@@ -8,9 +8,12 @@
 #define STOCHASTICSIMULATION_H_
 
 #include <vector>
+#include <algorithm>
+#include <cassert>
 #include <boost/function.hpp>
 
-namespace sim {
+namespace sim
+{
 
 class StochasticSimulation
 {
@@ -18,10 +21,13 @@ public:
 	typedef boost::function<double()> RateFunctor;
 	typedef boost::function<void()> ProcFunctor;
 
-	StochasticSimulation();
+	StochasticSimulation()
+	{
+	}
+
 	void registerProcess(const RateFunctor& rateFunc,
 			const ProcFunctor& procFunc);
-	double step();
+	template<class RandomNumGen> double step(RandomNumGen& rng);
 	unsigned int countReactions() const;
 
 private:
@@ -44,5 +50,36 @@ inline unsigned int StochasticSimulation::countReactions() const
 {
 	return rateFuncs_.size();
 }
+
+template<class RandomNumGen>
+double StochasticSimulation::step(RandomNumGen& rng)
+{
+	assert(rates_.size() == pr_.size());
+	assert(rateFuncs_.size() == pr_.size());
+	assert(procFuncs_.size() == pr_.size());
+	double atot = 0.0;
+	for (unsigned int i = 0; i < rates_.size(); ++i)
+	{
+		rates_[i] = (rateFuncs_[i])();
+		atot += rates_[i];
+	}
+	if (atot == 0.0)
+		return 1000;
+
+	const double tau = rng.Exponential(1.0 / atot);
+	const double x = rng.Uniform01() * atot;
+	unsigned int k = 0;
+	double sum = rates_[pr_[k]];
+	while (sum < x)
+		sum += rates_[pr_[++k]];
+
+	// call process k
+	procFuncs_[pr_[k]]();
+
+	if (k > 0)
+		std::swap(pr_[k], pr_[k - 1]);
+	return tau;
+}
+
 }
 #endif /* STOCHASTICSIMULATION_H_ */
