@@ -11,11 +11,12 @@
 #include <algorithm>
 #include <cassert>
 #include <boost/function.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace sim
 {
 
-class StochasticSimulation
+class StochasticSimulation: public boost::noncopyable
 {
 public:
 	typedef boost::function<double()> RateFunctor;
