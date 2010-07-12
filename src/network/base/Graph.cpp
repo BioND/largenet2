@@ -99,6 +99,13 @@ void Graph::removeNode(const node_id_t n)
 {
 	assert(nodes_.valid(n));
 	beforeNodeRemove(n);
+	// remove adjacent edges
+	Node::edge_iterator_range iters = node(n)->outEdges();
+	for (Node::edge_iterator it = iters.first; it != iters.second; ++it)
+		removeEdge((*it)->id());
+	iters = node(n)->inEdges();
+	for (Node::edge_iterator it = iters.first; it != iters.second; ++it)
+		removeEdge((*it)->id());
 	nodes_.erase(n);
 }
 
