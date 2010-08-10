@@ -26,8 +26,10 @@ public:
 	virtual Edge* edgeFrom(const Node* n) const;
 	virtual edge_iterator_range outEdges() const { return std::make_pair(outEdges_.begin(), outEdges_.end()); }
 	virtual edge_iterator_range inEdges() const { return std::make_pair(inEdges_.begin(), inEdges_.end()); }
-	virtual OutNeighborIteratorRange outNeighbors() const { return std::make_pair(OutNeighborIterator(outEdges_.begin()), OutNeighborIterator(outEdges_.end())); }
-	virtual InNeighborIteratorRange inNeighbors() const { return std::make_pair(InNeighborIterator(inEdges_.begin()), InNeighborIterator(inEdges_.end())); }
+	virtual OutNeighborIteratorRange outNeighbors() { return std::make_pair(OutNeighborIterator(outEdges_.begin(), id()), OutNeighborIterator(outEdges_.end(), id())); }
+	virtual ConstOutNeighborIteratorRange outNeighbors() const { return std::make_pair(ConstOutNeighborIterator(outEdges_.begin(), id()), ConstOutNeighborIterator(outEdges_.end(), id())); }
+	virtual InNeighborIteratorRange inNeighbors() { return std::make_pair(InNeighborIterator(inEdges_.begin()), InNeighborIterator(inEdges_.end())); }
+	virtual ConstInNeighborIteratorRange inNeighbors() const { return std::make_pair(ConstInNeighborIterator(inEdges_.begin()), ConstInNeighborIterator(inEdges_.end())); }
 
 protected:
 	virtual void registerEdge(const Edge* e);

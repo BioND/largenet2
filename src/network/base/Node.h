@@ -93,8 +93,10 @@ public:
 	}
 	virtual edge_iterator_range outEdges() const = 0;
 	virtual edge_iterator_range inEdges() const = 0;
-	virtual OutNeighborIteratorRange outNeighbors() const = 0;
-	virtual InNeighborIteratorRange inNeighbors() const = 0;
+	virtual ConstOutNeighborIteratorRange outNeighbors() const = 0;
+	virtual OutNeighborIteratorRange outNeighbors() = 0;
+	virtual ConstInNeighborIteratorRange inNeighbors() const = 0;
+	virtual InNeighborIteratorRange inNeighbors() = 0;
 
 	template<class RandomNumGen>
 	Node* randomOutNeighbor(RandomNumGen& rnd)
