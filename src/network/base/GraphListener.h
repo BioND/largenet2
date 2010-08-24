@@ -7,6 +7,8 @@
 #ifndef GRAPHLISTENER_H_
 #define GRAPHLISTENER_H_
 
+#include "types.h"
+
 namespace largenet
 {
 
