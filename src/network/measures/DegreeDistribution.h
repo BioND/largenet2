@@ -112,7 +112,7 @@ degree_t DegreeDistribution<inS>::countNeighbors(_NodeIterator& it,
 	Node::ConstInNeighborIteratorRange iters = it->inNeighbors();
 	for (Node::ConstInNeighborIterator i = iters.first; i != iters.second; ++i)
 	{
-		if (g.nodeState(*i) == s)
+		if (g.nodeState(i.id()) == s)
 			++num;
 	}
 	return num;
@@ -127,7 +127,7 @@ degree_t DegreeDistribution<outS>::countNeighbors(_NodeIterator& it,
 	Node::ConstOutNeighborIteratorRange iters = it->outNeighbors();
 	for (Node::ConstOutNeighborIterator i = iters.first; i != iters.second; ++i)
 	{
-		if (g.nodeState(*i) == s)
+		if (g.nodeState(i.id()) == s)
 			++num;
 	}
 	return num;
@@ -142,13 +142,13 @@ degree_t DegreeDistribution<bothS>::countNeighbors(_NodeIterator& it,
 	Node::ConstOutNeighborIteratorRange iters = it->outNeighbors();
 	for (Node::ConstOutNeighborIterator i = iters.first; i != iters.second; ++i)
 	{
-		if (g.nodeState(*i) == s)
+		if (g.nodeState(i.id()) == s)
 			++num;
 	}
 	Node::ConstInNeighborIteratorRange iters2 = it->inNeighbors();
 	for (Node::ConstInNeighborIterator i = iters2.first; i != iters2.second; ++i)
 	{
-		if (g.nodeState(*i) == s)
+		if (g.nodeState(i.id()) == s)
 			++num;
 	}
 	return num;

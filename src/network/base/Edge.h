@@ -73,7 +73,7 @@ typedef Edge DirectedEdge;
 
 class UndirectedEdge: public Edge
 {
-private:
+protected:
 	UndirectedEdge() : Edge() {}
 	UndirectedEdge(edge_id_t id, Node& source, Node& target);
 public:

@@ -50,9 +50,13 @@ public:
 		it_(other.it_)
 	{
 	}
-	typename choose_type<is_const, const node_id_t, node_id_t>::type operator*() const
+	typename choose_type<is_const, const node_id_t, node_id_t>::type id()
 	{
 		return it_.id();
+	}
+	typename choose_type<is_const, const_reference, reference>::type operator*()
+	{
+		return *it_;
 	}
 	node_pointer operator->()
 	{
@@ -117,9 +121,13 @@ public:
 		it_(other.it_)
 	{
 	}
-	typename choose_type<is_const, const edge_id_t, edge_id_t>::type operator*() const
+	typename choose_type<is_const, const edge_id_t, edge_id_t>::type id()
 	{
 		return it_.id();
+	}
+	typename choose_type<is_const, const_reference, reference>::type operator*()
+	{
+		return *it_;
 	}
 	edge_pointer operator->()
 	{

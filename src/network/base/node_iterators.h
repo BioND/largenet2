@@ -37,6 +37,8 @@ public:
 			iterator_category;
 	typedef typename choose_type<is_const, const Node*, Node*>::type
 			node_pointer;
+	typedef typename choose_type<is_const, const Node&, Node&>::type
+				node_reference;
 
 	explicit NodeOutNeighborIterator(const Iterator& i, const node_id_t nid) :
 		it_(i), nid_(nid)
@@ -49,14 +51,20 @@ public:
 		it_(other.it_), nid_(nid)
 	{
 	}
-	typename choose_type<is_const, const node_id_t, node_id_t>::type operator*()
+	typename choose_type<is_const, const node_id_t, node_id_t>::type id()
 	{
 		if ((*it_)->isDirected())
 			return (*it_)->target()->id();
 		else
 			return ((nid_ == (*it_)->target()->id()) ? (*it_)->source()->id() : (*it_)->target()->id());
 	}
-
+	node_reference operator*()
+	{
+		if ((*it_)->isDirected())
+			return *((*it_)->target());
+		else
+			return ((nid_ == (*it_)->target()->id()) ? *((*it_)->source()) : *((*it_)->target()));
+	}
 	node_pointer operator->()
 	{
 		if ((*it_)->isDirected())
@@ -127,6 +135,8 @@ public:
 			iterator_category;
 	typedef typename choose_type<is_const, const Node*, Node*>::type
 			node_pointer;
+	typedef typename choose_type<is_const, const Node&, Node&>::type
+				node_reference;
 
 	explicit NodeInNeighborIterator(const Iterator& i) :
 		it_(i)
@@ -139,11 +149,14 @@ public:
 		it_(other.it_)
 	{
 	}
-	typename choose_type<is_const, const node_id_t, node_id_t>::type operator*()
+	typename choose_type<is_const, const node_id_t, node_id_t>::type id()
 	{
 		return (*it_)->source()->id();
 	}
-
+	node_reference operator*()
+	{
+		return *((*it_)->source());
+	}
 	node_pointer operator->()
 	{
 		return (*it_)->source();
