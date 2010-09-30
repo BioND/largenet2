@@ -18,6 +18,14 @@
 namespace repo
 {
 
+/**
+ * A convenient way of organizing access to objects that can be grouped into a finite
+ * number of classes. Repository features efficient access to objects and can handle
+ * some additional tasks.
+ *
+ * @author Gerd Zschaler <zschaler@pks.mpg.de>
+ * @author Thilo Gross (original idea)
+ */
 template<class T, class Allocator = std::allocator<T> >
 class CRepository
 {
@@ -39,7 +47,8 @@ public:
 	typedef const_iterator ConstIndexIterator;
 
 	typedef iterators::RepoCategoryIterator<this_type, false> CategoryIterator;
-	typedef iterators::RepoCategoryIterator<this_type, true> ConstCategoryIterator;
+	typedef iterators::RepoCategoryIterator<this_type, true>
+			ConstCategoryIterator;
 
 	typedef iterator_range IndexIteratorRange;
 	typedef std::pair<ConstIndexIterator, ConstIndexIterator>
@@ -50,7 +59,7 @@ public:
 
 public:
 	CRepository();
-	CRepository(category_t cat);
+	explicit CRepository(category_t cat);
 	CRepository(category_t cat, id_size_t n);
 	CRepository(const CRepository& r);
 	~CRepository();

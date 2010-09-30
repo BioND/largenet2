@@ -13,19 +13,25 @@
 #include <vector>
 #include <memory>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/noncopyable.hpp>
 #include <cassert>
 #include <utility>
 
 namespace repo
 {
 
+/**
+ * A convenient way of organizing access to objects that can be grouped into a finite
+ * number of classes. Repository features efficient access to objects and can handle
+ * some additional tasks.
+ *
+ * @author Gerd Zschaler <zschaler@pks.mpg.de>
+ * @author Thilo Gross (original idea)
+ */
 template<class T, class CloneAllocator = boost::heap_clone_allocator,
 		class Allocator = std::allocator<T> >
-class CPtrRepository
+class CPtrRepository: boost::noncopyable
 {
-private:
-	/// do not allow copy construction for now
-	CPtrRepository(const CPtrRepository&);
 public:
 	typedef T* value_type;
 	typedef T& reference;
@@ -55,9 +61,9 @@ public:
 
 public:
 	CPtrRepository();
-	CPtrRepository(category_t cat);
+	explicit CPtrRepository(category_t cat);
 	CPtrRepository(category_t cat, id_size_t n);
-//	CPtrRepository(const CPtrRepository& r);
+	//	CPtrRepository(const CPtrRepository& r);
 	~CPtrRepository();
 
 	/**
@@ -265,6 +271,10 @@ public:
 	 */
 	reference operator[](id_t id);
 	const_reference operator[](id_t id) const;
+
+	void replace(id_t id, T* itm);
+	template<class U>
+	void replace(id_t id, std::auto_ptr<U> itm);
 
 	/**
 	 * Insert a copy of item @p itm into the repository.
@@ -808,7 +818,6 @@ id_t CPtrRepository<T, CloneAllocator, Allocator>::nextInsertId()
 	return ids_[curnum];
 }
 
-
 template<class T, class CloneAllocator, class Allocator>
 id_t CPtrRepository<T, CloneAllocator, Allocator>::insert(T* itm,
 		const category_t cat)
@@ -817,9 +826,9 @@ id_t CPtrRepository<T, CloneAllocator, Allocator>::insert(T* itm,
 	// Basic storage at the end
 	id_t uid = nextInsertId();
 	address_t curnum = offset_[C_];
-//	if (curnum >= N_)
-//		enlarge();
-//	id_t uid = ids_[curnum];
+	//	if (curnum >= N_)
+	//		enlarge();
+	//	id_t uid = ids_[curnum];
 	items_.replace(uid, itm); // this returns auto_type pointer to the old item, released and destroyed when out of scope
 	decreaseCat(curnum, cat); // Move into right class
 	++nStored_;
@@ -866,12 +875,28 @@ CPtrRepository<T, CloneAllocator, Allocator>& CPtrRepository<T, CloneAllocator,
 }
 
 template<class T, class CloneAllocator, class Allocator>
+void CPtrRepository<T, CloneAllocator, Allocator>::replace(id_t id, T* itm)
+{
+	assert(valid(id));
+	items_.replace(id, itm);
+}
+
+template<class T, class CloneAllocator, class Allocator>
+template<class U>
+void CPtrRepository<T, CloneAllocator, Allocator>::replace(id_t id,
+		std::auto_ptr<U> itm)
+{
+	assert(valid(id));
+	items_.replace(id, itm.release());
+}
+
+template<class T, class CloneAllocator, class Allocator>
 void CPtrRepository<T, CloneAllocator, Allocator>::erase(const address_t n)
 {
 	assert(n < N_);
 	assert(n < nStored_);
 	id_t uid = ids_[n];
-	items_.replace(uid, 0);	// replace by null pointer, returns released auto_ptr, destroyed and freed when out of scope
+	items_.replace(uid, 0); // replace by null pointer, returns released auto_ptr, destroyed and freed when out of scope
 	increaseCat(n, C_); // move to hidden category
 	--nStored_;
 	if (uid == minID_)
