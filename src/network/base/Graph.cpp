@@ -29,7 +29,7 @@ Graph::~Graph()
 
 bool Graph::isDirected() const
 {
-	return elf_->directedEdges();
+	throw("Not yet implemented");
 }
 
 void Graph::clear()
@@ -75,20 +75,20 @@ node_id_t Graph::addNode(const node_state_t s)
 	return id;
 }
 
-edge_id_t Graph::addEdge(const node_id_t source, const node_id_t target)
+edge_id_t Graph::addEdge(const node_id_t source, const node_id_t target, bool directed)
 {
 	edge_id_t id = edges_.nextInsertId();
 	Edge* e = 0;
 	try
 	{
-		e = elf_->createEdge(id, *node(source), *node(target));
+		e = elf_->createEdge(id, *node(source), *node(target), directed);
 		edges_.insert(e);
 		afterEdgeAdd(id);
 		return id;
 	} catch (SingletonException&)
 	{
 		// edge exists and we do not allow multiple edges
-		if (isDirected())
+		if (directed)
 			return node(source)->edgeTo(node(target))->id();
 		else
 			return node(source)->edgeToAdjacentNode(node(target))->id();
