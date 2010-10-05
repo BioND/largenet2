@@ -6,71 +6,116 @@
 
 #include "MultiNode.h"
 #include "Edge.h"
+#include "exceptions.h"
+#include <boost/foreach.hpp>
 
 namespace largenet
 {
 
 bool MultiNode::hasEdgeTo(const Node* n) const
 {
-	for (edge_set::iterator it = outEdges_.begin(); it != outEdges_.end(); ++it)
-	{
-		if ((*it)->to(*n))
-			return true;
-	}
+	BOOST_FOREACH(Edge* e, outEdges_)
+				{
+					if (e->to(*n))
+						return true;
+				}
 	return false;
 }
 
 Edge* MultiNode::edgeTo(const Node* n) const
 {
-
-	for (edge_set::iterator it = outEdges_.begin(); it != outEdges_.end(); ++it)
-	{
-		if ((*it)->to(*n))
-			return *it;
-	}
-	throw(std::invalid_argument("Node has no edge to given node."));
+	BOOST_FOREACH(Edge* e, outEdges_)
+				{
+					if (e->to(*n))
+						return e;
+				}
+	throw(NotAdjacentException("Node has no edge to given node."));
 }
 
 bool MultiNode::hasEdgeFrom(const Node* n) const
 {
-	for (edge_set::iterator it = inEdges_.begin(); it != inEdges_.end(); ++it)
-	{
-		if ((*it)->from(*n))
-			return true;
-	}
+	BOOST_FOREACH(Edge* e, inEdges_)
+				{
+					if (e->from(*n))
+						return true;
+				}
 	return false;
 }
 
 Edge* MultiNode::edgeFrom(const Node* n) const
 {
-	for (edge_set::iterator it = inEdges_.begin(); it != inEdges_.end(); ++it)
-	{
-		if ((*it)->from(*n))
-			return *it;
-	}
-	throw(std::invalid_argument("Node has no edge from given node."));
+	BOOST_FOREACH(Edge* e, inEdges_)
+				{
+					if (e->from(*n))
+						return e;
+				}
+	throw(NotAdjacentException("Node has no edge from given node."));
+}
+
+bool MultiNode::hasUndirectedEdgeTo(const Node* n) const
+{
+	BOOST_FOREACH(Edge* e, unEdges_)
+				{
+					if (e->from(*n) || e->to(*n))
+						return true;
+				}
+	return false;
+}
+
+Edge* MultiNode::undirectedEdgeTo(const Node* n) const
+{
+	BOOST_FOREACH(Edge* e, unEdges_)
+				{
+					if (e->from(*n) || e->to(*n))
+						return e;
+				}
+	throw(NotAdjacentException("Node has no undirected edge to given node."));
 }
 
 void MultiNode::registerEdge(const Edge* e)
 {
 	if (hasEdge(e))
 		return;
+
 	if (e->source() == this)
 	{
-		outEdges_.insert(const_cast<Edge*> (e));
-		if (!e->isDirected())
-			inEdges_.insert(const_cast<Edge*> (e));
+		if (e->isDirected())
+		{
+			outEdges_.insert(const_cast<Edge*> (e));
+			if (e->isLoop())
+			{
+				inEdges_.insert(const_cast<Edge*> (e));
+				return;
+			}
+		}
+		else
+		{
+			unEdges_.insert(const_cast<Edge*> (e));
+			return;
+		}
 	}
-	else if (e->target() != this)
-		throw(std::invalid_argument(
-				"Cannot register edge that does not connect to this node."));
 
 	if (e->target() == this)
 	{
-		inEdges_.insert(const_cast<Edge*> (e));
-		if (!e->isDirected())
-			outEdges_.insert(const_cast<Edge*> (e));
+		if (e->isDirected())
+		{
+			inEdges_.insert(const_cast<Edge*> (e));
+			if (e->isLoop())
+			{
+				outEdges_.insert(const_cast<Edge*> (e));
+				return;
+			}
+		}
+		else
+		{
+			unEdges_.insert(const_cast<Edge*> (e));
+			return;
+		}
 	}
+
+	// neither target nor source point to this node
+	throw(NotAdjacentException(
+			"Cannot register edge that does not connect to this node."));
 }
 
 void MultiNode::unregisterEdge(const Edge* e)
@@ -78,9 +123,14 @@ void MultiNode::unregisterEdge(const Edge* e)
 	edge_set::iterator i = inEdges_.find(const_cast<Edge*> (e)); // here be dragons
 	if (i != inEdges_.end())
 		inEdges_.erase(i);
-	i = outEdges_.find(const_cast<Edge*> (e)); // here be dragons
+
+	i = outEdges_.find(const_cast<Edge*> (e)); // here be dragons;
 	if (i != outEdges_.end())
 		outEdges_.erase(i);
+
+	i = unEdges_.find(const_cast<Edge*> (e)); // here be dragons;
+	if (i != unEdges_.end())
+		unEdges_.erase(i);
 }
 
 }

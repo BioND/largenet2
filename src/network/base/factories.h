@@ -30,14 +30,8 @@ private:
 	}
 };
 
-typedef GraphElementFactory<SingleNode, Edge>
-		SingleUndirectedElementFactory;
-typedef GraphElementFactory<MultiNode, Edge>
-		MultiUndirectedElementFactory;
-typedef GraphElementFactory<SingleNode, Edge>
-		SingleDirectedElementFactory;
-typedef GraphElementFactory<MultiNode, Edge>
-		MultiDirectedElementFactory;
+typedef GraphElementFactory<SingleNode, Edge> SingleEdgeElementFactory;
+typedef GraphElementFactory<MultiNode, Edge> MultiEdgeElementFactory;
 
 }
 

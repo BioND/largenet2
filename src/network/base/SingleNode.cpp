@@ -7,49 +7,69 @@
 #include "SingleNode.h"
 #include "Edge.h"
 #include "exceptions.h"
-#include <stdexcept>
+#include <boost/foreach.hpp>
 
 namespace largenet
 {
 
 bool SingleNode::hasEdgeTo(const Node* n) const
 {
-	for (edge_set::iterator it = outEdges_.begin(); it != outEdges_.end(); ++it)
-	{
-		if ((*it)->to(*n))
-			return true;
-	}
+	BOOST_FOREACH(Edge* e, outEdges_)
+				{
+					if (e->to(*n))
+						return true;
+				}
 	return false;
 }
 
 Edge* SingleNode::edgeTo(const Node* n) const
 {
-	for (edge_set::iterator it = outEdges_.begin(); it != outEdges_.end(); ++it)
-	{
-		if ((*it)->to(*n))
-			return *it;
-	}
-	throw(std::invalid_argument("Node has no edge to given node."));
+	BOOST_FOREACH(Edge* e, outEdges_)
+				{
+					if (e->to(*n))
+						return e;
+				}
+	throw(NotAdjacentException("Node has no edge to given node."));
 }
 
 bool SingleNode::hasEdgeFrom(const Node* n) const
 {
-	for (edge_set::iterator it = inEdges_.begin(); it != inEdges_.end(); ++it)
-	{
-		if ((*it)->from(*n))
-			return true;
-	}
+	BOOST_FOREACH(Edge* e, inEdges_)
+				{
+					if (e->from(*n))
+						return true;
+				}
 	return false;
 }
 
 Edge* SingleNode::edgeFrom(const Node* n) const
 {
-	for (edge_set::iterator it = inEdges_.begin(); it != inEdges_.end(); ++it)
-	{
-		if ((*it)->from(*n))
-			return *it;
-	}
-	throw(std::invalid_argument("Node has no edge from given node."));
+	BOOST_FOREACH(Edge* e, inEdges_)
+				{
+					if (e->from(*n))
+						return e;
+				}
+	throw(NotAdjacentException("Node has no edge from given node."));
+}
+
+bool SingleNode::hasUndirectedEdgeTo(const Node* n) const
+{
+	BOOST_FOREACH(Edge* e, unEdges_)
+				{
+					if (e->from(*n) || e->to(*n))
+						return true;
+				}
+	return false;
+}
+
+Edge* SingleNode::undirectedEdgeTo(const Node* n) const
+{
+	BOOST_FOREACH(Edge* e, unEdges_)
+				{
+					if (e->from(*n) || e->to(*n))
+						return e;
+				}
+	throw(NotAdjacentException("Node has no undirected edge to given node."));
 }
 
 void SingleNode::registerEdge(const Edge* e)
@@ -59,45 +79,52 @@ void SingleNode::registerEdge(const Edge* e)
 
 	if (e->source() == this)
 	{
-		if (hasEdgeTo(e->target()))
-			throw SingletonException("Edge already exists.");
-
-		outEdges_.insert(const_cast<Edge*> (e));
-		if (!e->isDirected()) // register bidirectional edge both in out- and inEdges
+		if (e->isDirected())
 		{
-			if (e->isLoop()) // cannot have bidirectional self-loop, that would be a multi-edge
-				throw SingletonException(
-						"Bidirectional self-loops are not allowed in SingleNode");
-			else
+			if (hasEdgeTo(e->target()))
+				throw SingletonException("Edge already exists.");
+
+			outEdges_.insert(const_cast<Edge*> (e));
+			if (e->isLoop())
 			{
 				inEdges_.insert(const_cast<Edge*> (e));
-				return; // finished here
+				return;
 			}
+		}
+		else if (hasUndirectedEdgeTo(e->target()))
+			throw SingletonException("Edge already exists.");
+		else
+		{
+			unEdges_.insert(const_cast<Edge*> (e));
+			return;
 		}
 	}
 
 	if (e->target() == this)
 	{
-		if (hasEdgeFrom(e->source()))
-			throw SingletonException("Edge already exists.");
-		inEdges_.insert(const_cast<Edge*> (e));
-		if (!e->isDirected()) // register bidirectional edge both in out- and inEdges
+		if (e->isDirected())
 		{
-			if (e->isLoop()) // cannot have bidirectional self-loop, that would be a multi-edge
-				throw SingletonException(
-						"Bidirectional self-loops are not allowed in SingleNode");
-			else
+			if (hasEdgeFrom(e->source()))
+				throw SingletonException("Edge already exists.");
+			inEdges_.insert(const_cast<Edge*> (e));
+			if (e->isLoop())
 			{
 				outEdges_.insert(const_cast<Edge*> (e));
-				return; // finished here
+				return;
 			}
+		}
+		else if (hasUndirectedEdgeTo(e->source()))
+			throw SingletonException("Edge already exists.");
+		else
+		{
+			unEdges_.insert(const_cast<Edge*> (e));
+			return;
 		}
 	}
 
 	// neither target nor source point to this node
-	throw(std::invalid_argument(
+	throw(NotAdjacentException(
 			"Cannot register edge that does not connect to this node."));
-
 }
 
 void SingleNode::unregisterEdge(const Edge* e)
@@ -109,6 +136,10 @@ void SingleNode::unregisterEdge(const Edge* e)
 	i = outEdges_.find(const_cast<Edge*> (e)); // here be dragons;
 	if (i != outEdges_.end())
 		outEdges_.erase(i);
+
+	i = unEdges_.find(const_cast<Edge*> (e)); // here be dragons;
+	if (i != unEdges_.end())
+		unEdges_.erase(i);
 }
 
 }

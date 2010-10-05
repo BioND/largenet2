@@ -14,7 +14,7 @@ namespace largenet
 {
 
 Graph::Graph(const node_state_t nodeStates, const edge_state_t edgeStates) :
-	elf_(std::auto_ptr<ElementFactory>(new SingleUndirectedElementFactory)),
+	elf_(std::auto_ptr<ElementFactory>(new SingleEdgeElementFactory)),
 			nodes_(nodeStates), edges_(edgeStates)
 {
 }
@@ -25,11 +25,6 @@ Graph::~Graph()
 	//		delete *i;
 	//	for (NodeContainer::iterator i = nodes_.begin(); i != nodes_.end(); ++i)
 	//		delete *i;
-}
-
-bool Graph::isDirected() const
-{
-	throw("Not yet implemented");
 }
 
 void Graph::clear()
@@ -168,10 +163,14 @@ bool Graph::isEdge(const node_id_t source, const node_id_t target) const
 {
 	assert(nodes_.valid(source));
 	assert(nodes_.valid(target));
-	if (isDirected()) // FIXME
-		return node(source)->hasEdgeTo(node(target));
-	else
-		return node(source)->isAdjacentTo(node(target));
+	return node(source)->hasEdgeTo(node(target));
+}
+
+bool Graph::adjacent(const node_id_t n1, const node_id_t n2) const
+{
+	assert(nodes_.valid(n1));
+	assert(nodes_.valid(n2));
+	return node(n1)->isAdjacentTo(node(n2));
 }
 
 void Graph::afterNodeAdd(const node_id_t n)

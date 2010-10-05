@@ -75,7 +75,6 @@ public:
 	node_size_t numberOfNodes(node_state_t s) const;
 	edge_size_t numberOfEdges() const;
 	edge_size_t numberOfEdges(edge_state_t s) const;
-	bool isDirected() const;
 
 	node_state_size_t numberOfNodeStates() const;
 	edge_state_size_t numberOfEdgeStates() const;
@@ -119,6 +118,7 @@ public:
 	ConstEdgeStateIteratorRange edges(edge_state_t s) const;
 
 	bool isEdge(node_id_t source, node_id_t target) const;
+	bool adjacent(node_id_t n1, node_id_t n2) const;
 
 private:
 	void afterNodeAdd(node_id_t n);
