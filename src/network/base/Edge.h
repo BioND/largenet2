@@ -17,7 +17,7 @@ namespace largenet
 class Node;
 
 /**
- * A directed edge.
+ * An edge.
  */
 class Edge: public boost::noncopyable
 {

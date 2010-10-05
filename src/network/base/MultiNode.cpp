@@ -55,19 +55,22 @@ void MultiNode::registerEdge(const Edge* e)
 {
 	if (hasEdge(e))
 		return;
-	edge_set* edges = &outEdges_;
 	if (e->source() == this)
-		edges = &outEdges_;
-	else if (e->target() == this)
 	{
-		if (e->isDirected()) // always register undirected edges as out edges
-			edges = &inEdges_;
+		outEdges_.insert(const_cast<Edge*> (e));
+		if (!e->isDirected())
+			inEdges_.insert(const_cast<Edge*> (e));
 	}
-	else
+	else if (e->target() != this)
 		throw(std::invalid_argument(
 				"Cannot register edge that does not connect to this node."));
 
-	edges->insert(const_cast<Edge*> (e)); // here be dragons
+	if (e->target() == this)
+	{
+		inEdges_.insert(const_cast<Edge*> (e));
+		if (!e->isDirected())
+			outEdges_.insert(const_cast<Edge*> (e));
+	}
 }
 
 void MultiNode::unregisterEdge(const Edge* e)
@@ -75,12 +78,9 @@ void MultiNode::unregisterEdge(const Edge* e)
 	edge_set::iterator i = inEdges_.find(const_cast<Edge*> (e)); // here be dragons
 	if (i != inEdges_.end())
 		inEdges_.erase(i);
-	else
-	{
-		i = outEdges_.find(const_cast<Edge*> (e)); // here be dragons
-		if (i != outEdges_.end())
-			outEdges_.erase(i);
-	}
+	i = outEdges_.find(const_cast<Edge*> (e)); // here be dragons
+	if (i != outEdges_.end())
+		outEdges_.erase(i);
 }
 
 }

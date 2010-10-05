@@ -51,9 +51,7 @@ public:
 		id_(id)
 	{
 	}
-	virtual ~Node()
-	{
-	}
+	virtual ~Node() {}
 	node_id_t id() const
 	{
 		return id_;
@@ -62,7 +60,7 @@ public:
 	virtual degree_t inDegree() const = 0;
 	degree_t degree() const
 	{
-		return outDegree() + inDegree();
+		return inDegree() + outDegree();
 	}
 	virtual bool hasInEdge(const Edge* e) const = 0;
 	virtual bool hasOutEdge(const Edge* e) const = 0;
