@@ -38,7 +38,7 @@ public:
 	typedef typename choose_type<is_const, const Node*, Node*>::type
 			node_pointer;
 	typedef typename choose_type<is_const, const Node&, Node&>::type
-				node_reference;
+			node_reference;
 
 	explicit NodeOutNeighborIterator(const Iterator& i, const node_id_t nid) :
 		it_(i), nid_(nid)
@@ -47,8 +47,8 @@ public:
 	NodeOutNeighborIterator()
 	{
 	}
-	NodeOutNeighborIterator(const NodeOutNeighborIterator& other, const node_id_t nid) :
-		it_(other.it_), nid_(nid)
+	NodeOutNeighborIterator(const NodeOutNeighborIterator& other) :
+		it_(other.it_), nid_(other.nid_)
 	{
 	}
 	typename choose_type<is_const, const node_id_t, node_id_t>::type id()
@@ -56,39 +56,45 @@ public:
 		if ((*it_)->isDirected())
 			return (*it_)->target()->id();
 		else
-			return ((nid_ == (*it_)->target()->id()) ? (*it_)->source()->id() : (*it_)->target()->id());
+			return ((nid_ == (*it_)->target()->id()) ? (*it_)->source()->id()
+					: (*it_)->target()->id());
 	}
 	node_reference operator*()
 	{
 		if ((*it_)->isDirected())
 			return *((*it_)->target());
 		else
-			return ((nid_ == (*it_)->target()->id()) ? *((*it_)->source()) : *((*it_)->target()));
+			return ((nid_ == (*it_)->target()->id()) ? *((*it_)->source())
+					: *((*it_)->target()));
 	}
 	node_pointer operator->()
 	{
 		if ((*it_)->isDirected())
 			return (*it_)->target();
 		else
-			return ((nid_ == (*it_)->target()->id()) ? (*it_)->source() : (*it_)->target());
+			return ((nid_ == (*it_)->target()->id()) ? (*it_)->source()
+					: (*it_)->target());
 	}
 
 	NodeOutNeighborIterator& operator=(const NodeOutNeighborIterator& i)
 	{
 		if (&i != this)
+		{
 			it_ = i.it_;
+			nid_ = i.nid_;
+		}
 		return *this;
 	}
 
 	friend bool operator==(const NodeOutNeighborIterator& a,
 			const NodeOutNeighborIterator& b)
 	{
-		return a.it_ == b.it_;
+		return (a.it_ == b.it_) && (a.nid_ == b.nid_);
 	}
 	friend bool operator!=(const NodeOutNeighborIterator& a,
 			const NodeOutNeighborIterator& b)
 	{
-		return a.it_ != b.it_;
+		return !(a == b);
 	}
 	NodeOutNeighborIterator& operator++()
 	{
@@ -136,48 +142,63 @@ public:
 	typedef typename choose_type<is_const, const Node*, Node*>::type
 			node_pointer;
 	typedef typename choose_type<is_const, const Node&, Node&>::type
-				node_reference;
+			node_reference;
 
-	explicit NodeInNeighborIterator(const Iterator& i) :
-		it_(i)
+	explicit NodeInNeighborIterator(const Iterator& i, const node_id_t nid) :
+		it_(i), nid_(nid)
 	{
 	}
 	NodeInNeighborIterator()
 	{
 	}
 	NodeInNeighborIterator(const NodeInNeighborIterator& other) :
-		it_(other.it_)
+		it_(other.it_), nid_(other.nid_)
 	{
 	}
 	typename choose_type<is_const, const node_id_t, node_id_t>::type id()
 	{
-		return (*it_)->source()->id();
+		if ((*it_)->isDirected())
+			return (*it_)->source()->id();
+		else
+			return ((nid_ == (*it_)->target()->id()) ? (*it_)->source()->id()
+					: (*it_)->target()->id());
 	}
 	node_reference operator*()
 	{
-		return *((*it_)->source());
+		if ((*it_)->isDirected())
+			return *((*it_)->source());
+		else
+			return (nid_ == (*it_)->target()->id()) ? *((*it_)->source())
+					: *((*it_)->target());
 	}
 	node_pointer operator->()
 	{
-		return (*it_)->source();
+		if ((*it_)->isDirected())
+			return (*it_)->source();
+		else
+			return (nid_ == (*it_)->target()->id()) ? (*it_)->source()
+					: (*it_)->target();
 	}
 
 	NodeInNeighborIterator& operator=(const NodeInNeighborIterator& i)
 	{
 		if (&i != this)
+		{
 			it_ = i.it_;
+			nid_ = i.nid_;
+		}
 		return *this;
 	}
 
 	friend bool operator==(const NodeInNeighborIterator& a,
 			const NodeInNeighborIterator& b)
 	{
-		return a.it_ == b.it_;
+		return (a.it_ == b.it_) && (a.nid_ == b.nid_);
 	}
 	friend bool operator!=(const NodeInNeighborIterator& a,
 			const NodeInNeighborIterator& b)
 	{
-		return a.it_ != b.it_;
+		return !(a == b);
 	}
 	NodeInNeighborIterator& operator++()
 	{
@@ -203,6 +224,7 @@ public:
 	}
 private:
 	Iterator it_;
+	node_id_t nid_;
 };
 }
 }
