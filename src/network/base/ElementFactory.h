@@ -29,14 +29,14 @@ public:
 	{
 		return doCreateNode(id);
 	}
-	Edge* createEdge(edge_id_t id, Node& source, Node& target, bool direction)
+	Edge* createEdge(edge_id_t id, Node& source, Node& target, bool directed)
 	{
-		return doCreateEdge(id, source, target, direction);
+		return doCreateEdge(id, source, target, directed);
 	}
 	//Triple* createTriple(edge_id_t left, edge_id_t right);	FIXME directed triples?
 private:
 	virtual Node* doCreateNode(node_id_t id) = 0;
-	virtual Edge* doCreateEdge(edge_id_t id, Node& source, Node& target, bool direction) = 0;
+	virtual Edge* doCreateEdge(edge_id_t id, Node& source, Node& target, bool directed) = 0;
 };
 
 }

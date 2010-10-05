@@ -81,7 +81,7 @@ public:
 
 	node_id_t addNode();
 	node_id_t addNode(node_state_t s);
-	edge_id_t addEdge(node_id_t source, node_id_t target, bool directed = false);
+	edge_id_t addEdge(node_id_t source, node_id_t target, bool directed);
 	void removeNode(node_id_t n);
 	void removeEdge(edge_id_t e);
 	Node* node(node_id_t n);
