@@ -77,6 +77,10 @@ void SingleNode::registerEdge(const Edge* e)
 	if (hasEdge(e))
 		return;
 
+	if ((e->source() != this) && (e->target() != this)) // neither target nor source point to this node
+		throw(NotAdjacentException(
+			"Cannot register edge that does not connect to this node."));
+
 	if (e->source() == this)
 	{
 		if (e->isDirected())
@@ -108,23 +112,13 @@ void SingleNode::registerEdge(const Edge* e)
 				throw SingletonException("Edge already exists.");
 			inEdges_.insert(const_cast<Edge*> (e));
 			if (e->isLoop())
-			{
 				outEdges_.insert(const_cast<Edge*> (e));
-				return;
-			}
 		}
 		else if (hasUndirectedEdgeTo(e->source()))
 			throw SingletonException("Edge already exists.");
 		else
-		{
 			unEdges_.insert(const_cast<Edge*> (e));
-			return;
-		}
 	}
-
-	// neither target nor source point to this node
-	throw(NotAdjacentException(
-			"Cannot register edge that does not connect to this node."));
 }
 
 void SingleNode::unregisterEdge(const Edge* e)

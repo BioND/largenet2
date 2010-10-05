@@ -77,6 +77,10 @@ void MultiNode::registerEdge(const Edge* e)
 	if (hasEdge(e))
 		return;
 
+	if ((e->source() != this) && (e->target() != this)) // neither target nor source point to this node
+		throw(NotAdjacentException(
+				"Cannot register edge that does not connect to this node."));
+
 	if (e->source() == this)
 	{
 		if (e->isDirected())
@@ -101,21 +105,11 @@ void MultiNode::registerEdge(const Edge* e)
 		{
 			inEdges_.insert(const_cast<Edge*> (e));
 			if (e->isLoop())
-			{
 				outEdges_.insert(const_cast<Edge*> (e));
-				return;
-			}
 		}
 		else
-		{
 			unEdges_.insert(const_cast<Edge*> (e));
-			return;
-		}
 	}
-
-	// neither target nor source point to this node
-	throw(NotAdjacentException(
-			"Cannot register edge that does not connect to this node."));
 }
 
 void MultiNode::unregisterEdge(const Edge* e)
