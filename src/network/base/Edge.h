@@ -23,7 +23,9 @@ class Edge: public boost::noncopyable
 {
 protected:
 	Edge() : id_(0), source_(0), target_(0) {}
-	Edge(edge_id_t id, Node& source, Node& target, bool directed) : id_(id), source_(&source), target_(&target), directed_(directed) {}
+	Edge(edge_id_t id, Node& source, Node& target, bool directed) :
+		id_(id), source_(&source), target_(&target), directed_(directed)
+	{}
 public:
 	/**
 	 * Force creation via factory function, as we cannot call virtual functions in
@@ -38,8 +40,20 @@ public:
 	Node* opposite(const Node& from) const;
 	bool isLoop() const { return source_ == target_; }
 	bool operator==(const Edge& e) const;
-	bool from(const Node& from) const { if (directed_) return source_ == &from; else return (source_ == &from) || (target_ == &from); }
-	bool to(const Node& to) const { if (directed_) return target_ == &to; else return (source_ == &to) || (target_ == &to); }
+	bool from(const Node& from) const
+	{
+		if (directed_)
+			return source_ == &from;
+		else
+			return (source_ == &from) || (target_ == &from);
+	}
+	bool to(const Node& to) const
+	{
+		if (directed_)
+			return target_ == &to;
+		else
+			return (source_ == &to) || (target_ == &to);
+	}
 
 protected:
 	void connect();
