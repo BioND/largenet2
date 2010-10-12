@@ -106,7 +106,7 @@ public:
 		IntervalOutput(out, interval), net_(net)
 	{
 	}
-	virtual ~DegDistOutput()
+	virtual ~StatelessDegDistOutput()
 	{
 	}
 
