@@ -20,7 +20,7 @@ namespace generators
 
 template<class RandomGen>
 void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
-		RandomGen& rng)
+		RandomGen& rng, bool directed = false)
 {
 	g.clear();
 	typedef std::pair<node_id_t, node_id_t> edge_t;
@@ -52,7 +52,7 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 			if (edges.find(current_edge) == edges.end())
 			{
 				edges.insert(current_edge);
-				g.addEdge(current_edge.first, current_edge.second, false); // undirected
+				g.addEdge(current_edge.first, current_edge.second, directed);
 				break;
 			}
 		}
