@@ -10,11 +10,10 @@
 #include "../largenet.h"
 #include <boost/unordered_set.hpp>
 #include <cassert>
+#include <cmath>
 
 namespace largenet
 {
-
-class Graph;
 
 namespace generators
 {
@@ -71,31 +70,33 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 template<class RandomGen>
 void randomGnp(Graph& g, node_size_t numNodes, double edgeProb, RandomGen& rng)
 {
+	// FIXME this seems broken
+	throw ("Not yet implented");
 	/*
 	 * efficient G(n,p) from Phys. Rev. E 71, 036113 (2005)
 	 */
-	assert(edgeProb > 0.0);
-	assert(edgeProb < 1.0);
-
-	g.clear();
-	while (g.numberOfNodes() < numNodes)
-		g.addNode();
-
-	long int w = -1;
-	Graph::NodeIteratorRange iters = g.nodes();
-	for (Graph::NodeIterator v = iters.first; v != iters.second; ++v)
-	{
-		double r = rng.Uniform01();
-		w = 1 + w + static_cast<long int> (std::floor(std::log(1.0 - r)
-				/ std::log(1.0 - edgeProb)));
-		while ((w >= v.id()) && (v != iters.second))
-		{
-			w -= v.id();
-			++v;
-		}
-		if (v != iters.second)
-			g.addEdge(v.id(), w, false); // undirected
-	}
+	//	assert(edgeProb > 0.0);
+	//	assert(edgeProb < 1.0);
+	//
+	//	g.clear();
+	//	while (g.numberOfNodes() < numNodes)
+	//		g.addNode();
+	//
+	//	long int w = -1;
+	//	Graph::NodeIteratorRange iters = g.nodes();
+	//	for (Graph::NodeIterator v = iters.first; v != iters.second; ++v)
+	//	{
+	//		double r = rng.Uniform01();
+	//		w = 1 + w + static_cast<long int> (std::floor(std::log(1.0 - r)
+	//				/ std::log(1.0 - edgeProb)));
+	//		while ((w >= v->id()) && (v != iters.second))
+	//		{
+	//			w -= v->id();
+	//			++v;
+	//		}
+	//		if (v != iters.second)
+	//			g.addEdge(v->id(), w, false); // undirected
+	//	}
 }
 
 /**
