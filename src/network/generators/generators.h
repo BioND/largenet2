@@ -49,6 +49,8 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 					std::sqrt(0.25 + 2.0 * edge_index) - 0.5));
 			current_edge.second = static_cast<node_id_t> (edge_index
 					- current_edge.first * (current_edge.first - 1) / 2);
+			if (current_edge.first == current_edge.second)	// disallow self-loops
+				continue;
 			if (edges.find(current_edge) == edges.end())
 			{
 				edges.insert(current_edge);
