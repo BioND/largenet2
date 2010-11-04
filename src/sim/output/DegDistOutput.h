@@ -20,6 +20,9 @@ namespace lmeas = largenet::measures;
 namespace sim
 {
 
+namespace output
+{
+
 /**
  * Calculates and outputs the degree distribution for each node state in the network.
  */
@@ -102,7 +105,8 @@ template<class _Graph>
 class StatelessDegDistOutput: public IntervalOutput
 {
 public:
-	StatelessDegDistOutput(std::ostream& out, const _Graph& net, double interval) :
+	StatelessDegDistOutput(std::ostream& out, const _Graph& net,
+			double interval) :
 		IntervalOutput(out, interval), net_(net)
 	{
 	}
@@ -115,12 +119,14 @@ private:
 	{
 		lmeas::InDegreeDistribution in_dist(net_);
 		lmeas::OutDegreeDistribution out_dist(net_);
-		largenet::degree_t maxDegree = std::max(in_dist.maxDegree(), out_dist.maxDegree());
+		largenet::degree_t maxDegree = std::max(in_dist.maxDegree(),
+				out_dist.maxDegree());
 
 		const char tab = '\t';
 		for (largenet::degree_t k = 0; k <= maxDegree; ++k)
 		{
-			stream() << t << tab << k << tab << in_dist[k] << tab << out_dist[k] << "\n";
+			stream() << t << tab << k << tab << in_dist[k] << tab
+					<< out_dist[k] << "\n";
 		}
 		stream() << "\n\n";
 	}
@@ -128,12 +134,13 @@ private:
 	void doWriteHeader()
 	{
 		const char tab = '\t';
-		stream() << commentChar() << " t" << tab << "k" << tab << "in" << tab << "out\n";
+		stream() << commentChar() << " t" << tab << "k" << tab << "in" << tab
+				<< "out\n";
 	}
 
 	const _Graph& net_;
 };
-
+}
 }
 
 #endif /* DEGDISTOUTPUT_H_ */

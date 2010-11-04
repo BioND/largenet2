@@ -14,6 +14,8 @@
 namespace sim
 {
 
+namespace output {
+
 /**
  * Outputs numbers of nodes, links, and possibly triples in all states in the network.
  */
@@ -118,5 +120,6 @@ void TimeSeriesOutput<_Graph, _LinkStateCalculator>::doWriteHeader()
 //		stream() << sep << net_.numberOfTriples(
 //				net_.getTripleStateCalculator()(*it));
 //}
+}
 }
 #endif /* TIMESERIESOUTPUT_H_ */
