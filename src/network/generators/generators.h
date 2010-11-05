@@ -184,7 +184,7 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 		RandomGen& rng)
 {
 	if (g.numberOfNodes() != 0)
-		throw("Need empty graph in randomBA");
+		throw("Need empty graph in randomOutDegreePowerlaw");
 
 	double normalization = 0;
 	for (int i = numNodes; i >= 1; --i)
