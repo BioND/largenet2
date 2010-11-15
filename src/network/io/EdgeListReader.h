@@ -21,6 +21,7 @@ public:
 	EdgeListReader() {}
 	virtual ~EdgeListReader() {}
 	Graph* createFromStream(std::istream& strm);
+	Graph* createFromStream(std::istream& strm, Graph& graphToFill);
 };
 
 }

@@ -21,10 +21,10 @@ namespace largenet
 namespace io
 {
 
-Graph* EdgeListReader::createFromStream(istream& strm)
+Graph* EdgeListReader::createFromStream(std::istream& strm, Graph& graphToFill)
 {
 	if (!strm)
-		return 0;
+		return &graphToFill;
 
 	typedef pair<node_id_t, node_id_t> edge;
 	typedef vector<edge> edge_v;
@@ -48,15 +48,25 @@ Graph* EdgeListReader::createFromStream(istream& strm)
 
 		edges.push_back(edge(n1, n2));
 	}
-	Graph* g = new Graph(1, 1); // TODO honor state
-	while (g->numberOfNodes() < maxNodeID + 1)
-		g->addNode();
+
+	graphToFill.clear();
+	while (graphToFill.numberOfNodes() < maxNodeID + 1)
+		graphToFill.addNode();
 
 	BOOST_FOREACH(edge e, edges)
 	{
-		g->addEdge(e.first, e.second, true);
+		graphToFill.addEdge(e.first, e.second, true);
 	}
-	return g;
+	return &graphToFill;
+}
+
+Graph* EdgeListReader::createFromStream(istream& strm)
+{
+	if (!strm)
+		return 0;
+	Graph* g = new Graph(1, 1); // TODO honor state
+
+	return createFromStream(strm, *g);
 }
 
 }

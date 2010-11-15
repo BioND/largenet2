@@ -23,6 +23,7 @@ public:
 	GraphReader() {}
 	virtual ~GraphReader() {}
 	virtual Graph* createFromStream(std::istream& strm) = 0;
+	virtual Graph* createFromStream(std::istream& strm, Graph& graphToFill) = 0;
 };
 
 }
