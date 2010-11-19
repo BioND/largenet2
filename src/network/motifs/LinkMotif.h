@@ -31,7 +31,7 @@ public:
 	 * @param directed True if link is directed
 	 */
 	LinkMotif(node_state_t source, node_state_t target, bool directed = true) :
-		s_(source), t_(target), directed_(!directed)
+		s_(source), t_(target), directed_(directed)
 	{
 		if ((!directed) && (s_ > t_))
 			std::swap(s_, t_);

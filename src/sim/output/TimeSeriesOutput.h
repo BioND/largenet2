@@ -14,6 +14,8 @@
 namespace sim
 {
 
+namespace output {
+
 /**
  * Outputs numbers of nodes, links, and possibly triples in all states in the network.
  */
@@ -22,7 +24,7 @@ class TimeSeriesOutput: public IntervalOutput
 {
 public:
 	TimeSeriesOutput(std::ostream& out, const _Graph& net,
-			const _LinkStateCalculator& lsc, double interval);
+			const _LinkStateCalculator& lsc, double interval, bool directedMotifs);
 	virtual ~TimeSeriesOutput();
 
 private:
@@ -40,11 +42,11 @@ private:
 template<class _Graph, class _LinkStateCalculator>
 TimeSeriesOutput<_Graph, _LinkStateCalculator>::TimeSeriesOutput(
 		std::ostream& out, const _Graph& net, const _LinkStateCalculator& lsc,
-		const double interval) :
+		const double interval, const bool directedMotifs) :
 	IntervalOutput(out, interval), net_(net), lsc_(lsc), nodeMotifs_(
-			net.numberOfNodeStates(), net.isDirected()), linkMotifs_(
-			net.numberOfNodeStates(), net.isDirected())
-//			, tripleMotifs_(net.numberOfNodeStates(), net.isDirected())
+			net.numberOfNodeStates(), directedMotifs), linkMotifs_(
+			net.numberOfNodeStates(), directedMotifs)
+//			, tripleMotifs_(net.numberOfNodeStates(), directedMotifs)
 {
 }
 
@@ -118,5 +120,6 @@ void TimeSeriesOutput<_Graph, _LinkStateCalculator>::doWriteHeader()
 //		stream() << sep << net_.numberOfTriples(
 //				net_.getTripleStateCalculator()(*it));
 //}
+}
 }
 #endif /* TIMESERIESOUTPUT_H_ */

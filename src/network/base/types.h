@@ -4,8 +4,8 @@
  * @author gerd
  */
 
-#ifndef TYPES_H_
-#define TYPES_H_
+#ifndef LARGENET_TYPES_H_
+#define LARGENET_TYPES_H_
 
 namespace largenet {
 
@@ -23,4 +23,4 @@ typedef edge_state_t edge_state_size_t;
 
 }
 
-#endif /* TYPES_H_ */
+#endif /* LARGENET_TYPES_H_ */

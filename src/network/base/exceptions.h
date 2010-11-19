@@ -22,6 +22,12 @@ private:
 	std::string msg_;
 };
 
+class NotAdjacentException : public LNetException
+{
+public:
+	NotAdjacentException(const char* msg) throw() : LNetException(msg) {}
+};
+
 class SingletonException : public LNetException
 {
 public:

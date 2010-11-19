@@ -15,7 +15,7 @@
 namespace largenet
 {
 
-template<class NodeType = SingleNode, class EdgeType = UndirectedEdge>
+template<class NodeType = SingleNode, class EdgeType = Edge>
 class GraphElementFactory: public ElementFactory
 {
 private:
@@ -24,25 +24,14 @@ private:
 		return new NodeType(id);
 	}
 
-	virtual EdgeType* doCreateEdge(edge_id_t id, Node& source, Node& target)
+	virtual EdgeType* doCreateEdge(edge_id_t id, Node& source, Node& target, bool directed)
 	{
-		return EdgeType::create(id, source, target);
-	}
-
-	virtual bool doDirectedEdges() const
-	{
-		return is_directed<EdgeType>(0);
+		return EdgeType::create(id, source, target, directed);
 	}
 };
 
-typedef GraphElementFactory<SingleNode, UndirectedEdge>
-		SingleUndirectedElementFactory;
-typedef GraphElementFactory<MultiNode, UndirectedEdge>
-		MultiUndirectedElementFactory;
-typedef GraphElementFactory<SingleNode, DirectedEdge>
-		SingleDirectedElementFactory;
-typedef GraphElementFactory<MultiNode, DirectedEdge>
-		MultiDirectedElementFactory;
+typedef GraphElementFactory<SingleNode, Edge> SingleEdgeElementFactory;
+typedef GraphElementFactory<MultiNode, Edge> MultiEdgeElementFactory;
 
 }
 

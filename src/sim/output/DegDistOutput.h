@@ -12,8 +12,16 @@
 #include "../../network/measures/DegreeDistribution.h"
 #include <boost/ptr_container/ptr_map.hpp>
 #include <iomanip>
+#include <algorithm>
 
-namespace sim {
+namespace lmo = largenet::motifs;
+namespace lmeas = largenet::measures;
+
+namespace sim
+{
+
+namespace output
+{
 
 /**
  * Calculates and outputs the degree distribution for each node state in the network.
@@ -34,19 +42,25 @@ public:
 private:
 	void doOutput(double t)
 	{
-		typedef boost::ptr_map<largenet::motifs::NodeMotif, largenet::measures::InDegreeDistribution> in_dist_map;
-		typedef boost::ptr_map<largenet::motifs::NodeMotif, largenet::measures::OutDegreeDistribution> out_dist_map;
+		typedef boost::ptr_map<lmo::NodeMotif, lmeas::InDegreeDistribution>
+				in_dist_map;
+		typedef boost::ptr_map<lmo::NodeMotif, lmeas::OutDegreeDistribution>
+				out_dist_map;
 
 		in_dist_map in_dists;
 		out_dist_map out_dists;
 		largenet::degree_t maxDegree = 0;
-		for (largenet::motifs::NodeMotifSet::const_iterator motif =
-				nodeMotifs_.begin(); motif != nodeMotifs_.end(); ++motif)
+		for (lmo::NodeMotifSet::const_iterator motif = nodeMotifs_.begin(); motif
+				!= nodeMotifs_.end(); ++motif)
 		{
-			largenet::measures::InDegreeDistribution* d1 = new largenet::measures::InDegreeDistribution(net_, *motif);
-			in_dists.insert(*motif, std::auto_ptr<largenet::measures::InDegreeDistribution>(d1));
-			largenet::measures::OutDegreeDistribution* d2 = new largenet::measures::OutDegreeDistribution(net_, *motif);
-			out_dists.insert(*motif, std::auto_ptr<largenet::measures::OutDegreeDistribution>(d2));
+			lmeas::InDegreeDistribution* d1 = new lmeas::InDegreeDistribution(
+					net_, *motif);
+			in_dists.insert(*motif, std::auto_ptr<lmeas::InDegreeDistribution>(
+					d1));
+			lmeas::OutDegreeDistribution* d2 =
+					new lmeas::OutDegreeDistribution(net_, *motif);
+			out_dists.insert(*motif,
+					std::auto_ptr<lmeas::OutDegreeDistribution>(d2));
 
 			if (maxDegree < d1->maxDegree())
 				maxDegree = d1->maxDegree();
@@ -58,9 +72,11 @@ private:
 		for (largenet::degree_t k = 0; k <= maxDegree; ++k)
 		{
 			stream() << t << tab << k;
-			for (in_dist_map::const_iterator i = in_dists.begin(); i != in_dists.end(); ++i)
+			for (in_dist_map::const_iterator i = in_dists.begin(); i
+					!= in_dists.end(); ++i)
 				stream() << tab << (*i->second)[k];
-			for (out_dist_map::const_iterator i = out_dists.begin(); i != out_dists.end(); ++i)
+			for (out_dist_map::const_iterator i = out_dists.begin(); i
+					!= out_dists.end(); ++i)
 				stream() << tab << (*i->second)[k];
 			stream() << "\n";
 		}
@@ -71,20 +87,60 @@ private:
 	{
 		const char tab = '\t';
 		stream() << commentChar() << " t" << tab << "k";
-		for (largenet::motifs::NodeMotifSet::const_iterator motif =
-				nodeMotifs_.begin(); motif != nodeMotifs_.end(); ++motif)
+		for (lmo::NodeMotifSet::const_iterator motif = nodeMotifs_.begin(); motif
+				!= nodeMotifs_.end(); ++motif)
 			stream() << tab << "i" << *motif;
-		for (largenet::motifs::NodeMotifSet::const_iterator motif =
-				nodeMotifs_.begin(); motif != nodeMotifs_.end(); ++motif)
+		for (lmo::NodeMotifSet::const_iterator motif = nodeMotifs_.begin(); motif
+				!= nodeMotifs_.end(); ++motif)
 			stream() << tab << "o" << *motif;
 		stream() << "\n";
 
 	}
 
 	const _Graph& net_;
-	largenet::motifs::NodeMotifSet nodeMotifs_;
+	lmo::NodeMotifSet nodeMotifs_;
 };
 
+template<class _Graph>
+class StatelessDegDistOutput: public IntervalOutput
+{
+public:
+	StatelessDegDistOutput(std::ostream& out, const _Graph& net,
+			double interval) :
+		IntervalOutput(out, interval), net_(net)
+	{
+	}
+	virtual ~StatelessDegDistOutput()
+	{
+	}
+
+private:
+	void doOutput(double t)
+	{
+		lmeas::InDegreeDistribution in_dist(net_);
+		lmeas::OutDegreeDistribution out_dist(net_);
+		largenet::degree_t maxDegree = std::max(in_dist.maxDegree(),
+				out_dist.maxDegree());
+
+		const char tab = '\t';
+		for (largenet::degree_t k = 0; k <= maxDegree; ++k)
+		{
+			stream() << t << tab << k << tab << in_dist[k] << tab
+					<< out_dist[k] << "\n";
+		}
+		stream() << "\n\n";
+	}
+
+	void doWriteHeader()
+	{
+		const char tab = '\t';
+		stream() << commentChar() << " t" << tab << "k" << tab << "in" << tab
+				<< "out\n";
+	}
+
+	const _Graph& net_;
+};
+}
 }
 
 #endif /* DEGDISTOUTPUT_H_ */

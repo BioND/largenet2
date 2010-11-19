@@ -10,16 +10,20 @@
 #include <iostream>
 #include <string>
 
-namespace sim {
+namespace sim
+{
+namespace output
+{
 
 class IntervalOutput
 {
 public:
-	IntervalOutput(std::ostream& out, double interval, std::string commentChar = "#");
+	IntervalOutput(std::ostream& out, double interval, std::string commentChar =
+			"#");
 	virtual ~IntervalOutput();
 	void setCommentChar(const std::string& commentChar);
 	std::string commentChar() const;
-	void output(double t);
+	void output(double t, bool force=false);
 	void writeHeader();
 protected:
 	std::ostream& stream() const;
@@ -50,5 +54,8 @@ inline void IntervalOutput::writeHeader()
 {
 	doWriteHeader();
 }
+
 }
+}
+
 #endif /* INTERVALOUTPUT_H_ */

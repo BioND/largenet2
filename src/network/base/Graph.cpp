@@ -14,7 +14,7 @@ namespace largenet
 {
 
 Graph::Graph(const node_state_t nodeStates, const edge_state_t edgeStates) :
-	elf_(std::auto_ptr<ElementFactory>(new SingleUndirectedElementFactory)),
+	elf_(std::auto_ptr<ElementFactory>(new SingleEdgeElementFactory)),
 			nodes_(nodeStates), edges_(edgeStates)
 {
 }
@@ -25,11 +25,6 @@ Graph::~Graph()
 	//		delete *i;
 	//	for (NodeContainer::iterator i = nodes_.begin(); i != nodes_.end(); ++i)
 	//		delete *i;
-}
-
-bool Graph::isDirected() const
-{
-	return elf_->directedEdges();
 }
 
 void Graph::clear()
@@ -75,20 +70,20 @@ node_id_t Graph::addNode(const node_state_t s)
 	return id;
 }
 
-edge_id_t Graph::addEdge(const node_id_t source, const node_id_t target)
+edge_id_t Graph::addEdge(const node_id_t source, const node_id_t target, bool directed)
 {
 	edge_id_t id = edges_.nextInsertId();
 	Edge* e = 0;
 	try
 	{
-		e = elf_->createEdge(id, *node(source), *node(target));
+		e = elf_->createEdge(id, *node(source), *node(target), directed);
 		edges_.insert(e);
 		afterEdgeAdd(id);
 		return id;
 	} catch (SingletonException&)
 	{
 		// edge exists and we do not allow multiple edges
-		if (isDirected())
+		if (directed)
 			return node(source)->edgeTo(node(target))->id();
 		else
 			return node(source)->edgeToAdjacentNode(node(target))->id();
@@ -168,10 +163,14 @@ bool Graph::isEdge(const node_id_t source, const node_id_t target) const
 {
 	assert(nodes_.valid(source));
 	assert(nodes_.valid(target));
-	if (isDirected()) // FIXME
-		return node(source)->hasEdgeTo(node(target));
-	else
-		return node(source)->isAdjacentTo(node(target));
+	return node(source)->hasEdgeTo(node(target));
+}
+
+bool Graph::adjacent(const node_id_t n1, const node_id_t n2) const
+{
+	assert(nodes_.valid(n1));
+	assert(nodes_.valid(n2));
+	return node(n1)->isAdjacentTo(node(n2));
 }
 
 void Graph::afterNodeAdd(const node_id_t n)
