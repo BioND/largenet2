@@ -55,7 +55,26 @@ size_t triples_undirected(const Graph& net, const motifs::TripleMotif& t)
 	size_t ret = 0;
 
 	// we cannot loop over links if we do not have access to the link state calculator
-	return ret;
+	BOOST_FOREACH(const Node& n, net.nodes(t.center()))
+	{
+		BOOST_FOREACH(const Node& nb1, n.undirectedNeighbors())
+		{
+			if (net.nodeState(nb1.id()) != t.left())
+				continue;
+			BOOST_FOREACH(const Node& nb2, n.undirectedNeighbors())
+			{
+				if (nb1.id() == nb2.id())
+					continue;
+				if (net.nodeState(nb2.id()) == t.right())
+					++ret;
+			}
+		}
+	}
+
+	if (t.isSymmetric())
+		return ret / 2;
+	else
+		return ret;
 
 
 	// loop over all a-b links
@@ -116,9 +135,85 @@ size_t triples_undirected(const Graph& net, const motifs::TripleMotif& t)
 
 size_t triples(const Graph& net, const motifs::TripleMotif& t)
 {
-	throw std::runtime_error("Triple motif counting not yet implemented");
 	if (!t.isDirected())
 		return triples_undirected(net, t);
+
+	size_t ret = 0;
+	BOOST_FOREACH(const Node& n, net.nodes(t.center()))
+	{
+		switch (t.dir())
+		{
+			case motifs::TripleMotif::LCR:   // one in-link to left, one out-link to right
+				BOOST_FOREACH(const Node& lnb, n.inNeighbors())
+				{
+					if (net.nodeState(lnb.id()) != t.left())
+						continue;
+
+					BOOST_FOREACH(const Node& rnb, n.outNeighbors())
+					{
+						if (lnb.id() == rnb.id())	// TODO should we consider melons as triples?
+							continue;
+						if (net.nodeState(rnb.id()) == t.right())
+							++ret;
+					}
+				}
+				break;
+
+			case motifs::TripleMotif::RCL:	// one in-link to right, one out-link to left
+				BOOST_FOREACH(const Node& rnb, n.inNeighbors())
+				{
+					if (net.nodeState(rnb.id()) != t.right())
+						continue;
+
+					BOOST_FOREACH(const Node& lnb, n.outNeighbors())
+					{
+						if (lnb.id() == rnb.id())	// TODO should we consider melons as triples?
+							continue;
+						if (net.nodeState(lnb.id()) == t.left())
+							++ret;
+					}
+				}
+				break;
+
+			case motifs::TripleMotif::CLR:	// two out-links
+				BOOST_FOREACH(const Node& lnb, n.outNeighbors())
+				{
+					if (net.nodeState(lnb.id()) != t.left())
+						continue;
+
+					BOOST_FOREACH(const Node& rnb, n.outNeighbors())
+					{
+						if (lnb.id() == rnb.id())	// TODO should we consider double links as triples?
+							continue;
+						if (net.nodeState(rnb.id()) == t.right())
+							++ret;
+					}
+				}
+				break;
+			case motifs::TripleMotif::LRC: // two in-links
+				BOOST_FOREACH(const Node& lnb, n.inNeighbors())
+				{
+					if (net.nodeState(lnb.id()) != t.left())
+						continue;
+
+					BOOST_FOREACH(const Node& rnb, n.inNeighbors())
+					{
+						if (lnb.id() == rnb.id())	// TODO should we consider double links as triples?
+							continue;
+						if (net.nodeState(rnb.id()) == t.right())
+							++ret;
+					}
+				}
+				break;
+			default:
+				break;
+		}
+	}
+	if (t.isSymmetric())
+		return ret / 2;
+	else
+		return ret;
+
 //	size_t ret = 0;
 
 //	// loop over all a-b links
