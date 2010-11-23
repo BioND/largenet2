@@ -176,9 +176,10 @@ size_t quadStars(const Graph& net)
 	size_t t = 0;
 	BOOST_FOREACH(const Node& n, net.nodes())
 	{
-		const degree_t d = n.degree();
+		const degree_t d = n.degree(), m = n.mutualDegree();
 		if (d > 2)
-			t += d * (d - 1) * (d - 2);
+			t += 2 * d - 3 * d * d + d * d * d + 8 * m
+					- 6 * d * m + 6 * m * m - 2 * m * m * m;
 	}
 	return t / 6;
 }
