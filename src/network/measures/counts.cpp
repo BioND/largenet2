@@ -250,15 +250,12 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 	if (!q.isDirected())
 		return quad_stars_undirected(net, q);
 	size_t ret = 0;
-	size_t a_neighbors = 0, b_neighbors = 0, c_neighbors = 0;
 	switch (q.dir())
 	{
 	case motifs::QuadStarMotif::ALL_OUT:
 		BOOST_FOREACH(const Node& n, net.nodes(q.center()))
 		{
-			a_neighbors = 0;
-			b_neighbors = 0;
-			c_neighbors = 0;
+			size_t a_neighbors = 0, b_neighbors = 0, c_neighbors = 0;
 			BOOST_FOREACH(const Node& nb, n.outNeighbors())
 			{
 				node_state_t s = net.nodeState(nb.id());
@@ -287,9 +284,7 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 	case motifs::QuadStarMotif::ALL_IN:
 		BOOST_FOREACH(const Node& n, net.nodes(q.center()))
 		{
-			a_neighbors = 0;
-			b_neighbors = 0;
-			c_neighbors = 0;
+			size_t a_neighbors = 0, b_neighbors = 0, c_neighbors = 0;
 			BOOST_FOREACH(const Node& nb, n.inNeighbors())
 			{
 				node_state_t s = net.nodeState(nb.id());
@@ -318,145 +313,157 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 	case motifs::QuadStarMotif::A_OUT:
 		BOOST_FOREACH(const Node& n, net.nodes(q.center()))
 		{
-			a_neighbors = 0;
-			b_neighbors = 0;
-			c_neighbors = 0;
 			BOOST_FOREACH(const Node& onb, n.outNeighbors())
 			{
-				if (net.nodeState(onb.id()) == q.a())
-					++a_neighbors;
+				if (net.nodeState(onb.id()) != q.a())
+					continue;
+				BOOST_FOREACH(const Node& inb1, n.inNeighbors())
+				{
+					if (inb1.id() == onb.id())
+						continue;
+					if (net.nodeState(inb1.id()) != q.b())
+						continue;
+					BOOST_FOREACH(const Node& inb2, n.inNeighbors())
+					{
+						if (inb2.id() == inb1.id())
+							continue;
+						if (inb2.id() == onb.id())
+							continue;
+						if (net.nodeState(inb2.id()) == q.c())
+							++ret;
+					}
+				}
 			}
-			BOOST_FOREACH(const Node& inb, n.inNeighbors())
-			{
-				if (net.nodeState(inb.id()) == q.b())
-					++b_neighbors;
-				else if (net.nodeState(inb.id()) == q.c())
-					++c_neighbors;
-			}
-			if (q.isMirrorSymmetric())	// can only be b = c
-				ret += b_neighbors * (b_neighbors - 1) * a_neighbors;
-			else
-				ret += a_neighbors * b_neighbors * c_neighbors;
 		}
 		break;
 	case motifs::QuadStarMotif::B_OUT:
 		BOOST_FOREACH(const Node& n, net.nodes(q.center()))
 		{
-			a_neighbors = 0;
-			b_neighbors = 0;
-			c_neighbors = 0;
 			BOOST_FOREACH(const Node& onb, n.outNeighbors())
 			{
-				if (net.nodeState(onb.id()) == q.b())
-					++b_neighbors;
+				if (net.nodeState(onb.id()) != q.b())
+					continue;
+				BOOST_FOREACH(const Node& inb1, n.inNeighbors())
+				{
+					if (inb1.id() == onb.id())
+						continue;
+					if (net.nodeState(inb1.id()) != q.a())
+						continue;
+					BOOST_FOREACH(const Node& inb2, n.inNeighbors())
+					{
+						if (inb2.id() == inb1.id())
+							continue;
+						if (inb2.id() == onb.id())
+							continue;
+						if (net.nodeState(inb2.id()) == q.c())
+							++ret;
+					}
+				}
 			}
-			BOOST_FOREACH(const Node& inb, n.inNeighbors())
-			{
-				if (net.nodeState(inb.id()) == q.a())
-					++a_neighbors;
-				else if (net.nodeState(inb.id()) == q.c())
-					++c_neighbors;
-			}
-			if (q.isMirrorSymmetric())	// can only be a = c
-				ret += a_neighbors * (a_neighbors - 1) * b_neighbors;
-			else
-				ret += a_neighbors * b_neighbors * c_neighbors;
 		}
 		break;
 	case motifs::QuadStarMotif::C_OUT:
 		BOOST_FOREACH(const Node& n, net.nodes(q.center()))
 		{
-			a_neighbors = 0;
-			b_neighbors = 0;
-			c_neighbors = 0;
 			BOOST_FOREACH(const Node& onb, n.outNeighbors())
 			{
-				if (net.nodeState(onb.id()) == q.c())
-					++c_neighbors;
+				if (net.nodeState(onb.id()) != q.c())
+					continue;
+				BOOST_FOREACH(const Node& inb1, n.inNeighbors())
+				{
+					if (inb1.id() == onb.id())
+						continue;
+					if (net.nodeState(inb1.id()) != q.b())
+						continue;
+					BOOST_FOREACH(const Node& inb2, n.inNeighbors())
+					{
+						if (inb2.id() == inb1.id())
+							continue;
+						if (inb2.id() == onb.id())
+							continue;
+						if (net.nodeState(inb2.id()) == q.a())
+							++ret;
+					}
+				}
 			}
-			BOOST_FOREACH(const Node& inb, n.inNeighbors())
-			{
-				if (net.nodeState(inb.id()) == q.b())
-					++b_neighbors;
-				else if (net.nodeState(inb.id()) == q.a())
-					++a_neighbors;
-			}
-			if (q.isMirrorSymmetric())	// can only be a = b
-				ret += b_neighbors * (b_neighbors - 1) * c_neighbors;
-			else
-				ret += a_neighbors * b_neighbors * c_neighbors;
 		}
 		break;
 	case motifs::QuadStarMotif::AB_OUT:
 		BOOST_FOREACH(const Node& n, net.nodes(q.center()))
 		{
-			a_neighbors = 0;
-			b_neighbors = 0;
-			c_neighbors = 0;
-			BOOST_FOREACH(const Node& onb, n.outNeighbors())
+			BOOST_FOREACH(const Node& onb1, n.outNeighbors())
 			{
-				if (net.nodeState(onb.id()) == q.a())
-					++a_neighbors;
-				else if (net.nodeState(onb.id()) == q.b())
-					++b_neighbors;
+				if (net.nodeState(onb1.id()) != q.a())
+					continue;
+				BOOST_FOREACH(const Node& onb2, n.outNeighbors())
+				{
+					if (onb2.id() == onb1.id())
+						continue;
+					if (net.nodeState(onb2.id() != q.b()))
+						continue;
+					BOOST_FOREACH(const Node& inb, n.inNeighbors())
+					{
+						if (inb.id() == onb1.id())
+							continue;
+						if (inb.id() == onb2.id())
+							continue;
+						if (net.nodeState(inb.id()) == q.c())
+							++ret;
+					}
+				}
 			}
-			BOOST_FOREACH(const Node& inb, n.inNeighbors())
-			{
-				if (net.nodeState(inb.id()) == q.c())
-					++c_neighbors;
-			}
-			if (q.isMirrorSymmetric())	// can only be a = b
-				ret += a_neighbors * (a_neighbors - 1) * c_neighbors;
-			else
-				ret += a_neighbors * b_neighbors * c_neighbors;
 		}
 		break;
 	case motifs::QuadStarMotif::AC_OUT:
 		BOOST_FOREACH(const Node& n, net.nodes(q.center()))
 		{
-			a_neighbors = 0;
-			b_neighbors = 0;
-			c_neighbors = 0;
-			BOOST_FOREACH(const Node& onb, n.outNeighbors())
+			BOOST_FOREACH(const Node& onb1, n.outNeighbors())
 			{
-				if (net.nodeState(onb.id()) == q.a())
-					++a_neighbors;
-				else if (net.nodeState(onb.id()) == q.c())
-					++c_neighbors;
+				if (net.nodeState(onb1.id()) != q.a())
+					continue;
+				BOOST_FOREACH(const Node& onb2, n.outNeighbors())
+				{
+					if (onb2.id() == onb1.id())
+						continue;
+					if (net.nodeState(onb2.id() != q.c()))
+						continue;
+					BOOST_FOREACH(const Node& inb, n.inNeighbors())
+					{
+						if (inb.id() == onb1.id())
+							continue;
+						if (inb.id() == onb2.id())
+							continue;
+						if (net.nodeState(inb.id()) == q.b())
+							++ret;
+					}
+				}
 			}
-			BOOST_FOREACH(const Node& inb, n.inNeighbors())
-			{
-				if (net.nodeState(inb.id()) == q.b())
-					++b_neighbors;
-			}
-			if (q.isMirrorSymmetric())	// can only be a = c
-				ret += a_neighbors * (a_neighbors - 1) * b_neighbors;
-			else
-				ret += a_neighbors * b_neighbors * c_neighbors;
 		}
 		break;
 	case motifs::QuadStarMotif::BC_OUT:
 		BOOST_FOREACH(const Node& n, net.nodes(q.center()))
 		{
-			a_neighbors = 0;
-			b_neighbors = 0;
-			c_neighbors = 0;
-			BOOST_FOREACH(const Node& onb, n.outNeighbors())
+			BOOST_FOREACH(const Node& onb1, n.outNeighbors())
 			{
-				if (net.nodeState(onb.id()) == q.b())
-					++b_neighbors;
-				else if (net.nodeState(onb.id()) == q.c())
-					++c_neighbors;
+				if (net.nodeState(onb1.id()) != q.b())
+					continue;
+				BOOST_FOREACH(const Node& onb2, n.outNeighbors())
+				{
+					if (onb2.id() == onb1.id())
+						continue;
+					if (net.nodeState(onb2.id() != q.c()))
+						continue;
+					BOOST_FOREACH(const Node& inb, n.inNeighbors())
+					{
+						if (inb.id() == onb1.id())
+							continue;
+						if (inb.id() == onb2.id())
+							continue;
+						if (net.nodeState(inb.id()) == q.a())
+							++ret;
+					}
+				}
 			}
-			BOOST_FOREACH(const Node& inb, n.inNeighbors())
-			{
-				if (net.nodeState(inb.id()) == q.a())
-					++a_neighbors;
-			}
-			if (q.isMirrorSymmetric())	// can only be b = c
-				ret += b_neighbors * (b_neighbors - 1) * a_neighbors;
-			else
-				ret += a_neighbors * b_neighbors * c_neighbors;
 		}
 		break;
 	default:
