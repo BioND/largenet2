@@ -16,7 +16,7 @@ class SingleNode: public Node
 {
 public:
 	SingleNode(node_id_t id) :
-		Node(id)
+		Node(id), mdeg_(0)
 	{
 	}
 	virtual ~SingleNode()
@@ -29,6 +29,10 @@ public:
 	degree_t inDegree() const
 	{
 		return inEdges_.size();
+	}
+	degree_t mutualDegree() const
+	{
+		return mdeg_;
 	}
 	degree_t undirectedDegree() const
 	{
@@ -104,7 +108,11 @@ protected:
 	void unregisterEdge(const Edge* e);
 
 private:
+	void onRegisterEdge(const Edge* e);
+	void beforeUnregisterEdge(const Edge* e);
+private:
 	edge_set outEdges_, inEdges_, unEdges_;
+	degree_t mdeg_;
 };
 
 }

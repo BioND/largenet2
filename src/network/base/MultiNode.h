@@ -8,6 +8,7 @@
 #define MULTINODE_H_
 
 #include "Node.h"
+#include <stdexcept>
 
 namespace largenet
 {
@@ -29,6 +30,10 @@ public:
 	degree_t inDegree() const
 	{
 		return inEdges_.size();
+	}
+	degree_t mutualDegree() const
+	{
+		throw std::runtime_error("Mutual degree not yet implemented for MultiNode");
 	}
 	degree_t undirectedDegree() const
 	{
