@@ -12,6 +12,7 @@
 #include "LinkMotif.h"
 #include "TripleMotif.h"
 #include "QuadLineMotif.h"
+#include "QuadStarMotif.h"
 #include "MotifSet.h"
 
 namespace largenet
@@ -22,7 +23,7 @@ typedef MotifSet<NodeMotif> NodeMotifSet;
 typedef MotifSet<LinkMotif> LinkMotifSet;
 typedef MotifSet<TripleMotif> TripleMotifSet;
 typedef MotifSet<QuadLineMotif> QuadLineMotifSet;
-//typedef MotifSet<QuadStarMotif> QuadStarMotifSet;
+typedef MotifSet<QuadStarMotif> QuadStarMotifSet;
 }
 }
 

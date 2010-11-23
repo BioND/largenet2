@@ -9,6 +9,7 @@
 
 #include "../base/Graph.h"
 #include "../motifs/TripleMotif.h"
+#include "../motifs/QuadStarMotif.h"
 
 namespace largenet {
 namespace measures {
@@ -16,7 +17,13 @@ namespace measures {
 size_t triples(const Graph& net);
 size_t inTriples(const Graph& net);
 size_t outTriples(const Graph& net);
+size_t inOutTriples(const Graph& net);
 size_t triples(const Graph& net, const motifs::TripleMotif& t);
+
+size_t quadStars(const Graph& net);
+size_t outQuadStars(const Graph& net);
+size_t inQuadStars(const Graph& net);
+size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q);
 
 }
 }
