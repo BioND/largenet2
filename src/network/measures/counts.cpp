@@ -18,7 +18,7 @@ size_t triples(const Graph& net)
 	size_t t = 0;
 	BOOST_FOREACH(const Node& n, net.nodes())
 	{
-		const degree_t d = n.degree();
+		const degree_t d = n.degree() - n.mutualDegree();	// do not count 2-loops as triples
 		if (d > 1)
 			t += d * (d - 1);
 	}
@@ -55,7 +55,7 @@ size_t inOutTriples(const Graph& net)
 	BOOST_FOREACH(const Node& n, net.nodes())
 	{
 		const degree_t d_in = n.inDegree(), d_out = n.outDegree();
-		t += d_in * d_out;
+		t += d_in * d_out - n.mutualDegree();
 	}
 	return t;
 }

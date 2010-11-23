@@ -31,10 +31,7 @@ public:
 	{
 		return inEdges_.size();
 	}
-	degree_t mutualDegree() const
-	{
-		throw std::runtime_error("Mutual degree not yet implemented for MultiNode");
-	}
+	degree_t mutualDegree() const;
 	degree_t undirectedDegree() const
 	{
 		return unEdges_.size();

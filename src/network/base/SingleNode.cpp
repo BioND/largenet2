@@ -12,23 +12,34 @@
 namespace largenet
 {
 
+degree_t SingleNode::mutualDegree() const
+{
+	degree_t mdeg = 0;
+	BOOST_FOREACH(Edge* e, inEdges_)
+	{
+		if (hasEdgeTo(e->source()))		// we can have at most one mutual edge pair per neighbor in a SingleNode
+			++mdeg;
+	}
+	return mdeg;
+}
+
 bool SingleNode::hasEdgeTo(const Node* n) const
 {
 	BOOST_FOREACH(Edge* e, outEdges_)
-				{
-					if (e->to(*n))
-						return true;
-				}
+	{
+		if (e->to(*n))
+			return true;
+	}
 	return false;
 }
 
 Edge* SingleNode::edgeTo(const Node* n) const
 {
 	BOOST_FOREACH(Edge* e, outEdges_)
-				{
-					if (e->to(*n))
-						return e;
-				}
+	{
+		if (e->to(*n))
+			return e;
+	}
 	throw(NotAdjacentException("Node has no edge to given node."));
 }
 
@@ -70,42 +81,6 @@ Edge* SingleNode::undirectedEdgeTo(const Node* n) const
 						return e;
 				}
 	throw(NotAdjacentException("Node has no undirected edge to given node."));
-}
-
-void SingleNode::onRegisterEdge(const Edge* e)
-{
-	// update mutual degree if new edge creates mutual edge
-	if (!e->isDirected())
-		return;
-	if (e->source() == this)
-	{
-		// find in-edge from same node (we can have at most one of them)
-		if (hasEdgeFrom(e->target()))
-			++mdeg_;
-	}
-	else if (e->target() == this)
-	{
-		if (hasEdgeTo(e->source()))
-			++mdeg_;
-	}
-}
-
-void SingleNode::beforeUnregisterEdge(const Edge* e)
-{
-	// update mutual degree if edge removal destroys mutual edge
-	if (!e->isDirected())
-		return;
-	if (e->source() == this)
-	{
-		// find in-edge from same node (we can have at most one of them)
-		if (hasEdgeFrom(e->target()))
-			--mdeg_;
-	}
-	else if (e->target() == this)
-	{
-		if (hasEdgeTo(e->source()))
-			--mdeg_;
-	}
 }
 
 void SingleNode::registerEdge(const Edge* e)
@@ -156,24 +131,17 @@ void SingleNode::registerEdge(const Edge* e)
 		else
 			unEdges_.insert(const_cast<Edge*> (e));
 	}
-	onRegisterEdge(e);
 }
 
 void SingleNode::unregisterEdge(const Edge* e)
 {
 	edge_set::iterator i = inEdges_.find(const_cast<Edge*> (e)); // here be dragons
 	if (i != inEdges_.end())
-	{
-		beforeUnregisterEdge(*i);
 		inEdges_.erase(i);
-	}
 
 	i = outEdges_.find(const_cast<Edge*> (e)); // here be dragons;
 	if (i != outEdges_.end())
-	{
-		beforeUnregisterEdge(*i);
 		outEdges_.erase(i);
-	}
 
 	i = unEdges_.find(const_cast<Edge*> (e)); // here be dragons;
 	if (i != unEdges_.end())
