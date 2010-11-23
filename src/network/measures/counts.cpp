@@ -18,9 +18,9 @@ size_t triples(const Graph& net)
 	size_t t = 0;
 	BOOST_FOREACH(const Node& n, net.nodes())
 	{
-		const degree_t d = n.degree() - n.mutualDegree();	// do not count 2-loops as triples
+		const degree_t d = n.degree();
 		if (d > 1)
-			t += d * (d - 1);
+			t += d * (d - 1) - 2*n.mutualDegree();	// do not count 2-loops as triples
 	}
 	return t / 2;
 }
@@ -32,7 +32,7 @@ size_t outTriples(const Graph& net)
 	{
 		const degree_t d = n.outDegree();
 		if (d > 1)
-			t += d * (d - 1);
+			t += d * (d - 1);	// FIXME will count multi-out-edges as triples for MultiNodes
 	}
 	return t / 2;
 }
@@ -44,7 +44,7 @@ size_t inTriples(const Graph& net)
 	{
 		const degree_t d = n.inDegree();
 		if (d > 1)
-			t += d * (d - 1);
+			t += d * (d - 1);	// FIXME will count multi-in-edges as triples for MultiNodes
 	}
 	return t / 2;
 }
