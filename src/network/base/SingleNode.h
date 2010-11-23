@@ -30,6 +30,7 @@ public:
 	{
 		return inEdges_.size();
 	}
+	degree_t mutualDegree() const;
 	degree_t undirectedDegree() const
 	{
 		return unEdges_.size();

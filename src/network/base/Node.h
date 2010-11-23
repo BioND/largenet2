@@ -72,6 +72,11 @@ public:
 	 */
 	virtual degree_t inDegree() const = 0;
 	/**
+	 * Number of mutual edges (pairs of incoming/outgoing edges from/to same node)
+	 * @return mutual degree of this node
+	 */
+	virtual degree_t mutualDegree() const = 0;
+	/**
 	 * Number of undirected edges
 	 * @return undirected degree of this node
 	 */

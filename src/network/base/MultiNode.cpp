@@ -8,10 +8,16 @@
 #include "Edge.h"
 #include "exceptions.h"
 #include <boost/foreach.hpp>
+#include <stdexcept>
 
 namespace largenet
 {
-
+degree_t MultiNode::mutualDegree() const
+{
+	throw std::runtime_error("Mutual degree not yet implemented for MultiNode");
+	degree_t mdeg = 0;
+	return mdeg;
+}
 bool MultiNode::hasEdgeTo(const Node* n) const
 {
 	BOOST_FOREACH(Edge* e, outEdges_)
