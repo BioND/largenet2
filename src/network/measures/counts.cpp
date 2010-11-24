@@ -399,7 +399,7 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 				{
 					if (onb2.id() == onb1.id())
 						continue;
-					if (net.nodeState(onb2.id() != q.b()))
+					if (net.nodeState(onb2.id()) != q.b())
 						continue;
 					BOOST_FOREACH(const Node& inb, n.inNeighbors())
 					{
@@ -425,7 +425,7 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 				{
 					if (onb2.id() == onb1.id())
 						continue;
-					if (net.nodeState(onb2.id() != q.c()))
+					if (net.nodeState(onb2.id()) != q.c())
 						continue;
 					BOOST_FOREACH(const Node& inb, n.inNeighbors())
 					{
@@ -451,7 +451,7 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 				{
 					if (onb2.id() == onb1.id())
 						continue;
-					if (net.nodeState(onb2.id() != q.c()))
+					if (net.nodeState(onb2.id()) != q.c())
 						continue;
 					BOOST_FOREACH(const Node& inb, n.inNeighbors())
 					{
