@@ -199,10 +199,10 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 	{
 		degdist[i] = 0;
 		remain += numNodes * normalization * pow(i, -exponent);
-		degdist[i] = floor(remain);
-		remain -= floor(remain);
+		degdist[i] = static_cast<node_size_t> (floor(remain));
+		remain -= degdist[i];
 	}
-	degdist[0] = round(remain);
+	degdist[0] = static_cast<node_size_t>(round(remain));
 
 	while (g.numberOfNodes() < numNodes)
 		g.addNode();
@@ -213,7 +213,7 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 
 	for (size_t i = numNodes; i > 0; --i)
 	{
-		for (node_size_t n = degdist[i]; n > 0; n--)
+		for (node_size_t n = degdist[i]; n > 0; --n)
 		{
 			node_id_t cur_id = nodes.back();
 			nodes.pop_back();
