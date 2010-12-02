@@ -16,6 +16,10 @@
 #include <iterator>
 #include <utility>
 
+#ifndef NDEBUG
+#include <iostream>
+#endif
+
 namespace largenet
 {
 
@@ -203,6 +207,18 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 		remain -= degdist[i];
 	}
 	degdist[0] = static_cast<node_size_t>(round(remain));
+
+#ifndef NDEBUG
+	node_size_t degsum = 0;
+	double mdeg = 0;
+	for (size_t k = 0; k < degdist.size(); ++k)
+	{
+		degsum += degdist[k];
+		mdeg += k*degdist[k];
+	}
+	std::cout << "Sum of N[k] is " << degsum << "\n";
+	std::cout << "Mean degree is " << mdeg/degsum << "\n";
+#endif
 
 	while (g.numberOfNodes() < numNodes)
 		g.addNode();
