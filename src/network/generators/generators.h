@@ -18,6 +18,7 @@
 
 #ifndef NDEBUG
 #include <iostream>
+#include <stdexcept>
 #endif
 
 namespace largenet
@@ -55,9 +56,36 @@ _Iter random_from(std::pair<_Iter, _Iter> range, RandomGen& rng)
 }
 
 template<class RandomGen>
+void randomGnmSlow(Graph& g, node_size_t numNodes, edge_size_t numEdges,
+		RandomGen& rng, bool directed = false)
+{
+	node_size_t max_edges = directed ? numNodes * (numNodes - 1) : numNodes * (numNodes - 1) / 2;
+	if (numEdges > max_edges)
+		throw std::runtime_error("Cannot create graph with more than O(N^2) edges");
+	g.clear();
+	while (g.numberOfNodes() < numNodes)
+		g.addNode();
+	while (g.numberOfEdges() < numEdges)
+	{
+		Graph::NodeIterator n1 = random_from(g.nodes()), n2 = random_from(g.nodes());
+		if (n1.id() == n2.id())
+			continue;
+		if (g.isEdge(n1.id(), n2.id()))
+			continue;
+		else
+			g.addEdge(n1.id(), n2.id(), directed);
+	}
+}
+
+template<class RandomGen>
 void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 		RandomGen& rng, bool directed = false)
 {
+	if (directed)
+	{
+		randomGnmSlow(g, numNodes, numEdges, rng, directed);
+		return;
+	}
 	g.clear();
 	typedef std::pair<node_id_t, node_id_t> edge_t;
 	// hash table for edges
@@ -68,7 +96,7 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 
 	if (numNodes < 1)
 		return;
-	// FIXME does this algorithm what it is expected to do when creating directed edges??
+	// FIXME this algorithm does not do what it is expected to do when creating directed edges??
 	node_size_t max_edges = numNodes * (numNodes - 1) / 2; // undirected
 	assert(numEdges <= max_edges);
 
