@@ -31,33 +31,33 @@ namespace util
 {
 
 template<class U, class V, class RandomGen>
-U& random_from(V& container, RandomGen& rng)
+U& random_from(V& container, RandomGen& rnd)
 {
-	int i = rng.IntFromTo(0, container.size() - 1);
+	int i = rnd.IntFromTo(0, container.size() - 1);
 	return container[i];
 }
 
 template<class _Iter, class RandomGen>
-_Iter random_from(_Iter begin, _Iter end, RandomGen& rng)
+_Iter random_from(_Iter begin, _Iter end, RandomGen& rnd)
 {
 	if (begin == end)
 		return end;
-	int i = rng.IntFromTo(0, std::distance(begin, end) - 1);
+	int i = rnd.IntFromTo(0, std::distance(begin, end) - 1);
 	std::advance(begin, i);
 	assert(begin != end);
 	return begin;
 }
 
 template<class _Iter, class RandomGen>
-_Iter random_from(std::pair<_Iter, _Iter> range, RandomGen& rng)
+_Iter random_from(std::pair<_Iter, _Iter> range, RandomGen& rnd)
 {
-	return random_from(range.first, range.second, rng);
+	return random_from(range.first, range.second, rnd);
 }
 }
 
 template<class RandomGen>
 void randomGnmSlow(Graph& g, node_size_t numNodes, edge_size_t numEdges,
-		RandomGen& rng, bool directed = false)
+		RandomGen& rnd, bool directed = false)
 {
 	node_size_t max_edges = directed ? numNodes * (numNodes - 1) : numNodes * (numNodes - 1) / 2;
 	if (numEdges > max_edges)
@@ -67,7 +67,7 @@ void randomGnmSlow(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 		g.addNode();
 	while (g.numberOfEdges() < numEdges)
 	{
-		Graph::NodeIterator n1 = random_from(g.nodes()), n2 = random_from(g.nodes());
+		Graph::NodeIterator n1 = util::random_from(g.nodes(), rnd), n2 = util::random_from(g.nodes(), rnd);
 		if (n1.id() == n2.id())
 			continue;
 		if (g.isEdge(n1.id(), n2.id()))
@@ -79,11 +79,11 @@ void randomGnmSlow(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 
 template<class RandomGen>
 void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
-		RandomGen& rng, bool directed = false)
+		RandomGen& rnd, bool directed = false)
 {
 	if (directed)
 	{
-		randomGnmSlow(g, numNodes, numEdges, rng, directed);
+		randomGnmSlow(g, numNodes, numEdges, rnd, directed);
 		return;
 	}
 	g.clear();
@@ -109,7 +109,7 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 	{
 		while (true)
 		{
-			int edge_index = rng.IntFromTo(0, max_edges - 1);
+			int edge_index = rnd.IntFromTo(0, max_edges - 1);
 			current_edge.first = 1 + static_cast<node_id_t> (std::floor(
 					std::sqrt(0.25 + 2.0 * edge_index) - 0.5));
 			current_edge.second = static_cast<node_id_t> (edge_index
@@ -135,7 +135,7 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
  * @param[in] p Link creation probability.
  */
 template<class RandomGen>
-void randomGnp(Graph& g, node_size_t numNodes, double edgeProb, RandomGen& rng)
+void randomGnp(Graph& g, node_size_t numNodes, double edgeProb, RandomGen& rnd)
 {
 	// FIXME this seems broken
 	throw("Not yet implented");
@@ -153,7 +153,7 @@ void randomGnp(Graph& g, node_size_t numNodes, double edgeProb, RandomGen& rng)
 	//	Graph::NodeIteratorRange iters = g.nodes();
 	//	for (Graph::NodeIterator v = iters.first; v != iters.second; ++v)
 	//	{
-	//		double r = rng.Uniform01();
+	//		double r = rnd.Uniform01();
 	//		w = 1 + w + static_cast<long int> (std::floor(std::log(1.0 - r)
 	//				/ std::log(1.0 - edgeProb)));
 	//		while ((w >= v->id()) && (v != iters.second))
@@ -174,7 +174,7 @@ void randomGnp(Graph& g, node_size_t numNodes, double edgeProb, RandomGen& rng)
  * @param rng Random number generator providing uniform IntFromTo(int low, int high)
  */
 template<class RandomGen>
-void randomBA(Graph& g, node_size_t numNodes, edge_size_t m, RandomGen& rng)
+void randomBA(Graph& g, node_size_t numNodes, edge_size_t m, RandomGen& rnd)
 {
 	/*
 	 * efficient BA(n,m) from Phys. Rev. E 71, 036113 (2005)
@@ -191,7 +191,7 @@ void randomBA(Graph& g, node_size_t numNodes, edge_size_t m, RandomGen& rng)
 		{
 			size_t ind = 2 * (v * m + i);
 			nodes[ind] = v;
-			int r = rng.IntFromTo(0, ind);
+			int r = rnd.IntFromTo(0, ind);
 			nodes[ind + 1] = nodes[r];
 		}
 	}
@@ -213,7 +213,7 @@ void randomBA(Graph& g, node_size_t numNodes, edge_size_t m, RandomGen& rng)
  */
 template<class RandomGen>
 void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
-		RandomGen& rng)
+		RandomGen& rnd)
 {
 	if (g.numberOfNodes() != 0)
 		throw("Need empty graph in randomOutDegreePowerlaw");
@@ -263,9 +263,9 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 			nodes.pop_back();
 			for (node_size_t k = 0; k < i; ++k)
 			{
-				Graph::NodeIterator nit = util::random_from(g.nodes(), rng);
-				while (g.isEdge(cur_id, nit.id()))
-					nit = util::random_from(g.nodes(), rng);
+				Graph::NodeIterator nit = util::random_from(g.nodes(), rnd);
+				while (g.isEdge(cur_id, nit.id()) || cur_id == nit.id())	// disallow double edges and self-loops
+					nit = util::random_from(g.nodes(), rnd);
 				g.addEdge(cur_id, nit.id(), true);
 			}
 		}
