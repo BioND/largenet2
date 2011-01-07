@@ -59,15 +59,18 @@ template<class RandomGen>
 void randomGnmSlow(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 		RandomGen& rnd, bool directed = false)
 {
-	node_size_t max_edges = directed ? numNodes * (numNodes - 1) : numNodes * (numNodes - 1) / 2;
+	node_size_t max_edges = directed ? numNodes * (numNodes - 1) : numNodes
+			* (numNodes - 1) / 2;
 	if (numEdges > max_edges)
-		throw std::runtime_error("Cannot create graph with more than O(N^2) edges");
+		throw std::runtime_error(
+				"Cannot create graph with more than O(N^2) edges");
 	g.clear();
 	while (g.numberOfNodes() < numNodes)
 		g.addNode();
 	while (g.numberOfEdges() < numEdges)
 	{
-		Graph::NodeIterator n1 = util::random_from(g.nodes(), rnd), n2 = util::random_from(g.nodes(), rnd);
+		Graph::NodeIterator n1 = util::random_from(g.nodes(), rnd), n2 =
+				util::random_from(g.nodes(), rnd);
 		if (n1.id() == n2.id())
 			continue;
 		if (g.isEdge(n1.id(), n2.id()))
@@ -219,22 +222,22 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 		throw("Need empty graph in randomOutDegreePowerlaw");
 
 	double normalization = 0;
-	for (int i = numNodes; i >= 1; --i)
+	for (int i = numNodes - 1; i >= 1; --i)
 	{
 		normalization += pow(i, -exponent);
 	}
 	normalization = 1.0 / normalization;
 
-	std::vector<node_size_t> degdist(numNodes + 1, 0);
+	std::vector<node_size_t> degdist(numNodes, 0);
 	double remain = 0;
-	for (size_t i = numNodes; i >= 1; --i)
+	for (size_t i = numNodes - 1; i >= 1; --i)
 	{
 		degdist[i] = 0;
 		remain += numNodes * normalization * pow(i, -exponent);
 		degdist[i] = static_cast<node_size_t> (floor(remain));
 		remain -= degdist[i];
 	}
-	degdist[0] = static_cast<node_size_t>(round(remain));
+	degdist[0] = static_cast<node_size_t> (round(remain));
 
 #ifndef NDEBUG
 	node_size_t degsum = 0;
@@ -242,10 +245,10 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 	for (size_t k = 0; k < degdist.size(); ++k)
 	{
 		degsum += degdist[k];
-		mdeg += k*degdist[k];
+		mdeg += k * degdist[k];
 	}
 	std::cout << "Sum of N[k] is " << degsum << "\n";
-	std::cout << "Mean degree is " << mdeg/degsum << "\n";
+	std::cout << "Mean degree is " << mdeg / degsum << "\n";
 #endif
 
 	while (g.numberOfNodes() < numNodes)
@@ -255,7 +258,7 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 	Graph::NodeIteratorRange nd = g.nodes();
 	std::transform(nd.first, nd.second, nodes.begin(), mem_fun_ref(&Node::id));
 
-	for (size_t i = numNodes; i > 0; --i)
+	for (size_t i = numNodes - 1; i > 0; --i)
 	{
 		for (node_size_t n = degdist[i]; n > 0; --n)
 		{
@@ -264,7 +267,7 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 			for (node_size_t k = 0; k < i; ++k)
 			{
 				Graph::NodeIterator nit = util::random_from(g.nodes(), rnd);
-				while (g.isEdge(cur_id, nit.id()) || cur_id == nit.id())	// disallow double edges and self-loops
+				while (g.isEdge(cur_id, nit.id()) || cur_id == nit.id()) // disallow double edges and self-loops
 					nit = util::random_from(g.nodes(), rnd);
 				g.addEdge(cur_id, nit.id(), true);
 			}
