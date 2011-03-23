@@ -6,6 +6,7 @@
 
 #include "measures.h"
 #include <boost/foreach.hpp>
+#include <cmath>
 
 namespace largenet
 {
@@ -82,6 +83,42 @@ degree_range_t outDegreeRange(const Graph& g)
 			max = k;
 	}
 	return std::make_pair(min, max);
+}
+
+double std_dev_in(const Graph& g)
+{
+	double s = 0;
+	double mean = g.numberOfEdges() / g.numberOfNodes();
+	BOOST_FOREACH(const Node& n, g.nodes())
+	{
+		degree_t d = n.inDegree();
+		s += (d - mean) * (d - mean);
+	}
+	return sqrt(s);
+}
+
+double std_dev_out(const Graph& g)
+{
+	double s = 0;
+	double mean = g.numberOfEdges() / g.numberOfNodes();
+	BOOST_FOREACH(const Node& n, g.nodes())
+	{
+		degree_t d = n.outDegree();
+		s += (d - mean) * (d - mean);
+	}
+	return sqrt(s);
+}
+
+double inOutDegreeCorrelation(const Graph& g)
+{
+	double cov = 0;
+	double mean = g.numberOfEdges() / g.numberOfNodes();
+	BOOST_FOREACH(const Node& n, g.nodes())
+	{
+		degree_t din = n.inDegree(), dout = n.outDegree();
+		cov += (din - mean) * (dout - mean);
+	}
+	return cov / std_dev_out(g) / std_dev_in(g);
 }
 
 }

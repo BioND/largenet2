@@ -31,6 +31,8 @@ inline double meanDegree(const Graph& g)
 	return static_cast<double> (g.numberOfEdges()) / g.numberOfNodes();
 }
 
+double inOutDegreeCorrelation(const Graph& g);
+
 }
 }
 

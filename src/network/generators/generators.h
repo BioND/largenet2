@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <iterator>
 #include <utility>
+#include <functional>
 
 #ifndef NDEBUG
 #include <iostream>
@@ -256,7 +257,7 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 
 	std::vector<node_id_t> nodes(numNodes, 0);
 	Graph::NodeIteratorRange nd = g.nodes();
-	std::transform(nd.first, nd.second, nodes.begin(), mem_fun_ref(&Node::id));
+	std::transform(nd.first, nd.second, nodes.begin(), std::mem_fun_ref(&Node::id));
 
 	for (size_t i = numNodes - 1; i > 0; --i)
 	{
