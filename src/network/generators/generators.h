@@ -9,6 +9,7 @@
 
 #include "../largenet.h"
 #include <boost/unordered_set.hpp>
+#include <boost/foreach.hpp>
 #include <vector>
 #include <cassert>
 #include <cmath>
@@ -16,10 +17,10 @@
 #include <iterator>
 #include <utility>
 #include <functional>
+#include <stdexcept>
 
 #ifndef NDEBUG
 #include <iostream>
-#include <stdexcept>
 #endif
 
 namespace largenet
@@ -63,7 +64,7 @@ void randomGnmSlow(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 	node_size_t max_edges = directed ? numNodes * (numNodes - 1) : numNodes
 			* (numNodes - 1) / 2;
 	if (numEdges > max_edges)
-		throw std::runtime_error(
+		throw std::out_of_range(
 				"Cannot create graph with more than O(N^2) edges");
 	g.clear();
 	while (g.numberOfNodes() < numNodes)
@@ -142,7 +143,7 @@ template<class RandomGen>
 void randomGnp(Graph& g, node_size_t numNodes, double edgeProb, RandomGen& rnd)
 {
 	// FIXME this seems broken
-	throw("Not yet implented");
+	throw std::runtime_error("Not yet implented");
 	/*
 	 * efficient G(n,p) from Phys. Rev. E 71, 036113 (2005)
 	 */
@@ -184,7 +185,7 @@ void randomBA(Graph& g, node_size_t numNodes, edge_size_t m, RandomGen& rnd)
 	 * efficient BA(n,m) from Phys. Rev. E 71, 036113 (2005)
 	 */
 	if (g.numberOfNodes() != 0)
-		throw("Need empty graph in randomBA");
+		throw std::invalid_argument("Need empty graph in randomBA");
 
 	typedef std::vector<node_id_t> node_id_v;
 	node_id_v nodes(2 * numNodes * m, 0);
@@ -220,7 +221,7 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 		RandomGen& rnd)
 {
 	if (g.numberOfNodes() != 0)
-		throw("Need empty graph in randomOutDegreePowerlaw");
+		throw std::invalid_argument("Need empty graph in randomOutDegreePowerlaw");
 
 	double normalization = 0;
 	for (int i = numNodes - 1; i >= 1; --i)
@@ -257,7 +258,8 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 
 	std::vector<node_id_t> nodes(numNodes, 0);
 	Graph::NodeIteratorRange nd = g.nodes();
-	std::transform(nd.first, nd.second, nodes.begin(), std::mem_fun_ref(&Node::id));
+	std::transform(nd.first, nd.second, nodes.begin(),
+			std::mem_fun_ref(&Node::id));
 
 	for (size_t i = numNodes - 1; i > 0; --i)
 	{
@@ -273,6 +275,64 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 				g.addEdge(cur_id, nit.id(), true);
 			}
 		}
+	}
+}
+
+/**
+ * Undirected Watts-Strogatz small-world graph
+ * @param g
+ * @param numNodes
+ * @param numNeighbors
+ * @param rewProb
+ * @param rnd
+ */
+template<class RandomGen>
+void wattsStrogatzGraph(Graph& g, node_size_t numNodes,
+		node_size_t numNeighbors, double rewProb, RandomGen& rnd)
+{
+	/// @see implementation in Python Networkx (http://networkx.lanl.gov)
+	if (numNeighbors >= numNodes / 2)
+		throw std::out_of_range("Number of neighbors must be less than N/2.");
+
+	g.clear();
+	while (g.numberOfNodes() < numNodes)
+		g.addNode();
+
+	typedef std::vector<node_id_t> node_id_v;
+	node_id_v nodes(numNodes, 0);
+	Graph::NodeIteratorRange nd = g.nodes();
+	std::transform(nd.first, nd.second, nodes.begin(),
+			std::mem_fun_ref(&Node::id));
+	assert(nodes.size() == g.numberOfNodes());
+	for (node_size_t i = 1; i < numNeighbors / 2 + 1; ++i)
+	{
+		node_id_v targets(numNodes, 0);
+		// targets = nodes[i:] + nodes[0:i]
+		std::rotate_copy(nodes.begin(), nodes.begin()+i, nodes.end(), targets.begin());
+		for (size_t k = 0; k < numNodes; ++k)
+			g.addEdge(nodes[k], targets[k], false);
+	}
+
+	assert(g.numberOfEdges() == numNodes * numNeighbors / 2);
+
+	// TODO now, rewire each edge with probability p
+	typedef std::vector<edge_id_t> edge_id_v;
+	edge_id_v edges;
+	edges.reserve(2*static_cast<size_t>(std::ceil(rewProb * g.numberOfEdges())));
+	BOOST_FOREACH(Edge& e, g.edges())
+	{
+		if (rnd.Chance(rewProb))
+			edges.push_back(e.id());
+	}
+	BOOST_FOREACH(edge_id_t eid, edges)
+	{
+		Edge* e = g.edge(eid);
+		Graph::NodeIterator nit = util::random_from(g.nodes(), rnd);
+		// no self-loops or double edges
+		while ((nit.id() == e->source()->id()) || g.adjacent(e->source()->id(), nit.id()))
+			nit = util::random_from(g.nodes(), rnd);
+		g.addEdge(e->source()->id(), nit.id(), false);
+		g.removeEdge(eid);
 	}
 }
 
