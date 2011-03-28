@@ -163,7 +163,7 @@ bool Graph::isEdge(const node_id_t source, const node_id_t target) const
 {
 	assert(nodes_.valid(source));
 	assert(nodes_.valid(target));
-	return node(source)->hasEdgeTo(node(target));
+	return node(source)->hasEdgeTo(node(target)) || node(source)->hasUndirectedEdgeTo(node(target));
 }
 
 bool Graph::adjacent(const node_id_t n1, const node_id_t n2) const
