@@ -7,6 +7,7 @@
 #include "counts.h"
 #include <boost/foreach.hpp>
 #include <cassert>
+#include <set>
 
 namespace largenet
 {
@@ -169,6 +170,41 @@ size_t triples(const Graph& net, const motifs::TripleMotif& t)
 		return ret / 2;
 	else
 		return ret;
+}
+
+size_t triangles(const Graph& net)
+{
+	size_t t = 0;
+	std::set<node_id_t> nbs;
+	// FIXME enumerating all nodes is slow in this case, can we do better?
+	BOOST_FOREACH(const Node& n, net.nodes())
+	{
+		nbs.clear();
+		BOOST_FOREACH(const Node& onb, n.outNeighbors())
+		{
+			nbs.insert(onb.id());
+		}
+		BOOST_FOREACH(const Node& inb, n.inNeighbors())
+		{
+			nbs.insert(inb.id());
+		}
+		BOOST_FOREACH(const Node& unb, n.undirectedNeighbors())
+		{
+			nbs.insert(unb.id());
+		}
+		// now check for each pair of nodes in nbs whether they are connected
+		for (std::set<node_id_t>::iterator i = nbs.begin(); i != nbs.end(); ++i)
+		{
+			std::set<node_id_t>::iterator j = i;
+			++j;
+			for (; j != nbs.end(); ++j)
+			{
+				if (net.isEdge(*i, *j))
+					++t;
+			}
+		}
+	}
+	return t / 3;
 }
 
 size_t quadStars(const Graph& net)
