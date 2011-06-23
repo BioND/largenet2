@@ -172,7 +172,7 @@ size_t triples(const Graph& net, const motifs::TripleMotif& t)
 		return ret;
 }
 
-size_t triangles(const Graph& net)
+size_t triangles2(const Graph& net)
 {
 	size_t t = 0;
 	std::set<node_id_t> nbs;
@@ -202,6 +202,30 @@ size_t triangles(const Graph& net)
 				if (net.isEdge(*i, *j))
 					++t;
 			}
+		}
+	}
+	return t / 3;
+}
+
+size_t triangles(const Graph& net)
+{
+	size_t t = 0;
+	BOOST_FOREACH(const Edge& e, net.edges())
+	{
+		BOOST_FOREACH(const Node& nb, e.source()->outNeighbors())
+		{
+			if (nb.isAdjacentTo(e.target()))
+				++t;
+		}
+		BOOST_FOREACH(const Node& nb, e.source()->inNeighbors())
+		{
+			if (nb.isAdjacentTo(e.target()))
+				++t;
+		}
+		BOOST_FOREACH(const Node& nb, e.source()->undirectedNeighbors())
+		{
+			if (nb.isAdjacentTo(e.target()))
+				++t;
 		}
 	}
 	return t / 3;
