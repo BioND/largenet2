@@ -31,6 +31,11 @@ inline double meanDegree(const Graph& g)
 	return static_cast<double> (g.numberOfEdges()) / g.numberOfNodes();
 }
 
+/**
+ * One-point correlation function: Pearson's correlation coefficient for in- and out-degree.
+ * @param g Graph to compute correlation coefficient for.
+ * @return Correlation coefficient $r\in[-1,1]$ of linear dependence between the nodes' in- and out-degrees.
+ */
 double inOutDegreeCorrelation(const Graph& g);
 
 }
