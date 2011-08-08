@@ -38,6 +38,38 @@ inline double meanDegree(const Graph& g)
  */
 double inOutDegreeCorrelation(const Graph& g);
 
+struct NeighborDegreeCorrelations
+{
+	double r_ii, r_io, r_oi, r_oo;
+};
+
+NeighborDegreeCorrelations neighborDegreeCorrelations(const Graph& g);
+
+/**
+ * Two-point correlation function: Pearson's correlation coefficient for in-degrees of adjacent nodes
+ * @param g Graph
+ * @return correlation coefficient between in-degrees of adjacent nodes
+ */
+double neighborDegreeCorrelationInIn(const Graph& g);
+/**
+ * Two-point correlation function: Pearson's correlation coefficient for in- and out-degrees of adjacent nodes
+ * @param g Graph
+ * @return correlation coefficient between the nodes' in-degrees and out-degrees of outgoing neighbors.
+ */
+double neighborDegreeCorrelationInOut(const Graph& g);
+/**
+ * Two-point correlation function: Pearson's correlation coefficient for out-degrees of adjacent nodes
+ * @param g Graph
+ * @return correlation coefficient between out-degrees of adjacent nodes
+ */
+double neighborDegreeCorrelationOutOut(const Graph& g);
+/**
+ * Two-point correlation function: Pearson's correlation coefficient for in- and out-degrees of adjacent nodes
+ * @param g Graph
+ * @return correlation coefficient between the nodes' out-degrees and in-degrees of outgoing neighbors.
+ */
+double neighborDegreeCorrelationOutIn(const Graph& g);
+
 }
 }
 
