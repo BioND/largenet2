@@ -13,6 +13,9 @@ AC_PROG_CXX
 AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 
+# Checks for header files
+# boost etc
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 AC_HEADER_STDBOOL
@@ -38,7 +41,7 @@ AC_CONFIG_SRCDIR([largenet2/base/Graph.h])
 
 # Output files
 AC_CONFIG_FILES([Makefile]
-                [largenet2-$PACKAGE_VERSION.pc:largenet2.pc.in])
+                [largenet2-0.1.pc:largenet2.pc.in])
 
 AC_CONFIG_HEADERS([config.h])
 
