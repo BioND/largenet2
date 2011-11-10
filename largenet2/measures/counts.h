@@ -10,6 +10,7 @@
 #include <largenet2/base/Graph.h>
 #include <largenet2/motifs/TripleMotif.h>
 #include <largenet2/motifs/QuadStarMotif.h>
+#include <cstddef>
 
 namespace largenet {
 namespace measures {
