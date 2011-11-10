@@ -15,6 +15,13 @@ AC_PROG_INSTALL
 
 # Checks for header files
 # boost etc
+#AC_CHECK_HEADERS_ONCE([boost/foreach.hpp
+#					   boost/ptr_container/ptr_vector.hpp
+#					   boost/noncopyable.hpp
+#					   boost/call_traits.hpp
+#					   boost/unordered_set.hpp])
+
+AX_BOOST_BASE([1.36.0])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
