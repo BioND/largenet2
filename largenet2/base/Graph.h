@@ -26,6 +26,12 @@ namespace largenet
 class ElementFactory;
 class GraphListener;
 
+/**
+ * The Graph class
+ *
+ * A Graph object holds the nodes and links and provides an interface to access,
+ * traverse, and modify them.
+ */
 class Graph: public boost::noncopyable
 {
 private:

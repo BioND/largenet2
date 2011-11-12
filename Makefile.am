@@ -76,4 +76,18 @@ nobase_include_HEADERS = \
 		largenet2/base/graph_iterators.h \
 		largenet2/base/Node.h \
 		largenet2/base/node_iterators.h
+
+if HAVE_DOXYGEN
+
+DOCDIR = doc
+MOSTLYCLEANFILES = -r $(DOCDIR)
+	
+doxygen-doc: $(DOCDIR)/doxygen.stamp 
+
+$(DOCDIR)/doxygen.stamp: Doxyfile
+	$(DOXYGEN) $(DOXYFLAGS) $<
+	echo Timestamp > $@
+
+endif
+
 		

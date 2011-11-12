@@ -7,6 +7,12 @@
 #ifndef LARGENET2_H_
 #define LARGENET2_H_
 
+/**
+ * @mainpage A C++ library for the efficient simulation of large adaptive networks
+ *
+ * @author Gerd Zschaler <gzschaler@googlemail.com>
+ */
+
 #include <largenet2/base/exceptions.h>
 #include <largenet2/base/factories.h>
 #include <largenet2/base/Graph.h>

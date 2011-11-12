@@ -12,17 +12,9 @@ AC_LANG([C++])
 AC_PROG_CXX
 AC_PROG_LIBTOOL
 AC_PROG_INSTALL
-
-# Checks for header files
-# boost etc
-#AC_CHECK_HEADERS_ONCE([boost/foreach.hpp
-#					   boost/ptr_container/ptr_vector.hpp
-#					   boost/noncopyable.hpp
-#					   boost/call_traits.hpp
-#					   boost/unordered_set.hpp])
-
+AC_PROG_TRY_DOXYGEN
 AX_BOOST_BASE([1.36.0])
-
+ 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 AC_HEADER_STDBOOL
@@ -46,9 +38,12 @@ AC_CONFIG_SRCDIR([largenet2/base/Graph.h])
 #     		   [examples=false])
 #AM_CONDITIONAL([BUILD_EXAMPLES], [test x$examples = xtrue])
 
+AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+
 # Output files
-AC_CONFIG_FILES([Makefile]
-                [largenet2-0.1.pc:largenet2.pc.in])
+AC_CONFIG_FILES([Makefile
+                largenet2-0.1.pc:largenet2.pc.in
+                Doxyfile])
 
 AC_CONFIG_HEADERS([config.h])
 
