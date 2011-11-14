@@ -7,6 +7,10 @@
 #ifndef CHOOSETYPE_H_
 #define CHOOSETYPE_H_
 
+/**
+ * @cond IGNORE
+ */
+
 template<bool flag, class IsTrue, class IsFalse>
 struct choose_type;
 
@@ -21,5 +25,9 @@ struct choose_type<false, IsTrue, IsFalse>
 {
 	typedef IsFalse type;
 };
+
+/**
+ * @endcond IGNORE
+ */
 
 #endif /* CHOOSETYPE_H_ */

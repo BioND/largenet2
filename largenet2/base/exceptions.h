@@ -18,8 +18,19 @@ namespace largenet
 class LNetException
 {
 public:
+	/**
+	 * Constructor
+	 * @param msg exception message
+	 */
 	LNetException(const char* msg) throw() : msg_(msg) { }
+	/**
+	 * Destructor
+	 */
 	virtual ~LNetException() throw() {}
+	/**
+	 * Get exception message
+	 * @return exception message
+	 */
 	virtual const char* what() const throw() { return msg_.c_str(); }
 private:
 	std::string msg_;
@@ -31,6 +42,10 @@ private:
 class NotAdjacentException : public LNetException
 {
 public:
+	/**
+	 * Constructor
+	 * @param msg exception message
+	 */
 	NotAdjacentException(const char* msg) throw() : LNetException(msg) {}
 };
 
@@ -40,6 +55,10 @@ public:
 class SingletonException : public LNetException
 {
 public:
+	/**
+	 * Constructor
+	 * @param msg exception message
+	 */
 	SingletonException(const char* msg) throw() : LNetException(msg) {}
 };
 

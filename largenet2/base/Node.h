@@ -325,8 +325,20 @@ public:
 	}
 */
 protected:
+	/**
+	 * Register an adjacent edge instance with this node
+	 * @param e pointer to Edge
+	 */
 	virtual void registerEdge(const Edge* e) = 0;
+	/**
+	 * Unregister an adjacent edge instance from this node (e.g., before
+	 * removing the edge)
+	 * @param e pointer to edge
+	 */
 	virtual void unregisterEdge(const Edge* e) = 0;
+	/**
+	 * Set node ID
+	 */
 	void setId(node_id_t id)
 	{
 		id_ = id;

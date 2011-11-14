@@ -23,10 +23,16 @@ namespace largenet
 class SingleNode: public Node
 {
 public:
+	/**
+	 * Create a new node with ID @p id
+	 */
 	SingleNode(node_id_t id) :
 		Node(id)
 	{
 	}
+	/**
+	 * Destructor
+	 */
 	virtual ~SingleNode()
 	{
 	}

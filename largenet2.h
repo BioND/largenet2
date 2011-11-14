@@ -10,12 +10,11 @@
 /**
  * @mainpage A C++ library for the efficient simulation of large adaptive networks
  *
+ * @author Gerd Zschaler <gzschaler@googlemail.com>
  * @copyright This work is licensed under the Creative Commons Attribution-NonCommercial 3.0
  * Unported License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-nc/3.0/ or send a letter to Creative Commons,
  * 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
- *
- * @author Gerd Zschaler <gzschaler@googlemail.com>
  */
 
 #include <largenet2/base/exceptions.h>

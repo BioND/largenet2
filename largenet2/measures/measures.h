@@ -17,17 +17,36 @@ namespace largenet
  */
 namespace measures
 {
-
+/// degree range type (for (min, max) degree pair)
 typedef std::pair<degree_t, degree_t> degree_range_t;
 
+/**
+ * Get maximum in-degree in graph @p g
+ */
 degree_t maxInDegree(const Graph& g);
+/**
+ * Get minimum in-degree in graph @p g
+ */
 degree_t minInDegree(const Graph& g);
+/**
+ * Get in-degree range (min, max) in graph @p g
+ */
 degree_range_t inDegreeRange(const Graph& g);
-
+/**
+ * Get maximum out-degree in graph @p g
+ */
 degree_t maxOutDegree(const Graph& g);
+/**
+ * Get minimum out-degree in graph @p g
+ */
 degree_t minOutDegree(const Graph& g);
+/**
+ * Get out-degree range (min, max) in graph @p g
+ */
 degree_range_t outDegreeRange(const Graph& g);
-
+/**
+ * Get mean degree in graph @p g
+ */
 inline double meanDegree(const Graph& g)
 {
 	return static_cast<double> (g.numberOfEdges()) / g.numberOfNodes();
@@ -36,7 +55,7 @@ inline double meanDegree(const Graph& g)
 /**
  * One-point correlation function: Pearson's correlation coefficient for in- and out-degree.
  * @param g Graph to compute correlation coefficient for.
- * @return Correlation coefficient $r\in[-1,1]$ of linear dependence between the nodes' in- and out-degrees.
+ * @return Correlation coefficient \f$r\in[-1,1]\f$ of linear dependence between the nodes' in- and out-degrees.
  */
 double inOutDegreeCorrelation(const Graph& g);
 
