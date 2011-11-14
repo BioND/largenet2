@@ -13,6 +13,11 @@
 namespace largenet
 {
 
+/**
+ * Allows for parallel edges to the same neighbors.
+ *
+ * A MultiNode can have any number of edges connecting it to the <em>same</em> neighbor.
+ */
 class MultiNode: public Node
 {
 public:

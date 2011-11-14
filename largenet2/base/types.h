@@ -7,6 +7,9 @@
 #ifndef LARGENET_TYPES_H_
 #define LARGENET_TYPES_H_
 
+/**
+ * The largenet namespace
+ */
 namespace largenet {
 
 typedef unsigned long int node_id_t;

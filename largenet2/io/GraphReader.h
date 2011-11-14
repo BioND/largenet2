@@ -14,6 +14,9 @@ namespace largenet
 
 class Graph;
 
+/**
+ * graph I/O functionality
+ */
 namespace io
 {
 

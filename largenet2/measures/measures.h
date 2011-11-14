@@ -12,7 +12,9 @@
 
 namespace largenet
 {
-
+/**
+ * Various graph-theoretic measures
+ */
 namespace measures
 {
 

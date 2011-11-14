@@ -11,6 +11,9 @@
 #include <largenet2/base/Graph.h>
 
 namespace largenet {
+/**
+ * Various graph conversion functions
+ */
 namespace converters {
 
 /**

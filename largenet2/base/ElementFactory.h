@@ -16,19 +16,41 @@ class Node;
 class Edge;
 //class Triple;
 
+/**
+ * Basic graph element factory used to create nodes and edges as required
+ */
 class ElementFactory
 {
 public:
+	/**
+	 * Constructor
+	 */
 	ElementFactory()
 	{
 	}
+	/**
+	 * Destructor
+	 */
 	virtual ~ElementFactory()
 	{
 	}
+	/**
+	 * Create a new node with ID @p id
+	 * @param id node ID
+	 * @return pointer to the new node
+	 */
 	Node* createNode(node_id_t id)
 	{
 		return doCreateNode(id);
 	}
+	/**
+	 * Create a new edge with ID @p id connecting @p source and @p target
+	 * @param id edge ID
+	 * @param source source node
+	 * @param target target node
+	 * @param directed create a directed edge?
+	 * @return
+	 */
 	Edge* createEdge(edge_id_t id, Node& source, Node& target, bool directed)
 	{
 		return doCreateEdge(id, source, target, directed);

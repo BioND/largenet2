@@ -12,6 +12,14 @@
 namespace largenet
 {
 
+/**
+ * Does not allow for parallel edges.
+ *
+ * A SingleNode cannot have more than one edge to, one edge from, and one undirected
+ * edge to the <em>same</em> neighbor. When trying to add an edge to a node that is already
+ * connected accordingly, a SingletonException is thrown.  Self-loops (non-parallel edges
+ * connecting a node with itself are allowed, however.
+ */
 class SingleNode: public Node
 {
 public:

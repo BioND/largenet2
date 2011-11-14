@@ -15,6 +15,9 @@
 namespace largenet
 {
 
+/**
+ * Basic graph element factory template
+ */
 template<class NodeType = SingleNode, class EdgeType = Edge>
 class GraphElementFactory: public ElementFactory
 {
@@ -30,7 +33,13 @@ private:
 	}
 };
 
+/**
+ * Element factory for simple graphs in which no parallel edges are allowed
+ */
 typedef GraphElementFactory<SingleNode, Edge> SingleEdgeElementFactory;
+/**
+ * Element factory for non-simple graphs, in which parallel edges are allowed
+ */
 typedef GraphElementFactory<MultiNode, Edge> MultiEdgeElementFactory;
 
 }

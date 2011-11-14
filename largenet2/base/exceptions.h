@@ -12,6 +12,9 @@
 namespace largenet
 {
 
+/**
+ * Base class for largenet exceptions
+ */
 class LNetException
 {
 public:
@@ -22,12 +25,18 @@ private:
 	std::string msg_;
 };
 
+/**
+ * Thrown when two nodes are not connected
+ */
 class NotAdjacentException : public LNetException
 {
 public:
 	NotAdjacentException(const char* msg) throw() : LNetException(msg) {}
 };
 
+/**
+ * Thrown when trying to create parallel edges in simple graphs
+ */
 class SingletonException : public LNetException
 {
 public:

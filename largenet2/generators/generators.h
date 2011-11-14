@@ -25,7 +25,9 @@
 
 namespace largenet
 {
-
+/**
+ * graph generators
+ */
 namespace generators
 {
 
@@ -57,6 +59,14 @@ _Iter random_from(std::pair<_Iter, _Iter> range, RandomGen& rnd)
 }
 }
 
+/**
+ * Random graph G(N,M), naive implementation
+ * @param g
+ * @param numNodes
+ * @param numEdges
+ * @param rnd
+ * @param directed
+ */
 template<class RandomGen>
 void randomGnmSlow(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 		RandomGen& rnd, bool directed = false)
@@ -82,6 +92,15 @@ void randomGnmSlow(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 	}
 }
 
+/**
+ * Random graph G(N, M), fast implementation
+ * @param g
+ * @param numNodes
+ * @param numEdges
+ * @param rnd
+ * @param directed
+ * @see Phys. Rev. E 71, 036113 (2005)
+ */
 template<class RandomGen>
 void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 		RandomGen& rnd, bool directed = false)
@@ -132,12 +151,13 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 }
 
 /**
- * Create a random Erdos-Renyi network with link probability @p p.
+ * Create a random Erdọős-Rényi network with link probability @p p.
  *
  * Links are created with probability @p p in such a way that the expected (average)
  * number of links is @f$ \frac{p}{2} N(N-1) @f$.
  * @param[out] g Graph object to store network (will be cleared first)
  * @param[in] p Link creation probability.
+ * @todo implement
  */
 template<class RandomGen>
 void randomGnp(Graph& g, node_size_t numNodes, double edgeProb, RandomGen& rnd)
