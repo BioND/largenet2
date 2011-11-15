@@ -36,6 +36,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+check_PROGRAMS = largenet2_boost_test$(EXEEXT)
 subdir = .
 DIST_COMMON = $(am__configure_deps) $(nobase_include_HEADERS) \
 	$(srcdir)/Doxyfile.in $(srcdir)/Makefile.am \
@@ -103,6 +104,10 @@ liblargenet2_0_1_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(AM_CXXFLAGS) $(CXXFLAGS) $(liblargenet2_0_1_la_LDFLAGS) \
 	$(LDFLAGS) -o $@
+am_largenet2_boost_test_OBJECTS =  \
+	tests/boost/largenet2_boost_test.$(OBJEXT)
+largenet2_boost_test_OBJECTS = $(am_largenet2_boost_test_OBJECTS)
+largenet2_boost_test_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -129,8 +134,10 @@ am__v_CXXLD_0 = @echo "  CXXLD " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(liblargenet2_0_1_la_SOURCES)
-DIST_SOURCES = $(liblargenet2_0_1_la_SOURCES)
+SOURCES = $(liblargenet2_0_1_la_SOURCES) \
+	$(largenet2_boost_test_SOURCES)
+DIST_SOURCES = $(liblargenet2_0_1_la_SOURCES) \
+	$(largenet2_boost_test_SOURCES)
 DATA = $(pkgconfig_DATA)
 HEADERS = $(nobase_include_HEADERS)
 ETAGS = etags
@@ -340,8 +347,10 @@ nobase_include_HEADERS = \
 		largenet2/base/Edge.h \
 		largenet2/base/graph_iterators.h \
 		largenet2/base/Node.h \
-		largenet2/base/node_iterators.h
+		largenet2/base/node_iterators.h \
+		largenet2/boost/largenet2_boost.h
 
+largenet2_boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
 @HAVE_DOXYGEN_TRUE@DOCDIR = doc
 @HAVE_DOXYGEN_TRUE@MOSTLYCLEANFILES = -r $(DOCDIR)
 all: config.h
@@ -514,6 +523,27 @@ largenet2/base/MultiNode.lo: largenet2/base/$(am__dirstamp) \
 liblargenet2-0.1.la: $(liblargenet2_0_1_la_OBJECTS) $(liblargenet2_0_1_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(liblargenet2_0_1_la_LINK) -rpath $(libdir) $(liblargenet2_0_1_la_OBJECTS) $(liblargenet2_0_1_la_LIBADD) $(LIBS)
 
+clean-checkPROGRAMS:
+	@list='$(check_PROGRAMS)'; test -n "$$list" || exit 0; \
+	echo " rm -f" $$list; \
+	rm -f $$list || exit $$?; \
+	test -n "$(EXEEXT)" || exit 0; \
+	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
+	echo " rm -f" $$list; \
+	rm -f $$list
+tests/boost/$(am__dirstamp):
+	@$(MKDIR_P) tests/boost
+	@: > tests/boost/$(am__dirstamp)
+tests/boost/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tests/boost/$(DEPDIR)
+	@: > tests/boost/$(DEPDIR)/$(am__dirstamp)
+tests/boost/largenet2_boost_test.$(OBJEXT):  \
+	tests/boost/$(am__dirstamp) \
+	tests/boost/$(DEPDIR)/$(am__dirstamp)
+largenet2_boost_test$(EXEEXT): $(largenet2_boost_test_OBJECTS) $(largenet2_boost_test_DEPENDENCIES) 
+	@rm -f largenet2_boost_test$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(largenet2_boost_test_OBJECTS) $(largenet2_boost_test_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f largenet2/base/Edge.$(OBJEXT)
@@ -552,6 +582,7 @@ mostlyclean-compile:
 	-rm -f largenet2/sim/output/IntervalOutput.lo
 	-rm -f largenet2/sim/output/Outputter.$(OBJEXT)
 	-rm -f largenet2/sim/output/Outputter.lo
+	-rm -f tests/boost/largenet2_boost_test.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -574,6 +605,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/motifs/detail/$(DEPDIR)/motif_construction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/sim/output/$(DEPDIR)/IntervalOutput.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/sim/output/$(DEPDIR)/Outputter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tests/boost/$(DEPDIR)/largenet2_boost_test.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -860,6 +892,7 @@ distcleancheck: distclean
 	       $(distcleancheck_listfiles) ; \
 	       exit 1; } >&2
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS) config.h
 installdirs:
@@ -900,18 +933,20 @@ distclean-generic:
 	-rm -f largenet2/motifs/detail/$(am__dirstamp)
 	-rm -f largenet2/sim/output/$(DEPDIR)/$(am__dirstamp)
 	-rm -f largenet2/sim/output/$(am__dirstamp)
+	-rm -f tests/boost/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tests/boost/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
-	mostlyclean-am
+clean-am: clean-checkPROGRAMS clean-generic clean-libLTLIBRARIES \
+	clean-libtool mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR)
+	-rm -rf largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/boost/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -959,7 +994,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR)
+	-rm -rf largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/boost/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -979,26 +1014,26 @@ ps-am:
 uninstall-am: uninstall-libLTLIBRARIES uninstall-nobase_includeHEADERS \
 	uninstall-pkgconfigDATA
 
-.MAKE: all install-am install-strip
+.MAKE: all check-am install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am am--refresh check check-am clean \
-	clean-generic clean-libLTLIBRARIES clean-libtool ctags dist \
-	dist-all dist-bzip2 dist-gzip dist-lzma dist-shar dist-tarZ \
-	dist-xz dist-zip distcheck distclean distclean-compile \
-	distclean-generic distclean-hdr distclean-libtool \
-	distclean-tags distcleancheck distdir distuninstallcheck dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-libLTLIBRARIES \
-	install-man install-nobase_includeHEADERS install-pdf \
-	install-pdf-am install-pkgconfigDATA install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-libLTLIBRARIES uninstall-nobase_includeHEADERS \
-	uninstall-pkgconfigDATA
+	clean-checkPROGRAMS clean-generic clean-libLTLIBRARIES \
+	clean-libtool ctags dist dist-all dist-bzip2 dist-gzip \
+	dist-lzma dist-shar dist-tarZ dist-xz dist-zip distcheck \
+	distclean distclean-compile distclean-generic distclean-hdr \
+	distclean-libtool distclean-tags distcleancheck distdir \
+	distuninstallcheck dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am \
+	install-libLTLIBRARIES install-man \
+	install-nobase_includeHEADERS install-pdf install-pdf-am \
+	install-pkgconfigDATA install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-libLTLIBRARIES \
+	uninstall-nobase_includeHEADERS uninstall-pkgconfigDATA
 
 
 @HAVE_DOXYGEN_TRUE@doxygen-doc: $(DOCDIR)/doxygen.stamp 
