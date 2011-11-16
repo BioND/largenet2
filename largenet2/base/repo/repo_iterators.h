@@ -9,7 +9,6 @@
 
 #include <largenet2/base/repo/repo_types.h>
 #include <largenet2/util/choosetype.h>
-#include <boost/call_traits.hpp>
 #include <iterator>
 #include <cassert>
 
@@ -40,15 +39,14 @@ public:
 	typedef std::input_iterator_tag iterator_category;
 
 	typedef typename choose_type<is_const, const Repo&, Repo&>::type repo_ref;
-	typedef typename choose_type<is_const, const Repo* const , Repo*>::type
-			repo_ptr;
+	typedef typename choose_type<is_const, const Repo*, Repo*>::type repo_ptr;
 
 	/**
 	 * Default constructor needed for STL compliance. This creates a singular
 	 * (invalid) iterator which does not belong to any repository.
 	 */
 	RepoIndexIterator() :
-		rep_(0), cur_(0)
+			rep_(0), cur_(0)
 	{
 	}
 	/**
@@ -57,7 +55,7 @@ public:
 	 * @param repo Repository the iterator belongs to.
 	 */
 	explicit RepoIndexIterator(repo_ref repo) :
-		rep_(&repo), cur_(0)
+			rep_(&repo), cur_(0)
 	{
 		assert(rep_ != 0);
 	}
@@ -68,7 +66,7 @@ public:
 	 * @param n Number of item.
 	 */
 	RepoIndexIterator(repo_ref repo, id_t n) :
-		rep_(&repo), cur_(n)
+			rep_(&repo), cur_(n)
 	{
 		assert(rep_ != 0);
 		// this should be correct now
@@ -78,8 +76,9 @@ public:
 	 * Copy constructor.
 	 * @param it Iterator to copy from.
 	 */
-	RepoIndexIterator(const RepoIndexIterator& it) :
-		rep_(it.rep_), cur_(it.cur_)
+	template<bool other_is_const>
+	RepoIndexIterator(const RepoIndexIterator<Repo, other_is_const>& it) :
+			rep_(it.rep_), cur_(it.cur_)
 	{
 	}
 
@@ -95,9 +94,11 @@ public:
 	 * @param it Iterator to assign from.
 	 * @return Reference to self.
 	 */
-	RepoIndexIterator& operator=(const RepoIndexIterator& it)
+	template<bool other_is_const>
+	RepoIndexIterator& operator=(
+			const RepoIndexIterator<Repo, other_is_const>& it)
 	{
-		if (this != &it)
+		if ((rep_ != it.rep_) || (cur_ != it.cur_))
 		{
 			rep_ = it.rep_;
 			cur_ = it.cur_;
@@ -106,24 +107,24 @@ public:
 	}
 
 	/**
-	 * Equality operator is a friend, declared as non-template
-	 * but depending on template parameter.
-	 * @see M. Austern: The Standard Librarian: Defining Iterators and Const
-	 * Iterators. http://www.ddj.com/cpp/184401331
-	 * @param a first iterator to be compared
-	 * @param b second iterator to be compared
-	 * @return true if equal
+	 * Equality operator is a template on the const-ness of @p it, so
+	 * as to be able to compare non-const iterators with const iterators
+	 * @return true if @p it belongs to the same repository and points at
+	 * the same current value
 	 */
-	friend bool operator==(const RepoIndexIterator& a,
-			const RepoIndexIterator& b)
+	template<bool other_is_const>
+	bool operator==(const RepoIndexIterator<Repo, other_is_const>& it) const
 	{
-		return ((a.rep_ == b.rep_) && (a.cur_ == b.cur_));
+		return ((rep_ == it.rep_) && (cur_ == it.cur_));
 	}
 
-	friend bool operator!=(const RepoIndexIterator& a,
-			const RepoIndexIterator& b)
+	/**
+	 * Inequality operator
+	 */
+	template<bool other_is_const>
+	bool operator!=(const RepoIndexIterator<Repo, other_is_const>& it) const
 	{
-		return !(a == b);
+		return !operator==(it);
 	}
 
 	/**
@@ -190,6 +191,7 @@ public:
 	}
 
 private:
+	template<class R, bool c> friend class RepoIndexIterator;
 	repo_ptr rep_; ///< repository the iterator belongs to
 	id_t cur_; ///< current iterator position
 };
@@ -208,8 +210,7 @@ public:
 	typedef std::input_iterator_tag iterator_category;
 
 	typedef typename choose_type<is_const, const Repo&, Repo&>::type repo_ref;
-	typedef typename choose_type<is_const, const Repo* const , Repo*>::type
-			repo_ptr;
+	typedef typename choose_type<is_const, const Repo*, Repo*>::type repo_ptr;
 
 public:
 	/**
@@ -217,7 +218,7 @@ public:
 	 * (invalid) iterator which does not belong to any repository.
 	 */
 	RepoCategoryIterator() :
-		rep_(0), category_(0), cur_(0)
+			rep_(0), category_(0), cur_(0)
 	{
 	}
 	/**
@@ -227,7 +228,7 @@ public:
 	 * @param cat Category to iterate over.
 	 */
 	RepoCategoryIterator(repo_ref repo, category_t cat) :
-		rep_(&repo), category_(cat), cur_(0)
+			rep_(&repo), category_(cat), cur_(0)
 	{
 		assert(rep_ != 0);
 		assert(category_ < rep_->numberOfCategories());
@@ -240,18 +241,20 @@ public:
 	 * @param n Number of item.
 	 */
 	RepoCategoryIterator(repo_ref repo, category_t cat, address_t n) :
-		rep_(&repo), category_(cat), cur_(n)
+			rep_(&repo), category_(cat), cur_(n)
 	{
 		assert(rep_ != 0);
 		assert(category_ < rep_->numberOfCategories());
-		assert(cur_ <= rep_->count(category_)); // equal on end
+		assert(cur_ <= rep_->count(category_));
+		// equal on end
 	}
 	/**
 	 * Copy constructor.
 	 * @param it Iterator to copy from.
 	 */
-	RepoCategoryIterator(const RepoCategoryIterator& it) :
-		rep_(it.rep_), category_(it.category_), cur_(it.cur_)
+	template<bool other_is_const>
+	RepoCategoryIterator(const RepoCategoryIterator<Repo, other_is_const>& it) :
+			rep_(it.rep_), category_(it.category_), cur_(it.cur_)
 	{
 	}
 	/**
@@ -266,9 +269,10 @@ public:
 	 * @param it Iterator to assign from.
 	 * @return Reference to self.
 	 */
-	RepoCategoryIterator& operator=(const RepoCategoryIterator& it)
+	template<bool other_is_const>
+	RepoCategoryIterator& operator=(const RepoCategoryIterator<Repo, other_is_const>& it)
 	{
-		if (this != &it)
+		if ((rep_ != it.rep_) || (category_ != it.category_) || (cur_ != it.cur_))
 		{
 			rep_ = it.rep_;
 			category_ = it.category_;
@@ -278,25 +282,21 @@ public:
 	}
 
 	/**
-	 * Equality operator is a friend, declared as non-template
-	 * but depending on template parameter.
-	 * @see M. Austern: The Standard Librarian: Defining Iterators and Const
-	 * Iterators. http://www.ddj.com/cpp/184401331
-	 * @param a first iterator to be compared
-	 * @param b second iterator to be compared
-	 * @return true if equal
+	 * Equality operator is a template on the const-ness of @p it, so
+	 * as to be able to compare non-const iterators with const iterators
+	 * @return true if @p it belongs to the same repository and points at
+	 * the same current value
 	 */
-	friend bool operator==(const RepoCategoryIterator& a,
-			const RepoCategoryIterator& b)
+	template<bool other_is_const>
+	bool operator==(const RepoCategoryIterator<Repo, other_is_const>& it) const
 	{
-		return ((a.rep_ == b.rep_) && (a.category_ == b.category_) && (a.cur_
-				== b.cur_));
+		return ((rep_ == it.rep_) && (category_ == it.category_)
+				&& (cur_ == it.cur_));
 	}
-
-	friend bool operator!=(const RepoCategoryIterator& a,
-			const RepoCategoryIterator& b)
+	template<bool other_is_const>
+	bool operator!=(const RepoCategoryIterator<Repo, other_is_const>& it) const
 	{
-		return !(a == b);
+		return !operator==(it);
 	}
 
 	/**
@@ -348,6 +348,7 @@ public:
 	}
 
 private:
+	template<class R, bool c> friend class RepoCategoryIterator;
 	repo_ptr rep_; ///< Repository the iterator belongs to.
 	category_t category_; ///< Category the iterator traverses.
 	address_t cur_; ///< Current iterator position, relative to rep_->offset_[category_] (index in ids_ array).
