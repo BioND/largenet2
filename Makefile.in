@@ -36,7 +36,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = largenet2_boost_test$(EXEEXT)
+check_PROGRAMS = graph_iterators_test$(EXEEXT) boost_test$(EXEEXT)
 subdir = .
 DIST_COMMON = $(am__configure_deps) $(nobase_include_HEADERS) \
 	$(srcdir)/Doxyfile.in $(srcdir)/Makefile.am \
@@ -104,10 +104,13 @@ liblargenet2_0_1_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(AM_CXXFLAGS) $(CXXFLAGS) $(liblargenet2_0_1_la_LDFLAGS) \
 	$(LDFLAGS) -o $@
-am_largenet2_boost_test_OBJECTS =  \
-	tests/boost/largenet2_boost_test.$(OBJEXT)
-largenet2_boost_test_OBJECTS = $(am_largenet2_boost_test_OBJECTS)
-largenet2_boost_test_LDADD = $(LDADD)
+am_boost_test_OBJECTS = tests/boost/largenet2_boost_test.$(OBJEXT)
+boost_test_OBJECTS = $(am_boost_test_OBJECTS)
+boost_test_LDADD = $(LDADD)
+am_graph_iterators_test_OBJECTS =  \
+	tests/base/graph_iterators_test.$(OBJEXT)
+graph_iterators_test_OBJECTS = $(am_graph_iterators_test_OBJECTS)
+graph_iterators_test_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -134,10 +137,10 @@ am__v_CXXLD_0 = @echo "  CXXLD " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(liblargenet2_0_1_la_SOURCES) \
-	$(largenet2_boost_test_SOURCES)
-DIST_SOURCES = $(liblargenet2_0_1_la_SOURCES) \
-	$(largenet2_boost_test_SOURCES)
+SOURCES = $(liblargenet2_0_1_la_SOURCES) $(boost_test_SOURCES) \
+	$(graph_iterators_test_SOURCES)
+DIST_SOURCES = $(liblargenet2_0_1_la_SOURCES) $(boost_test_SOURCES) \
+	$(graph_iterators_test_SOURCES)
 DATA = $(pkgconfig_DATA)
 HEADERS = $(nobase_include_HEADERS)
 ETAGS = etags
@@ -350,7 +353,8 @@ nobase_include_HEADERS = \
 		largenet2/base/node_iterators.h \
 		largenet2/boost/largenet2_boost.h
 
-largenet2_boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
+graph_iterators_test_SOURCES = tests/base/graph_iterators_test.cpp
+boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
 @HAVE_DOXYGEN_TRUE@DOCDIR = doc
 @HAVE_DOXYGEN_TRUE@MOSTLYCLEANFILES = -r $(DOCDIR)
 all: config.h
@@ -540,9 +544,20 @@ tests/boost/$(DEPDIR)/$(am__dirstamp):
 tests/boost/largenet2_boost_test.$(OBJEXT):  \
 	tests/boost/$(am__dirstamp) \
 	tests/boost/$(DEPDIR)/$(am__dirstamp)
-largenet2_boost_test$(EXEEXT): $(largenet2_boost_test_OBJECTS) $(largenet2_boost_test_DEPENDENCIES) 
-	@rm -f largenet2_boost_test$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(largenet2_boost_test_OBJECTS) $(largenet2_boost_test_LDADD) $(LIBS)
+boost_test$(EXEEXT): $(boost_test_OBJECTS) $(boost_test_DEPENDENCIES) 
+	@rm -f boost_test$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(boost_test_OBJECTS) $(boost_test_LDADD) $(LIBS)
+tests/base/$(am__dirstamp):
+	@$(MKDIR_P) tests/base
+	@: > tests/base/$(am__dirstamp)
+tests/base/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tests/base/$(DEPDIR)
+	@: > tests/base/$(DEPDIR)/$(am__dirstamp)
+tests/base/graph_iterators_test.$(OBJEXT): tests/base/$(am__dirstamp) \
+	tests/base/$(DEPDIR)/$(am__dirstamp)
+graph_iterators_test$(EXEEXT): $(graph_iterators_test_OBJECTS) $(graph_iterators_test_DEPENDENCIES) 
+	@rm -f graph_iterators_test$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(graph_iterators_test_OBJECTS) $(graph_iterators_test_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -582,6 +597,7 @@ mostlyclean-compile:
 	-rm -f largenet2/sim/output/IntervalOutput.lo
 	-rm -f largenet2/sim/output/Outputter.$(OBJEXT)
 	-rm -f largenet2/sim/output/Outputter.lo
+	-rm -f tests/base/graph_iterators_test.$(OBJEXT)
 	-rm -f tests/boost/largenet2_boost_test.$(OBJEXT)
 
 distclean-compile:
@@ -605,6 +621,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/motifs/detail/$(DEPDIR)/motif_construction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/sim/output/$(DEPDIR)/IntervalOutput.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/sim/output/$(DEPDIR)/Outputter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tests/base/$(DEPDIR)/graph_iterators_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/boost/$(DEPDIR)/largenet2_boost_test.Po@am__quote@
 
 .cpp.o:
@@ -933,6 +950,8 @@ distclean-generic:
 	-rm -f largenet2/motifs/detail/$(am__dirstamp)
 	-rm -f largenet2/sim/output/$(DEPDIR)/$(am__dirstamp)
 	-rm -f largenet2/sim/output/$(am__dirstamp)
+	-rm -f tests/base/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tests/base/$(am__dirstamp)
 	-rm -f tests/boost/$(DEPDIR)/$(am__dirstamp)
 	-rm -f tests/boost/$(am__dirstamp)
 
@@ -946,7 +965,7 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libLTLIBRARIES \
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/boost/$(DEPDIR)
+	-rm -rf largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/boost/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -994,7 +1013,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/boost/$(DEPDIR)
+	-rm -rf largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/boost/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

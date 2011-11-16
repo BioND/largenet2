@@ -78,8 +78,12 @@ nobase_include_HEADERS = \
 		largenet2/base/node_iterators.h \
 		largenet2/boost/largenet2_boost.h
 
-check_PROGRAMS = largenet2_boost_test
-largenet2_boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
+check_PROGRAMS = \
+		graph_iterators_test \
+		boost_test 
+
+graph_iterators_test_SOURCES = tests/base/graph_iterators_test.cpp
+boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
 
 if HAVE_DOXYGEN
 
