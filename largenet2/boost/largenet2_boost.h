@@ -9,7 +9,35 @@
 #include <largenet2/base/Graph.h>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/foreach.hpp>
+#include <boost/function.hpp>
+#include <boost/iterator/transform_iterator.hpp>
 #include <utility>
+
+namespace largenet
+{
+namespace detail
+{
+typedef boost::function<node_id_t(Node&)> node_func_t;
+typedef boost::function<edge_id_t(Edge&)> edge_func_t;
+typedef boost::function<edge_id_t(Edge*)> ptr_edge_func_t;
+
+typedef boost::transform_iterator<node_func_t, Graph::NodeIterator> node_iterator_t;
+typedef boost::transform_iterator<edge_func_t, Graph::EdgeIterator> edge_iterator_t;
+typedef boost::transform_iterator<ptr_edge_func_t, Node::edge_iterator> node_edge_iterator_t;
+inline node_id_t node_id(const Node& n)
+{
+	return n.id();
+}
+inline edge_id_t edge_id(const Edge& e)
+{
+	return e.id();
+}
+inline edge_id_t ptr_edge_id(const Edge* e)
+{
+	return e->id();
+}
+}
+}
 
 namespace boost
 {
@@ -27,10 +55,10 @@ struct graph_traits<largenet::Graph>
 
 	// FIXME we need to use iterator adaptors/facades here, because the BGL requires
 	// the iterator's value_types to be edge or vertex descriptors
-	typedef largenet::Node::edge_iterator out_edge_iterator;
-	typedef largenet::Node::edge_iterator in_edge_iterator;
-	typedef largenet::Graph::EdgeIterator edge_iterator;
-	typedef largenet::Graph::NodeIterator vertex_iterator;
+	typedef largenet::detail::node_edge_iterator_t out_edge_iterator;
+	typedef largenet::detail::node_edge_iterator_t in_edge_iterator;
+	typedef largenet::detail::edge_iterator_t edge_iterator;
+	typedef largenet::detail::node_iterator_t vertex_iterator;
 
 	typedef largenet_graph_traversal_category traversal_category;
 	// FIXME need clever mechanics for this
@@ -49,7 +77,7 @@ struct graph_traits<largenet::Graph>
 
 inline std::pair<graph_traits<largenet::Graph>::vertex_iterator,
 		graph_traits<largenet::Graph>::vertex_iterator> vertices(
-		largenet::Graph& g)
+		const largenet::Graph& g)
 {
 	return g.nodes();
 }
@@ -95,17 +123,25 @@ inline graph_traits<largenet::Graph>::degree_size_type out_degree(
 
 inline std::pair<graph_traits<largenet::Graph>::edge_iterator,
 		graph_traits<largenet::Graph>::edge_iterator> edges(
-		largenet::Graph& g)
-{
-	return g.edges();
-}
-
-inline std::pair<graph_traits<largenet::Graph>::edge_iterator,
-		graph_traits<largenet::Graph>::edge_iterator> edges(
 		const largenet::Graph& g)
 {
-	return g.edges();
+	typedef graph_traits<largenet::Graph>::edge_iterator ei_t;
+	largenet::Graph::EdgeIteratorRange iters = g.edges();
+	return std::pair < ei_t, ei_t
+			> (ei_t(iters.first, &largenet::detail::edge_id), ei_t(iters.second,
+					&largenet::detail::edge_id));
 }
+
+//inline std::pair<graph_traits<largenet::Graph>::edge_iterator,
+//		graph_traits<largenet::Graph>::edge_iterator> edges(
+//		const largenet::Graph& g)
+//{
+//	typedef graph_traits<largenet::Graph>::edge_iterator ei_t;
+//	largenet::Graph::ConstEdgeIteratorRange iters = g.edges();
+//	return std::pair < ei_t, ei_t
+//			> (ei_t(iters.first, &largenet::detail::edge_id), ei_t(iters.second,
+//					&largenet::detail::edge_id));
+//}
 
 inline graph_traits<largenet::Graph>::edges_size_type num_edges(
 		const largenet::Graph& g)
@@ -120,7 +156,11 @@ inline std::pair<graph_traits<largenet::Graph>::in_edge_iterator,
 		graph_traits<largenet::Graph>::vertex_descriptor u,
 		const largenet::Graph& g)
 {
-	return g.node(u)->inEdges();
+	typedef graph_traits<largenet::Graph>::in_edge_iterator ei_t;
+	largenet::Node::edge_iterator_range iters = g.node(u)->inEdges();
+	return std::pair < ei_t, ei_t
+			> (ei_t(iters.first, &largenet::detail::ptr_edge_id), ei_t(
+					iters.second, &largenet::detail::ptr_edge_id));
 }
 
 inline graph_traits<largenet::Graph>::degree_size_type in_degree(
@@ -177,7 +217,7 @@ inline void remove_edge(graph_traits<largenet::Graph>::edge_descriptor e,
 inline void remove_edge(graph_traits<largenet::Graph>::edge_iterator it,
 		largenet::Graph& g)
 {
-	g.removeEdge(it.id());
+	g.removeEdge(*it);
 }
 
 template<typename _Predicate>
