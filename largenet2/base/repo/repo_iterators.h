@@ -1,8 +1,7 @@
-/*
- * repo_iterators.h
- *
- *  Created on: 16.11.2011
- *      Author: gerd
+/**
+ * @file repo_iterators.h
+ * @date 30.09.2009
+ * @author gerd
  */
 
 #ifndef REPO_ITERATORS_H_
@@ -10,31 +9,43 @@
 
 #include <largenet2/base/repo/repo_types.h>
 #include <largenet2/util/choosetype.h>
-#include <boost/iterator/iterator_facade.hpp>
-#include <boost/call_traits.hpp>
 #include <iterator>
 #include <cassert>
 
 namespace repo
 {
+
 namespace iterators
 {
-namespace detail
-{
 
-template<class Repo, class T = typename Repo::value_type>
-class RepoIndexIteratorImpl: public boost::iterator_facade<
-		RepoIndexIteratorImpl<Repo>, T, std::input_iterator_tag,
-		typename Repo::reference, long int>
+/**
+ * Index iterator.
+ *
+ * This should be used for the traversal of the repository. If valid, it will
+ * always dereference to the unique ID of an item actually stored in the repository.
+ * Note that inserting into the repository invalidates all iterators.
+ */
+template<class Repo, bool is_const = false>
+class RepoIndexIterator
 {
 public:
-	typedef Repo* repo_ptr;
-	typedef typename boost::call_traits<Repo>::reference repo_ref;
+	typedef typename Repo::value_type value_type;
+	typedef typename choose_type<is_const, typename Repo::const_reference,
+			typename Repo::reference>::type reference;
+	typedef typename Repo::const_reference const_reference;
+	typedef typename choose_type<is_const, typename Repo::const_pointer,
+			typename Repo::pointer>::type pointer;
+	typedef long int difference_type;
+	typedef std::input_iterator_tag iterator_category;
+
+	typedef typename choose_type<is_const, const Repo&, Repo&>::type repo_ref;
+	typedef typename choose_type<is_const, const Repo*, Repo*>::type repo_ptr;
+
 	/**
 	 * Default constructor needed for STL compliance. This creates a singular
 	 * (invalid) iterator which does not belong to any repository.
 	 */
-	RepoIndexIteratorImpl() :
+	RepoIndexIterator() :
 			rep_(0), cur_(0)
 	{
 	}
@@ -43,7 +54,7 @@ public:
 	 * item in the repository @p repo.
 	 * @param repo Repository the iterator belongs to.
 	 */
-	explicit RepoIndexIteratorImpl(repo_ref repo) :
+	explicit RepoIndexIterator(repo_ref repo) :
 			rep_(&repo), cur_(0)
 	{
 		assert(rep_ != 0);
@@ -54,7 +65,7 @@ public:
 	 * @param repo Repository the iterator belongs to.
 	 * @param n Number of item.
 	 */
-	RepoIndexIteratorImpl(repo_ref repo, id_t n) :
+	RepoIndexIterator(repo_ref repo, id_t n) :
 			rep_(&repo), cur_(n)
 	{
 		assert(rep_ != 0);
@@ -65,11 +76,99 @@ public:
 	 * Copy constructor.
 	 * @param it Iterator to copy from.
 	 */
-	template<class V>
-	RepoIndexIteratorImpl(const RepoIndexIteratorImpl<Repo, V>& it) :
+	template<bool other_is_const>
+	RepoIndexIterator(const RepoIndexIterator<Repo, other_is_const>& it) :
 			rep_(it.rep_), cur_(it.cur_)
 	{
 	}
+
+	/**
+	 * Destructor. Does nothing.
+	 */
+	~RepoIndexIterator()
+	{
+	}
+
+	/**
+	 * Assignment operator.
+	 * @param it Iterator to assign from.
+	 * @return Reference to self.
+	 */
+	template<bool other_is_const>
+	RepoIndexIterator& operator=(
+			const RepoIndexIterator<Repo, other_is_const>& it)
+	{
+		if ((rep_ != it.rep_) || (cur_ != it.cur_))
+		{
+			rep_ = it.rep_;
+			cur_ = it.cur_;
+		}
+		return *this;
+	}
+
+	/**
+	 * Equality operator is a template on the const-ness of @p it, so
+	 * as to be able to compare non-const iterators with const iterators
+	 * @return true if @p it belongs to the same repository and points at
+	 * the same current value
+	 */
+	template<bool other_is_const>
+	bool operator==(const RepoIndexIterator<Repo, other_is_const>& it) const
+	{
+		return ((rep_ == it.rep_) && (cur_ == it.cur_));
+	}
+
+	/**
+	 * Inequality operator
+	 */
+	template<bool other_is_const>
+	bool operator!=(const RepoIndexIterator<Repo, other_is_const>& it) const
+	{
+		return !operator==(it);
+	}
+
+	/**
+	 * Prefix increment operator.
+	 * @return Reference to (incremented) self.
+	 */
+	RepoIndexIterator& operator++()
+	{
+		assert(rep_ != 0);
+		while (true)
+		{
+			if (cur_ == rep_->maxID())
+			{
+				++cur_;
+				break;
+			}
+			if (cur_ > rep_->maxID())
+				break;
+			if (rep_->valid(++cur_))
+				break;
+		}
+		return *this;
+	}
+	/**
+	 * Postfix increment operator.
+	 * @return Copy of self before increment.
+	 */
+	RepoIndexIterator operator++(int)
+	{
+		RepoIndexIterator tmp(*this);
+		++(*this);
+		return tmp;
+	}
+	/**
+	 * Dereference operator.
+	 * @return Reference to item.
+	 */
+	reference operator*()
+	{
+		assert(rep_ != 0);
+		assert(rep_->valid(cur_));
+		return rep_->item(cur_);
+	}
+
 	/**
 	 * Return item ID in repository.
 	 */
@@ -92,58 +191,33 @@ public:
 	}
 
 private:
-	friend class boost::iterator_core_access;
-	template<class, class > friend class RepoIndexIteratorImpl;
-
-	void increment()
-	{
-		assert(rep_ != 0);
-		while (true)
-		{
-			if (cur_ == rep_->maxID())
-			{
-				++cur_;
-				break;
-			}
-			if (cur_ > rep_->maxID())
-				break;
-			if (rep_->valid(++cur_))
-				break;
-		}
-	}
-
-	template<class V>
-	bool equal(const RepoIndexIteratorImpl<Repo, V>& other) const
-	{
-		return ((rep_ == other.rep_) && (cur_ == other.cur_));
-	}
-
-	typename Repo::reference dereference() const
-	{
-		assert(rep_ != 0);
-		assert(rep_->valid(cur_));
-		return rep_->item(cur_);
-	}
-
-private:
-	// FIXME this should be const if the iterator is const
+	template<class R, bool c> friend class RepoIndexIterator;
 	repo_ptr rep_; ///< repository the iterator belongs to
 	id_t cur_; ///< current iterator position
 };
 
-template<class Repo, class T = typename Repo::value_type>
-class RepoCategoryIteratorImpl: public boost::iterator_facade<
-		RepoCategoryIteratorImpl<Repo>, T, std::input_iterator_tag,
-		typename Repo::reference, long int>
+template<class Repo, bool is_const = false>
+class RepoCategoryIterator
 {
 public:
-	typedef Repo* repo_ptr;
-	typedef typename boost::call_traits<Repo>::reference repo_ref;
+	typedef typename Repo::value_type value_type;
+	typedef typename choose_type<is_const, typename Repo::const_reference,
+			typename Repo::reference>::type reference;
+	typedef typename Repo::const_reference const_reference;
+	typedef typename choose_type<is_const, typename Repo::const_pointer,
+			typename Repo::pointer>::type pointer;
+	typedef long int difference_type;
+	typedef std::input_iterator_tag iterator_category;
+
+	typedef typename choose_type<is_const, const Repo&, Repo&>::type repo_ref;
+	typedef typename choose_type<is_const, const Repo*, Repo*>::type repo_ptr;
+
+public:
 	/**
 	 * Default constructor needed for STL compliance. This creates a singular
 	 * (invalid) iterator which does not belong to any repository.
 	 */
-	RepoCategoryIteratorImpl() :
+	RepoCategoryIterator() :
 			rep_(0), category_(0), cur_(0)
 	{
 	}
@@ -153,7 +227,7 @@ public:
 	 * @param repo Repository the iterator belongs to.
 	 * @param cat Category to iterate over.
 	 */
-	RepoCategoryIteratorImpl(repo_ref repo, category_t cat) :
+	RepoCategoryIterator(repo_ref repo, category_t cat) :
 			rep_(&repo), category_(cat), cur_(0)
 	{
 		assert(rep_ != 0);
@@ -166,7 +240,7 @@ public:
 	 * @param cat Category to iterate over.
 	 * @param n Number of item.
 	 */
-	RepoCategoryIteratorImpl(repo_ref repo, category_t cat, address_t n) :
+	RepoCategoryIterator(repo_ref repo, category_t cat, address_t n) :
 			rep_(&repo), category_(cat), cur_(n)
 	{
 		assert(rep_ != 0);
@@ -178,11 +252,89 @@ public:
 	 * Copy constructor.
 	 * @param it Iterator to copy from.
 	 */
-	template<class V>
-	RepoCategoryIteratorImpl(const RepoCategoryIteratorImpl<Repo, V>& it) :
+	template<bool other_is_const>
+	RepoCategoryIterator(const RepoCategoryIterator<Repo, other_is_const>& it) :
 			rep_(it.rep_), category_(it.category_), cur_(it.cur_)
 	{
 	}
+	/**
+	 * Destructor. Does nothing.
+	 */
+	~RepoCategoryIterator()
+	{
+	}
+
+	/**
+	 * Assignment operator.
+	 * @param it Iterator to assign from.
+	 * @return Reference to self.
+	 */
+	template<bool other_is_const>
+	RepoCategoryIterator& operator=(const RepoCategoryIterator<Repo, other_is_const>& it)
+	{
+		if ((rep_ != it.rep_) || (category_ != it.category_) || (cur_ != it.cur_))
+		{
+			rep_ = it.rep_;
+			category_ = it.category_;
+			cur_ = it.cur_;
+		}
+		return *this;
+	}
+
+	/**
+	 * Equality operator is a template on the const-ness of @p it, so
+	 * as to be able to compare non-const iterators with const iterators
+	 * @return true if @p it belongs to the same repository and points at
+	 * the same current value
+	 */
+	template<bool other_is_const>
+	bool operator==(const RepoCategoryIterator<Repo, other_is_const>& it) const
+	{
+		return ((rep_ == it.rep_) && (category_ == it.category_)
+				&& (cur_ == it.cur_));
+	}
+	template<bool other_is_const>
+	bool operator!=(const RepoCategoryIterator<Repo, other_is_const>& it) const
+	{
+		return !operator==(it);
+	}
+
+	/**
+	 * Prefix increment operator.
+	 * @return Reference to (incremented) self.
+	 */
+	RepoCategoryIterator& operator++()
+	{
+		assert(rep_ != 0);
+
+		if (rep_) // do not increment invalid (singular) iterator
+		{
+			++cur_;
+		}
+		return *this;
+	}
+	/**
+	 * Postfix increment operator.
+	 * @return Copy of self before increment.
+	 */
+	RepoCategoryIterator operator++(int)
+	{
+		RepoCategoryIterator tmp(*this);
+		++(*this);
+		return tmp;
+	}
+	/**
+	 * Dereference operator.
+	 * @return Reference to item.
+	 */
+	reference operator*()
+	{
+		assert(rep_ != 0);
+		// this should be correct now
+		assert(cur_ < rep_->count(category_));
+		return rep_->item(category_, cur_);
+	}
+
 	id_t id() const
 	{
 		assert(rep_ != 0);
@@ -194,86 +346,15 @@ public:
 	{
 		return category_;
 	}
-private:
-	friend class boost::iterator_core_access;
-	template<class, class > friend class RepoCategoryIteratorImpl;
-
-	void increment()
-	{
-		assert(rep_ != 0);
-		if (rep_) // do not increment invalid (singular) iterator
-		{
-			++cur_;
-		}
-	}
-
-	template<class V>
-	bool equal(const RepoCategoryIteratorImpl<Repo, V>& other) const
-	{
-		return ((rep_ == other.rep_) && (category_ == other.category_)
-				&& (cur_ == other.cur_));
-	}
-
-	typename Repo::reference dereference() const
-	{
-		assert(rep_ != 0);
-		// this should be correct now
-		assert(cur_ < rep_->count(category_));
-		return rep_->item(category_, cur_);
-	}
 
 private:
-	// FIXME this should be const if the iterator is const
-	repo_ptr rep_; ///< repository the iterator belongs to
+	template<class R, bool c> friend class RepoCategoryIterator;
+	repo_ptr rep_; ///< Repository the iterator belongs to.
 	category_t category_; ///< Category the iterator traverses.
 	address_t cur_; ///< Current iterator position, relative to rep_->offset_[category_] (index in ids_ array).
 };
 
 }
 
-template<class Repo, bool is_const = false>
-class RepoIndexIterator: public detail::RepoIndexIteratorImpl<
-		Repo,
-		typename choose_type<is_const, typename Repo::value_type const,
-				typename Repo::value_type>::type>
-{
-public:
-	RepoIndexIterator() :
-			detail::RepoIndexIteratorImpl()
-	{
-	}
-	explicit RepoIndexIterator(repo_ref repo) :
-			detail::RepoIndexIteratorImpl(repo)
-	{
-	}
-	RepoIndexIterator(repo_ref repo, id_t n) :
-			detail::RepoIndexIteratorImpl(repo, n)
-	{
-	}
-};
-
-template<class Repo, bool is_const>
-class RepoCategoryIterator: public detail::RepoCategoryIteratorImpl<
-		Repo,
-		typename choose_type<is_const, typename Repo::value_type const,
-				typename Repo::value_type>::type>
-{
-public:
-	RepoCategoryIterator() :
-			detail::RepoCategoryIteratorImpl()
-	{
-	}
-	RepoCategoryIterator(repo_ref repo, category_t cat) :
-			detail::RepoCategoryIteratorImpl(repo, cat)
-	{
-	}
-	RepoCategoryIterator(repo_ref repo, category_t cat, address_t n) :
-			detail::RepoCategoryIteratorImpl(repo, cat, n)
-	{
-	}
-};
-
 }
-}
-
 #endif /* REPO_ITERATORS_H_ */

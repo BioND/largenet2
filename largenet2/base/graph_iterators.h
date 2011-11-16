@@ -30,13 +30,12 @@ class GraphNodeIterator
 {
 public:
 	typedef typename std::iterator_traits<Iterator>::value_type value_type;
-	typedef typename choose_type<is_const, const typename std::iterator_traits<
-			Iterator>::reference,
+	typedef typename choose_type<is_const,
+			const typename std::iterator_traits<Iterator>::reference,
 			typename std::iterator_traits<Iterator>::reference>::type reference;
-	typedef const typename std::iterator_traits<Iterator>::reference
-			const_reference;
-	typedef typename choose_type<is_const, const typename std::iterator_traits<
-			Iterator>::pointer,
+	typedef const typename std::iterator_traits<Iterator>::reference const_reference;
+	typedef typename choose_type<is_const,
+			const typename std::iterator_traits<Iterator>::pointer,
 			typename std::iterator_traits<Iterator>::pointer>::type pointer;
 	typedef node_id_t difference_type;
 	typedef typename std::iterator_traits<Iterator>::iterator_category iterator_category;
@@ -47,7 +46,7 @@ public:
 	 * @param i iterator instance this GraphNodeIterator encapsulates
 	 */
 	explicit GraphNodeIterator(const Iterator& i) :
-		it_(i)
+			it_(i)
 	{
 	}
 	/**
@@ -60,8 +59,9 @@ public:
 	 * Copy constructor
 	 * @param other iterator to copy
 	 */
-	GraphNodeIterator(const GraphNodeIterator& other) :
-		it_(other.it_)
+	template<bool other_is_const>
+	GraphNodeIterator(const GraphNodeIterator<Iterator, other_is_const>& other) :
+			it_(other.it_)
 	{
 	}
 	/**
@@ -91,9 +91,11 @@ public:
 	/**
 	 * Assignment operator
 	 */
-	GraphNodeIterator& operator=(const GraphNodeIterator& i)
+	template<bool other_is_const>
+	GraphNodeIterator& operator=(
+			const GraphNodeIterator<Iterator, other_is_const>& i)
 	{
-		if (&i != this)
+		if (it_ != i.it_)
 			it_ = i.it_;
 		return *this;
 	}
@@ -102,17 +104,19 @@ public:
 	 * Check for equality
 	 * @return true if equal
 	 */
-	friend bool operator==(const GraphNodeIterator& a, const GraphNodeIterator& b)
+	template<bool other_is_const>
+	bool operator==(const GraphNodeIterator<Iterator, other_is_const>& it) const
 	{
-		return a.it_ == b.it_;
+		return it_ == it.it_;
 	}
 	/**
 	 * Check for inequality
 	 * @return true if unequal
 	 */
-	friend bool operator!=(const GraphNodeIterator& a, const GraphNodeIterator& b)
+	template<bool other_is_const>
+	bool operator!=(const GraphNodeIterator<Iterator, other_is_const>& it) const
 	{
-		return a.it_ != b.it_;
+		return !operator==(it);
 	}
 	/**
 	 * Increment operator (prefix)
@@ -132,6 +136,7 @@ public:
 		return temp;
 	}
 private:
+	template<class I, bool c> friend class GraphNodeIterator;
 	Iterator it_;
 };
 
@@ -143,13 +148,12 @@ class GraphEdgeIterator
 {
 public:
 	typedef typename std::iterator_traits<Iterator>::value_type value_type;
-	typedef typename choose_type<is_const, const typename std::iterator_traits<
-			Iterator>::reference,
+	typedef typename choose_type<is_const,
+			const typename std::iterator_traits<Iterator>::reference,
 			typename std::iterator_traits<Iterator>::reference>::type reference;
-	typedef const typename std::iterator_traits<Iterator>::reference
-			const_reference;
-	typedef typename choose_type<is_const, const typename std::iterator_traits<
-			Iterator>::pointer,
+	typedef const typename std::iterator_traits<Iterator>::reference const_reference;
+	typedef typename choose_type<is_const,
+			const typename std::iterator_traits<Iterator>::pointer,
 			typename std::iterator_traits<Iterator>::pointer>::type pointer;
 	typedef typename std::iterator_traits<Iterator>::difference_type difference_type;
 	typedef typename std::iterator_traits<Iterator>::iterator_category iterator_category;
@@ -161,7 +165,7 @@ public:
 	 * @param i iterator instance this GraphEdgeIterator encapsulates
 	 */
 	explicit GraphEdgeIterator(const Iterator& i) :
-		it_(i)
+			it_(i)
 	{
 	}
 	/**
@@ -173,8 +177,9 @@ public:
 	/**
 	 * Copy constructor
 	 */
-	GraphEdgeIterator(const GraphEdgeIterator& other) :
-		it_(other.it_)
+	template<bool other_is_const>
+	GraphEdgeIterator(const GraphEdgeIterator<Iterator, other_is_const>& other) :
+			it_(other.it_)
 	{
 	}
 	/**
@@ -202,25 +207,29 @@ public:
 	/**
 	 * Assignment operator
 	 */
-	GraphEdgeIterator& operator=(const GraphEdgeIterator& i)
+	template<bool other_is_const>
+	GraphEdgeIterator& operator=(
+			const GraphEdgeIterator<Iterator, other_is_const>& i)
 	{
-		if (&i != this)
+		if (it_ != i.it_)
 			it_ = i.it_;
 		return *this;
 	}
 	/**
 	 * Check for equality
 	 */
-	friend bool operator==(const GraphEdgeIterator& a, const GraphEdgeIterator& b)
+	template<bool other_is_const>
+	bool operator==(const GraphEdgeIterator<Iterator, other_is_const>& it) const
 	{
-		return a.it_ == b.it_;
+		return it_ == it.it_;
 	}
 	/**
 	 * Check for unequality
 	 */
-	friend bool operator!=(const GraphEdgeIterator& a, const GraphEdgeIterator& b)
+	template<bool other_is_const>
+	bool operator!=(const GraphEdgeIterator<Iterator, other_is_const>& it) const
 	{
-		return a.it_ != b.it_;
+		return it_ != it.it_;
 	}
 	/**
 	 * Increment operator (prefix)
@@ -240,6 +249,7 @@ public:
 		return temp;
 	}
 private:
+	template<class I, bool c> friend class GraphEdgeIterator;
 	Iterator it_;
 };
 }
