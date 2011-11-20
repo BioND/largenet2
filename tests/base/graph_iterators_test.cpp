@@ -7,6 +7,7 @@
 
 #include <largenet2.h>
 #include <boost/assert.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 using namespace largenet;
 
@@ -20,4 +21,6 @@ int main(int argc, char **argv)
 	Graph::ConstNodeIterator c_n(n);
 	BOOST_ASSERT(c_n == n);
 	BOOST_ASSERT(n == c_n);
+	if (boost::is_convertible<Graph::ConstNodeIterator, Graph::NodeIterator>::value)
+		std::cerr << "Must not be able to convert const to non-const iterator!\n";
 }

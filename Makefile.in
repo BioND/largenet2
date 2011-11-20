@@ -110,7 +110,7 @@ boost_test_LDADD = $(LDADD)
 am_graph_iterators_test_OBJECTS =  \
 	tests/base/graph_iterators_test.$(OBJEXT)
 graph_iterators_test_OBJECTS = $(am_graph_iterators_test_OBJECTS)
-graph_iterators_test_LDADD = $(LDADD)
+graph_iterators_test_DEPENDENCIES = liblargenet2-0.1.la
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -348,12 +348,12 @@ nobase_include_HEADERS = \
 		largenet2/base/converters.h \
 		largenet2/base/GraphListener.h \
 		largenet2/base/Edge.h \
-		largenet2/base/graph_iterators.h \
 		largenet2/base/Node.h \
 		largenet2/base/node_iterators.h \
 		largenet2/boost/largenet2_boost.h
 
 graph_iterators_test_SOURCES = tests/base/graph_iterators_test.cpp
+graph_iterators_test_LDADD = liblargenet2-0.1.la
 boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
 @HAVE_DOXYGEN_TRUE@DOCDIR = doc
 @HAVE_DOXYGEN_TRUE@MOSTLYCLEANFILES = -r $(DOCDIR)
