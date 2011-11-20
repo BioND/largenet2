@@ -28,7 +28,6 @@ liblargenet2_0_1_la_SOURCES = \
 		largenet2/base/Graph.cpp \
 		largenet2/base/MultiNode.cpp
 
-
 nobase_include_HEADERS = \
 		largenet2.h \
 		largenet2/generators/generators.h \
@@ -73,13 +72,17 @@ nobase_include_HEADERS = \
 		largenet2/base/converters.h \
 		largenet2/base/GraphListener.h \
 		largenet2/base/Edge.h \
-		largenet2/base/graph_iterators.h \
 		largenet2/base/Node.h \
 		largenet2/base/node_iterators.h \
 		largenet2/boost/largenet2_boost.h
 
-check_PROGRAMS = largenet2_boost_test
-largenet2_boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
+check_PROGRAMS = \
+		graph_iterators_test \
+		boost_test 
+
+graph_iterators_test_SOURCES = tests/base/graph_iterators_test.cpp
+graph_iterators_test_LDADD = liblargenet2-0.1.la
+boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
 
 if HAVE_DOXYGEN
 

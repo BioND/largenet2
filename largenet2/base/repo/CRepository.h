@@ -40,22 +40,21 @@ public:
 
 	typedef CRepository<T, Allocator> this_type;
 
-	typedef iterators::RepoIndexIterator<this_type, false> iterator;
-	typedef iterators::RepoIndexIterator<this_type, true> const_iterator;
+	typedef iterators::IndexIterator<T, this_type> iterator;
+	typedef iterators::IndexIterator<T const, this_type const> const_iterator;
+//	typedef iterators::RepoIndexIterator<this_type, false> iterator;
+//	typedef iterators::RepoIndexIterator<this_type, true> const_iterator;
 	typedef std::pair<iterator, iterator> iterator_range;
 	typedef iterator IndexIterator;
 	typedef const_iterator ConstIndexIterator;
 
-	typedef iterators::RepoCategoryIterator<this_type, false> CategoryIterator;
-	typedef iterators::RepoCategoryIterator<this_type, true>
-			ConstCategoryIterator;
+	typedef iterators::CategoryIterator<T, this_type> CategoryIterator;
+	typedef iterators::CategoryIterator<T const, this_type const> ConstCategoryIterator;
 
 	typedef iterator_range IndexIteratorRange;
-	typedef std::pair<ConstIndexIterator, ConstIndexIterator>
-			ConstIndexIteratorRange;
+	typedef std::pair<ConstIndexIterator, ConstIndexIterator> ConstIndexIteratorRange;
 	typedef std::pair<CategoryIterator, CategoryIterator> CategoryIteratorRange;
-	typedef std::pair<ConstCategoryIterator, ConstCategoryIterator>
-			ConstCategoryIteratorRange;
+	typedef std::pair<ConstCategoryIterator, ConstCategoryIterator> ConstCategoryIteratorRange;
 
 public:
 	CRepository();
@@ -395,16 +394,16 @@ inline void CRepository<T, Allocator>::updateMinMaxID(const id_t id)
 
 template<class T, class Allocator>
 CRepository<T, Allocator>::CRepository() :
-	C_(1), N_(0), nStored_(0), minID_(0), maxID_(0), enlargeFactor_(2)
+		C_(1), N_(0), nStored_(0), minID_(0), maxID_(0), enlargeFactor_(2)
 {
 	init();
 }
 
 template<class T, class Allocator>
 CRepository<T, Allocator>::CRepository(const category_t cat) :
-	C_(cat), N_(100), nStored_(0), count_(cat + 1, 0), offset_(cat + 1, 0),
-			nums_(N_, 0), ids_(N_, 0), items_(N_), minID_(0), maxID_(0),
-			enlargeFactor_(2)
+		C_(cat), N_(100), nStored_(0), count_(cat + 1, 0), offset_(cat + 1, 0), nums_(
+				N_, 0), ids_(N_, 0), items_(N_), minID_(0), maxID_(0), enlargeFactor_(
+				2)
 {
 	assert(C_ > 0);
 	init();
@@ -412,17 +411,17 @@ CRepository<T, Allocator>::CRepository(const category_t cat) :
 
 template<class T, class Allocator>
 CRepository<T, Allocator>::CRepository(const category_t cat, const id_size_t n) :
-	C_(cat), N_(n), nStored_(0), count_(cat + 1, 0), offset_(cat + 1, 0),
-			nums_(N_, 0), ids_(N_, 0), items_(N_), minID_(0), maxID_(0),
-			enlargeFactor_(2)
+		C_(cat), N_(n), nStored_(0), count_(cat + 1, 0), offset_(cat + 1, 0), nums_(
+				N_, 0), ids_(N_, 0), items_(N_), minID_(0), maxID_(0), enlargeFactor_(
+				2)
 {
 	init();
 }
 
 template<class T, class Allocator>
 CRepository<T, Allocator>::CRepository(const CRepository<T, Allocator>& r) :
-	C_(r.C_), N_(r.nStored_), count_(C_ + 1, 0), offset_(C_ + 1, 0),
-			items_(N_), enlargeFactor_(r.enlargeFactor_)
+		C_(r.C_), N_(r.nStored_), count_(C_ + 1, 0), offset_(C_ + 1, 0), items_(
+				N_), enlargeFactor_(r.enlargeFactor_)
 {
 	init();
 	copyItems(r);
@@ -495,7 +494,8 @@ void CRepository<T, Allocator>::reorderToMaxCategory(const category_t n)
 	std::copy(ids_.begin() + offset_[n + 1], ids_.begin() + offset_[C_],
 			temp.begin());
 
-	for (std::vector<id_t>::const_iterator it = temp.begin(); it != temp.end(); ++it)
+	for (std::vector<id_t>::const_iterator it = temp.begin(); it != temp.end();
+			++it)
 	{
 		decreaseCat(nums_[*it], n);
 	}

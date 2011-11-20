@@ -11,7 +11,7 @@
 #include <largenet2/base/Node.h>
 #include <largenet2/base/Edge.h>
 #include <largenet2/base/repo/CPtrRepository.h>
-#include <largenet2/base/graph_iterators.h>
+//#include <largenet2/base/graph_iterators.h>
 #include <boost/noncopyable.hpp>
 #include <list>
 #include <utility>
@@ -41,23 +41,21 @@ private:
 
 public:
 	/// iterator for all nodes
-	typedef iterators::GraphNodeIterator<NodeContainer::iterator> NodeIterator;
+	typedef NodeContainer::iterator NodeIterator;
 	/// iterator for all nodes in given state
-	typedef iterators::GraphNodeIterator<NodeContainer::CategoryIterator> NodeStateIterator;
+	typedef NodeContainer::CategoryIterator NodeStateIterator;
 	/// iterator for all edges
-	typedef iterators::GraphEdgeIterator<EdgeContainer::iterator> EdgeIterator;
+	typedef EdgeContainer::iterator EdgeIterator;
 	/// iterator for all edges in given state
-	typedef iterators::GraphEdgeIterator<EdgeContainer::CategoryIterator> EdgeStateIterator;
+	typedef EdgeContainer::CategoryIterator EdgeStateIterator;
 	/// const node iterator
-	typedef iterators::GraphNodeIterator<NodeContainer::const_iterator, true> ConstNodeIterator;
+	typedef NodeContainer::const_iterator ConstNodeIterator;
 	/// const node iterator for all nodes in given state
-	typedef iterators::GraphNodeIterator<NodeContainer::ConstCategoryIterator,
-			true> ConstNodeStateIterator;
+	typedef NodeContainer::ConstCategoryIterator ConstNodeStateIterator;
 	/// const edge iterator
-	typedef iterators::GraphEdgeIterator<EdgeContainer::const_iterator, true> ConstEdgeIterator;
+	typedef EdgeContainer::const_iterator ConstEdgeIterator;
 	/// const edge iterator for all edges in given state
-	typedef iterators::GraphEdgeIterator<EdgeContainer::ConstCategoryIterator,
-			true> ConstEdgeStateIterator;
+	typedef EdgeContainer::ConstCategoryIterator ConstEdgeStateIterator;
 
 	/// node iterator range
 	typedef std::pair<NodeIterator, NodeIterator> NodeIteratorRange;
