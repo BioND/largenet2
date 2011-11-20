@@ -77,7 +77,7 @@ struct graph_traits<largenet::Graph>
 
 inline std::pair<graph_traits<largenet::Graph>::vertex_iterator,
 		graph_traits<largenet::Graph>::vertex_iterator> vertices(
-		const largenet::Graph& g)
+		largenet::Graph& g)
 {
 	return g.nodes();
 }
@@ -123,7 +123,7 @@ inline graph_traits<largenet::Graph>::degree_size_type out_degree(
 
 inline std::pair<graph_traits<largenet::Graph>::edge_iterator,
 		graph_traits<largenet::Graph>::edge_iterator> edges(
-		const largenet::Graph& g)
+		largenet::Graph& g)
 {
 	typedef graph_traits<largenet::Graph>::edge_iterator ei_t;
 	largenet::Graph::EdgeIteratorRange iters = g.edges();
@@ -217,7 +217,7 @@ inline void remove_edge(graph_traits<largenet::Graph>::edge_descriptor e,
 inline void remove_edge(graph_traits<largenet::Graph>::edge_iterator it,
 		largenet::Graph& g)
 {
-	g.removeEdge(*it);
+	g.removeEdge(it.id());
 }
 
 template<typename _Predicate>

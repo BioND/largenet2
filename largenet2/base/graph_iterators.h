@@ -61,6 +61,11 @@ public:
 	 */
 	template<bool other_is_const>
 	GraphNodeIterator(const GraphNodeIterator<Iterator, other_is_const>& other) :
+	/// FIXME the Iterator argument will have an internal is_const template
+	/// argument that can still be different
+	/// Perhaps we can use boost::is_convertible here? This might require implementing
+	/// some hints for the boost::is_convertible magic as discussed in the documentation
+	/// of boost::iterator_facade...
 			it_(other.it_)
 	{
 	}

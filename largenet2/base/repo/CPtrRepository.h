@@ -7,9 +7,9 @@
 #ifndef CPTRREPOSITORY_H_
 #define CPTRREPOSITORY_H_
 
-#include <largenet2/base/repo/repo_types.h>
-#include <largenet2/base/repo/repo_iterators.h>
-#include <largenet2/base/repo/repo_exceptions.h>
+#include "repo_types.h"
+#include "repo_iterators.h"
+#include "repo_exceptions.h"
 #include <vector>
 #include <memory>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -42,22 +42,19 @@ public:
 
 	typedef CPtrRepository<T, CloneAllocator, Allocator> this_type;
 
-	typedef iterators::RepoIndexIterator<this_type, false> iterator;
-	typedef iterators::RepoIndexIterator<this_type, true> const_iterator;
+	typedef iterators::IndexIterator<T, this_type> iterator;
+	typedef iterators::IndexIterator<T const, this_type const> const_iterator;
 	typedef std::pair<iterator, iterator> iterator_range;
 	typedef iterator IndexIterator;
 	typedef const_iterator ConstIndexIterator;
 
-	typedef iterators::RepoCategoryIterator<this_type, false> CategoryIterator;
-	typedef iterators::RepoCategoryIterator<this_type, true>
-			ConstCategoryIterator;
+	typedef iterators::CategoryIterator<T, this_type> CategoryIterator;
+	typedef iterators::CategoryIterator<T const, this_type const> ConstCategoryIterator;
 
 	typedef iterator_range IndexIteratorRange;
-	typedef std::pair<ConstIndexIterator, ConstIndexIterator>
-			ConstIndexIteratorRange;
+	typedef std::pair<ConstIndexIterator, ConstIndexIterator> ConstIndexIteratorRange;
 	typedef std::pair<CategoryIterator, CategoryIterator> CategoryIteratorRange;
-	typedef std::pair<ConstCategoryIterator, ConstCategoryIterator>
-			ConstCategoryIteratorRange;
+	typedef std::pair<ConstCategoryIterator, ConstCategoryIterator> ConstCategoryIteratorRange;
 
 public:
 	CPtrRepository();
@@ -444,7 +441,7 @@ inline void CPtrRepository<T, CloneAllocator, Allocator>::updateMinMaxID(
 
 template<class T, class CloneAllocator, class Allocator>
 CPtrRepository<T, CloneAllocator, Allocator>::CPtrRepository() :
-	C_(1), N_(0), nStored_(0), minID_(0), maxID_(0), enlargeFactor_(2)
+		C_(1), N_(0), nStored_(0), minID_(0), maxID_(0), enlargeFactor_(2)
 {
 	init();
 }
@@ -452,9 +449,9 @@ CPtrRepository<T, CloneAllocator, Allocator>::CPtrRepository() :
 template<class T, class CloneAllocator, class Allocator>
 CPtrRepository<T, CloneAllocator, Allocator>::CPtrRepository(
 		const category_t cat) :
-	C_(cat), N_(100), nStored_(0), count_(cat + 1, 0), offset_(cat + 1, 0),
-			nums_(N_, 0), ids_(N_, 0), items_(N_), minID_(0), maxID_(0),
-			enlargeFactor_(2)
+		C_(cat), N_(100), nStored_(0), count_(cat + 1, 0), offset_(cat + 1, 0), nums_(
+				N_, 0), ids_(N_, 0), items_(N_), minID_(0), maxID_(0), enlargeFactor_(
+				2)
 {
 	assert(C_ > 0);
 	init();
@@ -463,9 +460,9 @@ CPtrRepository<T, CloneAllocator, Allocator>::CPtrRepository(
 template<class T, class CloneAllocator, class Allocator>
 CPtrRepository<T, CloneAllocator, Allocator>::CPtrRepository(
 		const category_t cat, const id_size_t n) :
-	C_(cat), N_(n), nStored_(0), count_(cat + 1, 0), offset_(cat + 1, 0),
-			nums_(N_, 0), ids_(N_, 0), items_(N_), minID_(0), maxID_(0),
-			enlargeFactor_(2)
+		C_(cat), N_(n), nStored_(0), count_(cat + 1, 0), offset_(cat + 1, 0), nums_(
+				N_, 0), ids_(N_, 0), items_(N_), minID_(0), maxID_(0), enlargeFactor_(
+				2)
 {
 	init();
 }
@@ -552,7 +549,8 @@ void CPtrRepository<T, CloneAllocator, Allocator>::reorderToMaxCategory(
 	std::copy(ids_.begin() + offset_[n + 1], ids_.begin() + offset_[C_],
 			temp.begin());
 
-	for (std::vector<id_t>::const_iterator it = temp.begin(); it != temp.end(); ++it)
+	for (std::vector<id_t>::const_iterator it = temp.begin(); it != temp.end();
+			++it)
 	{
 		decreaseCat(nums_[*it], n);
 	}
@@ -792,7 +790,8 @@ inline typename CPtrRepository<T, CloneAllocator, Allocator>::const_reference CP
 }
 
 template<class T, class CloneAllocator, class Allocator>
-inline id_t CPtrRepository<T, CloneAllocator, Allocator>::id(const address_t n) const
+inline id_t CPtrRepository<T, CloneAllocator, Allocator>::id(
+		const address_t n) const
 {
 	assert(n < N_);
 	return ids_[n];
