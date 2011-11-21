@@ -5,6 +5,7 @@
  *      Author: gerd
  */
 
+#include <iostream>
 #include <largenet2.h>
 #include <boost/assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
