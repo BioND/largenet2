@@ -301,7 +301,7 @@ inline boost::graph_traits<largenet::Graph>::vertex_descriptor add_vertex(
 	return g.addNode();
 }
 
-inline void clearVertex(
+inline void clear_vertex(
 		boost::graph_traits<largenet::Graph>::vertex_descriptor u,
 		largenet::Graph& g)
 {
@@ -324,7 +324,7 @@ inline void clearVertex(
 			}
 }
 
-inline void removeVertex(
+inline void remove_vertex(
 		boost::graph_traits<largenet::Graph>::vertex_descriptor u,
 		largenet::Graph& g)
 {
