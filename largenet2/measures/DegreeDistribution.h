@@ -48,6 +48,7 @@ public:
 		{
 			return 0;
 		}
+		return 0;
 	}
 
 	degree_t maxDegree() const
@@ -194,7 +195,7 @@ DegreeDistribution<directionS>::DegreeDistribution(const Graph& g,
 	Graph::ConstNodeStateIteratorRange iters = g.nodes(s1);
 	for (Graph::ConstNodeStateIterator& it = iters.first; it != iters.second; ++it)
 	{
-		degree_t k = countNeighbors(it, s2);
+		degree_t k = countNeighbors(it, g, s2);
 		while (k >= dist_.size())
 		{
 			dist_.push_back(0);
