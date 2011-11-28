@@ -79,15 +79,15 @@ edge_id_t Graph::addEdge(const node_id_t source, const node_id_t target, bool di
 		e = elf_->createEdge(id, *node(source), *node(target), directed);
 		edges_.insert(e);
 		afterEdgeAdd(id);
-		return id;
 	} catch (SingletonException&)
 	{
 		// edge exists and we do not allow multiple edges
 		if (directed)
-			return node(source)->edgeTo(node(target))->id();
+			id = node(source)->edgeTo(node(target))->id();
 		else
-			return node(source)->edgeToAdjacentNode(node(target))->id();
+			id = node(source)->edgeToAdjacentNode(node(target))->id();
 	}
+	return id;
 }
 
 void Graph::removeNode(const node_id_t n)
