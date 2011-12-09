@@ -27,16 +27,16 @@ AC_CHECK_FUNCS([floor pow sqrt])
 AC_CONFIG_SRCDIR([largenet2/base/Graph.h])
 
 # provide --enable-examples option
-#AC_ARG_ENABLE([examples],
-#		      [AS_HELP_STRING([--enable-examples],
-#			  				  [build examples (default: no)])],
-#     		  [case "${enableval}" in
-#				yes) examples=true ;;
-#				no)  examples=false ;;
-#				*) AC_MSG_ERROR([bad value ${enableval} for --enable-examples]) ;;
-#     		   esac],
-#     		   [examples=false])
-#AM_CONDITIONAL([BUILD_EXAMPLES], [test x$examples = xtrue])
+AC_ARG_ENABLE([examples],
+		      [AS_HELP_STRING([--enable-examples],
+			  				  [build examples (default: no)])],
+     		  [case "${enableval}" in
+				yes) examples=true ;;
+				no)  examples=false ;;
+				*) AC_MSG_ERROR([bad value ${enableval} for --enable-examples]) ;;
+     		   esac],
+     		   [examples=false])
+AM_CONDITIONAL([BUILD_EXAMPLES], [test x$examples = xtrue])
 
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 

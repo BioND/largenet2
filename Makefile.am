@@ -5,10 +5,10 @@ pkgconfig_DATA = largenet2-@PACKAGE_VERSION@.pc
 
 EXTRA_DIST = largenet2-@PACKAGE_VERSION@.pc README.md Doxyfile
 
-lib_LTLIBRARIES = liblargenet2-0.1.la
-liblargenet2_0_1_la_LDFLAGS = -version-info 0:0:0
+lib_LTLIBRARIES = liblargenet2-@PACKAGE_VERSION@.la
+liblargenet2_@PACKAGE_VERSION@_la_LDFLAGS = -version-info 0:0:0
 
-liblargenet2_0_1_la_SOURCES = \
+liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 		largenet2/measures/measures.cpp \
 		largenet2/measures/InOutDegreeMatrix.cpp \
 		largenet2/measures/counts.cpp \
@@ -97,4 +97,16 @@ $(DOCDIR)/doxygen.stamp: Doxyfile
 
 endif
 
+if BUILD_EXAMPLES
+
+noinst_PROGRAMS = votermodel
+votermodel_LDADD = liblargenet2-@PACKAGE_VERSION@.la 
+votermodel_SOURCES = \
+		examples/votermodel/vm.cpp \
+		examples/votermodel/VoterModel.h \
+		examples/votermodel/RandomVariates.h \
+		examples/votermodel/util.h \
+		examples/votermodel/WELLEngine.h \
+		examples/votermodel/WELLEngine.cpp 
 		
+endif
