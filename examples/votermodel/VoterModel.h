@@ -1,5 +1,6 @@
 /**
  * @file VoterModel.h
+ * The VoterModel class in the voter model example.
  * @author Gerd Zschaler <gzschaler@googlemail.com>
  */
 
@@ -9,11 +10,14 @@
 #include "util.h"
 #include <largenet2.h>
 
+/**
+ * The voter model class in the @ref vm.cpp "voter model example".
+ */
 class VoterModel
 {
 public:
-	static const largenet::node_state_size_t node_states = 2;
-	static const largenet::edge_state_size_t link_states = 4;
+	static const largenet::node_state_size_t node_states = 2; ///< number of node states
+	static const largenet::edge_state_size_t link_states = 4; ///< number of edge states
 
 	/// Names for node states
 	enum NodeState
@@ -21,27 +25,36 @@ public:
 		UP, DOWN
 	};
 	/**
-	 * Names for link states
+	 * Names for edge states
 	 *
-	 * Note that the link states will be computed automatically by the library from the
-	 * states of the two nodes a link connects using a lnet::DefaultLinkStateCalculator.
-	 * To use enum names for the automatically computed states, they have to be specified
-	 * in canonical order in the enum.
+	 * Note that the edge states will be computed automatically by the library from the
+	 * states of the two nodes an edge connects by the largenet::StateConsistencyListener,
+	 * which makes use of the supplied VoterModel::EdgeStateCalculator.
 	 *
-	 * @see largenet/base/state_calculators.h
-	 * @see largenet/motifs/LinkMotif.h
+	 * @see largenet2/StateConsistencyListener.h
 	 */
 	enum LinkState
 	{
 		UU, UD, DU, DD
 	};
 
+	/**
+	 * An edge state calculator
+	 *
+	 * This computes appropriate edge states from source and target node states.
+	 */
 	class EdgeStateCalculator
 	{
 	public:
 		EdgeStateCalculator()
 		{
 		}
+		/**
+		 * Compute edge state from given node states
+		 * @param s source node state
+		 * @param t target node state
+		 * @return
+		 */
 		largenet::edge_state_t operator()(const largenet::node_state_t s,
 				const largenet::node_state_t t) const
 		{
@@ -59,11 +72,23 @@ public:
 		}
 	};
 
+	/**
+	 * Constructor
+	 * @param net Graph instance to use for the simulation
+	 * @param p rewiring rate
+	 */
 	VoterModel(largenet::Graph& net, double p) :
 			net_(net), p_(p)
 	{
 	}
 
+	/**
+	 * Check whether the simulation has stopped
+	 *
+	 * Returns true when no further updates are possible (i.e. an absorbing
+	 * state of zero active links and/or all nodes in the same state has
+	 * been reached)
+	 */
 	bool stopped() const
 	{
 		return (net_.numberOfNodes(UP) == 0) || (net_.numberOfNodes(DOWN) == 0)
@@ -71,6 +96,12 @@ public:
 						&& (net_.numberOfEdges(DU) == 0));
 	}
 
+	/**
+	 * Perform one simulation step
+	 * @param rng Random number generator, providing a method IntFromTo(int, int)
+	 * that returns a random integer between the specified boundaries.
+	 * @return time increment
+	 */
 	template<class RandomGen> double step(RandomGen& rng)
 	{
 		// do nothing if there is only one node
@@ -112,6 +143,11 @@ public:
 	}
 
 private:
+	/**
+	 * Rewire an edge to a new target with the same state as the source node
+	 * @param e edge to rewire
+	 * @param rng random number generator providing an IntFromTo(int, int) member
+	 */
 	template<class RandomGen> void rewire(largenet::Edge* e, RandomGen& rng)
 	{
 		// get source node state

@@ -1,10 +1,8 @@
 /**
- * @file vm.cpp
- * @author Gerd Zschaler <gzschaler@googlemail.com>
+ * @example vm.cpp
+ * @section vm_example Voter model example
  *
- * Voter model example
- *
- * This is a simulation of the directed adaptive voter model as in Zschaler et al. (2011), arXiv:1110.1336.
+ * This is a simulation of the directed adaptive voter model as in <a href="http://arxiv.org/abs/1110.1336">Zschaler et al. (2011)</a>.
  * A network of @p N nodes, representing agents, and @p L directed links, representing social connections, is
  * created. Each agent holds one of two possible opinions, @p UP or @p DOWN. The system evolves as
  * follows: In each update step, a random node and a random one of its outgoing neighbors are selected. If
@@ -19,6 +17,8 @@
  * the network, i.e., the ratio of @p L an @p N.
  * If the network contains a substantial fraction of nodes with low out-degree, self-stabilizing structures
  * can form and lead to "early fragmentation".
+ *
+ * @author Gerd Zschaler <gzschaler@googlemail.com>
  */
 
 #include "VoterModel.h"
@@ -33,8 +33,6 @@
 using namespace std;
 using namespace largenet;
 
-typedef myrng::RandomVariates<myrng::WELLEngine> RandomGen;
-
 int main(int argc, char **argv)
 {
 	unsigned int N = 2000; // number of nodes
@@ -47,7 +45,7 @@ int main(int argc, char **argv)
 	double tmax = 1000; // maximum simulation time
 
 	// a random number generator (WELL1024a)
-	RandomGen rng;
+	myrng::RandomVariates<myrng::WELLEngine> rng;
 
 	// Create a Graph object with VoterModel::node_states possible node
 	// states and VoterModel::link_states possible link states

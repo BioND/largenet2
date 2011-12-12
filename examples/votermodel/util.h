@@ -11,6 +11,13 @@
 #include <iterator>
 #include <cassert>
 
+/**
+ * Select a random element within [@p begin, @p end)
+ * @param begin iterator to beginning of range
+ * @param end iterator to past the end of range
+ * @param rng random number generator providing an IntFromTo(int, int) member
+ * @return random iterator within [@p begin, @p end) or @p end if empty range
+ */
 template<class _Iter, class RandomGen>
 _Iter random_from(_Iter begin, _Iter end, RandomGen& rng)
 {
@@ -22,6 +29,12 @@ _Iter random_from(_Iter begin, _Iter end, RandomGen& rng)
 	return begin;
 }
 
+/**
+ * Select a random element within @p range
+ * @param range iterator range
+ * @param rng random number generator providing an IntFromTo(int, int) member
+ * @return random iterator within @p range or @p range.second if empty range
+ */
 template<class _Iter, class RandomGen>
 _Iter random_from(std::pair<_Iter, _Iter> range, RandomGen& rng)
 {
