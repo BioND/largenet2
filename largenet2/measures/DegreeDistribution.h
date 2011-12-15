@@ -17,18 +17,27 @@ namespace largenet
 namespace measures
 {
 
+/// raw degree distribution container type
 typedef std::vector<node_size_t> degree_dist_t;
 
+/// selector for in-degree distributions
 struct inS
 {
 };
+/// selector for out-degree distributions
 struct outS
 {
 };
+/// selector for total-degree distributions
 struct bothS
 {
 };
 
+/**
+ * Degree distribution
+ * @tparam directionS Selector for in-, out-, or total-degree distribution.
+ *                    Possible values are inS, outS, and bothS.
+ */
 template<typename directionS = bothS>
 class DegreeDistribution: public boost::noncopyable
 {

@@ -12,10 +12,26 @@
 
 namespace largenet {
 
+/**
+ * Ensure edge states that are consistent with node states.
+ *
+ * This graph listener updates the states of all adjacent
+ * edges whenever a node changes its state. The edge states are
+ * computed using a user-supplied edge state calculator.
+ *
+ * @tparam EdgeStateCalculator Functor computing an appropriate
+ * 		   edge state from given source and target node states.
+ */
 template<class EdgeStateCalculator>
 class StateConsistencyListener: public largenet::GraphListener
 {
 public:
+	/**
+	 * Create a new StateConsistencyListener object
+	 * @param lsc Pointer to an edge state calculator object. Note that
+	 * 			  the listener takes ownership of the edge state calculator,
+	 * 			  deleting it when the listener is destroyed.
+	 */
 	StateConsistencyListener(std::auto_ptr<EdgeStateCalculator> lsc) :
 		lsc_(lsc)
 	{
@@ -26,6 +42,10 @@ public:
 	{
 	}
 
+	/**
+	 * Get the edge state calculator object used by the listener
+	 * @return edge state calculator
+	 */
 	EdgeStateCalculator& edgeStateCalculator() const { return *lsc_; }
 private:
 	virtual void afterEdgeAddEvent(largenet::Graph& g, largenet::Edge& e)

@@ -85,6 +85,7 @@ degree_range_t outDegreeRange(const Graph& g)
 	return std::make_pair(min, max);
 }
 
+/// @cond IGNORE
 double std_dev_in(const Graph& g)
 {
 	double s = 0;
@@ -108,6 +109,7 @@ double std_dev_out(const Graph& g)
 	}
 	return sqrt(s);
 }
+/// @endcond
 
 double inOutDegreeCorrelation(const Graph& g)
 {

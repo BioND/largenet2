@@ -17,6 +17,8 @@ namespace largenet
 
 /**
  * Basic graph element factory template
+ * @tparam NodeType type of node elements
+ * @tparam EdgeType type of edge elements
  */
 template<class NodeType = SingleNode, class EdgeType = Edge>
 class GraphElementFactory: public ElementFactory

@@ -17,11 +17,19 @@ class Graph;
 namespace io
 {
 
+/**
+ * Graph writer interface
+ */
 class GraphWriter
 {
 public:
 	GraphWriter() {}
 	virtual ~GraphWriter() {}
+	/**
+	 * Write graph to stream
+	 * @param g graph to write to stream
+	 * @param strm stream to write to
+	 */
 	virtual void write(const Graph& g, std::ostream& strm) = 0;
 };
 

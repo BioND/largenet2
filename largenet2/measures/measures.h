@@ -59,11 +59,22 @@ inline double meanDegree(const Graph& g)
  */
 double inOutDegreeCorrelation(const Graph& g);
 
+/**
+ * Combined nearest-neighbor degree correlation coefficients.
+ */
 struct NeighborDegreeCorrelations
 {
-	double r_ii, r_io, r_oi, r_oo;
+	double r_ii;	///< in-in-degree correlation along directed edges
+	double r_io;	///< in-out-degree correlation along directed edges
+	double r_oi;	///< out-in-degree correlations along directed edges
+	double r_oo;	///< out-out-degree correlations along directed edges
 };
 
+/**
+ * Two-point correlation functions for all four possible combinations.
+ * @param g Graph object
+ * @return correlation coefficients
+ */
 NeighborDegreeCorrelations neighborDegreeCorrelations(const Graph& g);
 
 /**

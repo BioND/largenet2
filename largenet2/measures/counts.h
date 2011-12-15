@@ -15,13 +15,25 @@
 namespace largenet {
 namespace measures {
 
+/**
+ * Total number of triples in graph.
+ *
+ * A triple consists of three nodes connected in a row (either closed or open triangle).
+ *
+ * @param net Graph object
+ * @return number of triples in @p net
+ */
 size_t triples(const Graph& net);
 size_t inTriples(const Graph& net);
 size_t outTriples(const Graph& net);
 size_t inOutTriples(const Graph& net);
 size_t triples(const Graph& net, const motifs::TripleMotif& t);
 
-// number of closed triangles
+/**
+ * Total number of closed triangles in graph.
+ * @param net Graph object
+ * @return number of triangles in @p net
+ */
 size_t triangles(const Graph& net);
 
 size_t quadStars(const Graph& net);

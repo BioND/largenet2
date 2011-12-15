@@ -33,7 +33,12 @@ namespace generators
 
 namespace util
 {
-
+/**
+ * Get random element from container
+ * @param container Random access container
+ * @param rnd Random number generator
+ * @return random element in @p container
+ */
 template<class U, class V, class RandomGen>
 U& random_from(V& container, RandomGen& rnd)
 {
@@ -41,6 +46,13 @@ U& random_from(V& container, RandomGen& rnd)
 	return container[i];
 }
 
+/**
+ * Get random element from range
+ * @param begin iterator pointing to beginning of range
+ * @param end iterator pointing to (past the) end of range
+ * @param rnd random number generator
+ * @return random iterator within range or @p end if empty range
+ */
 template<class _Iter, class RandomGen>
 _Iter random_from(_Iter begin, _Iter end, RandomGen& rnd)
 {
@@ -52,6 +64,12 @@ _Iter random_from(_Iter begin, _Iter end, RandomGen& rnd)
 	return begin;
 }
 
+/**
+ * Get random element from range
+ * @param range iterator range
+ * @param rnd random number generator
+ * @return random iterator within @p range or @p range.second if empty range
+ */
 template<class _Iter, class RandomGen>
 _Iter random_from(std::pair<_Iter, _Iter> range, RandomGen& rnd)
 {
@@ -156,7 +174,9 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
  * Links are created with probability @p p in such a way that the expected (average)
  * number of links is @f$ \frac{p}{2} N(N-1) @f$.
  * @param[out] g Graph object to store network (will be cleared first)
- * @param[in] p Link creation probability.
+ * @param[in] numNodes number @f$ N @f$ of nodes
+ * @param[in] edgeProb edge creation probability @f$ p @f$.
+ * @param[in] rnd random number generator
  * @todo implement
  */
 template<class RandomGen>
@@ -196,7 +216,7 @@ void randomGnp(Graph& g, node_size_t numNodes, double edgeProb, RandomGen& rnd)
  * @param g Graph object to hold BA graph, must be empty
  * @param numNodes Total number of nodes of final graph
  * @param m Number of edges attached to each new node
- * @param rng Random number generator providing uniform IntFromTo(int low, int high)
+ * @param rnd Random number generator providing uniform IntFromTo(int low, int high)
  */
 template<class RandomGen>
 void randomBA(Graph& g, node_size_t numNodes, edge_size_t m, RandomGen& rnd)
@@ -234,7 +254,7 @@ void randomBA(Graph& g, node_size_t numNodes, edge_size_t m, RandomGen& rnd)
  * @param g Graph object to hold graph, must be empty
  * @param numNodes Total number of nodes of final graph
  * @param exponent power law exponent in out-degree distribution @f$ p(k) = k^(-exponent) @f$
- * @param rng Random number generator providing uniform IntFromTo(int low, int high)
+ * @param rnd Random number generator providing uniform IntFromTo(int low, int high)
  */
 template<class RandomGen>
 void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
