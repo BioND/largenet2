@@ -5,6 +5,8 @@
  */
 
 #include <largenet2.h>
+#include <largenet2/io/EdgeListWriter.h>
+#include <largenet2/io/EdgeListReader.h>
 #include <largenet2/io/BinWriter.h>
 #include <largenet2/io/BinReader.h>
 #include <largenet2/io/DotWriter.h>
@@ -27,12 +29,21 @@ int main(int argc, char **argv)
 	g.setEdgeState(e, 1);
 	e = g.addEdge(2, 3, true);
 	g.setEdgeState(e, 3);
-
-	cout << "Writing graph to binary file.\n";
-	cout << "Graph with " << g.numberOfNodes() << " nodes in "
+	cout << "Created graph with " << g.numberOfNodes() << " nodes in "
 			<< g.numberOfNodeStates() << " states and " << g.numberOfEdges()
 			<< " edges.\n";
-	ofstream outfile("iotest.net", ios::binary);
+
+	cout << "Writing graph to edge list file.\n";
+	ofstream outfile("iotest.edgelist");
+	if (outfile)
+	{
+		io::EdgeListWriter writer;
+		writer.write(g, outfile);
+		outfile.close();
+	}
+
+	cout << "Writing graph to binary file.\n";
+	outfile.open("iotest.net", ios::binary);
 	if (outfile)
 	{
 		io::BinWriter writer;
@@ -55,6 +66,19 @@ int main(int argc, char **argv)
 	if (infile)
 	{
 		io::BinReader reader;
+		g2 = reader.createFromStream(infile);
+		infile.close();
+		cout << "Graph with " << g2->numberOfNodes() << " nodes in "
+				<< g2->numberOfNodeStates() << " states and "
+				<< g2->numberOfEdges() << " edges.\n";
+	}
+	delete g2;
+
+	cout << "Trying to read graph from edge list file.\n";
+	infile.open("iotest.edgelist", ios::in);
+	if (infile)
+	{
+		io::EdgeListReader reader;
 		g2 = reader.createFromStream(infile);
 		infile.close();
 		cout << "Graph with " << g2->numberOfNodes() << " nodes in "
