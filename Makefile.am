@@ -15,6 +15,7 @@ liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 		largenet2/io/EdgeListWriter.cpp \
 		largenet2/io/EdgeListReader.cpp \
 		largenet2/io/BinWriter.cpp \
+		largenet2/io/BinReader.cpp \
 		largenet2/sim/output/IntervalOutput.cpp \
 		largenet2/sim/output/Outputter.cpp \
 		largenet2/motifs/QuadLineMotif.cpp \
@@ -42,6 +43,7 @@ nobase_include_HEADERS = \
 		largenet2/io/GraphWriter.h \
 		largenet2/io/EdgeListWriter.h \
 		largenet2/io/BinWriter.h \
+		largenet2/io/BinReader.h \
 		largenet2/sim/gillespie/MaxMethod.h \
 		largenet2/sim/gillespie/DirectMethod.h \
 		largenet2/sim/SimApp.h \
@@ -80,11 +82,14 @@ nobase_include_HEADERS = \
 
 check_PROGRAMS = \
 		graph_iterators_test \
-		boost_test 
+		boost_test \
+		io_test
 
 graph_iterators_test_SOURCES = tests/base/graph_iterators_test.cpp
-graph_iterators_test_LDADD = liblargenet2-0.1.la
+graph_iterators_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
+io_test_SOURCES = tests/io/io_test.cpp
+io_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 
 if HAVE_DOXYGEN
 

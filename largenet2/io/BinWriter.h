@@ -7,7 +7,7 @@
 #ifndef BINWRITER_H_
 #define BINWRITER_H_
 
-#include "GraphWriter.h"
+#include <largenet2/io/GraphWriter.h>
 
 namespace largenet
 {
