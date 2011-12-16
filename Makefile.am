@@ -16,6 +16,7 @@ liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 		largenet2/io/EdgeListReader.cpp \
 		largenet2/io/BinWriter.cpp \
 		largenet2/io/BinReader.cpp \
+		largenet2/io/DotWriter.cpp \
 		largenet2/sim/output/IntervalOutput.cpp \
 		largenet2/sim/output/Outputter.cpp \
 		largenet2/motifs/QuadLineMotif.cpp \
@@ -44,6 +45,7 @@ nobase_include_HEADERS = \
 		largenet2/io/EdgeListWriter.h \
 		largenet2/io/BinWriter.h \
 		largenet2/io/BinReader.h \
+		largenet2/io/DotWriter.h \
 		largenet2/sim/gillespie/MaxMethod.h \
 		largenet2/sim/gillespie/DirectMethod.h \
 		largenet2/sim/SimApp.h \

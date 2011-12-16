@@ -7,6 +7,7 @@
 #include <largenet2.h>
 #include <largenet2/io/BinWriter.h>
 #include <largenet2/io/BinReader.h>
+#include <largenet2/io/DotWriter.h>
 #include <iostream>
 #include <fstream>
 
@@ -27,7 +28,7 @@ int main(int argc, char **argv)
 	e = g.addEdge(2, 3, true);
 	g.setEdgeState(e, 3);
 
-	cout << "Writing graph to file.\n";
+	cout << "Writing graph to binary file.\n";
 	cout << "Graph with " << g.numberOfNodes() << " nodes in "
 			<< g.numberOfNodeStates() << " states and " << g.numberOfEdges()
 			<< " edges.\n";
@@ -38,7 +39,17 @@ int main(int argc, char **argv)
 		writer.write(g, outfile);
 		outfile.close();
 	}
-	cout << "Trying to read graph from file.\n";
+
+	cout << "Writing graph to DOT file.\n";
+	outfile.open("iotest.dot");
+	if (outfile)
+	{
+		io::DotWriter writer;
+		writer.write(g, outfile);
+		outfile.close();
+	}
+
+	cout << "Trying to read graph from binary file.\n";
 	ifstream infile("iotest.net", ios::binary);
 	Graph* g2 = 0;
 	if (infile)

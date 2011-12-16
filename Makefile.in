@@ -91,7 +91,7 @@ am_liblargenet2_@PACKAGE_VERSION@_la_OBJECTS =  \
 	largenet2/measures/InOutDegreeMatrix.lo \
 	largenet2/measures/counts.lo largenet2/io/EdgeListWriter.lo \
 	largenet2/io/EdgeListReader.lo largenet2/io/BinWriter.lo \
-	largenet2/io/BinReader.lo \
+	largenet2/io/BinReader.lo largenet2/io/DotWriter.lo \
 	largenet2/sim/output/IntervalOutput.lo \
 	largenet2/sim/output/Outputter.lo \
 	largenet2/motifs/QuadLineMotif.lo \
@@ -331,6 +331,7 @@ liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 		largenet2/io/EdgeListReader.cpp \
 		largenet2/io/BinWriter.cpp \
 		largenet2/io/BinReader.cpp \
+		largenet2/io/DotWriter.cpp \
 		largenet2/sim/output/IntervalOutput.cpp \
 		largenet2/sim/output/Outputter.cpp \
 		largenet2/motifs/QuadLineMotif.cpp \
@@ -359,6 +360,7 @@ nobase_include_HEADERS = \
 		largenet2/io/EdgeListWriter.h \
 		largenet2/io/BinWriter.h \
 		largenet2/io/BinReader.h \
+		largenet2/io/DotWriter.h \
 		largenet2/sim/gillespie/MaxMethod.h \
 		largenet2/sim/gillespie/DirectMethod.h \
 		largenet2/sim/SimApp.h \
@@ -529,6 +531,8 @@ largenet2/io/BinWriter.lo: largenet2/io/$(am__dirstamp) \
 	largenet2/io/$(DEPDIR)/$(am__dirstamp)
 largenet2/io/BinReader.lo: largenet2/io/$(am__dirstamp) \
 	largenet2/io/$(DEPDIR)/$(am__dirstamp)
+largenet2/io/DotWriter.lo: largenet2/io/$(am__dirstamp) \
+	largenet2/io/$(DEPDIR)/$(am__dirstamp)
 largenet2/sim/output/$(am__dirstamp):
 	@$(MKDIR_P) largenet2/sim/output
 	@: > largenet2/sim/output/$(am__dirstamp)
@@ -669,6 +673,8 @@ mostlyclean-compile:
 	-rm -f largenet2/io/BinReader.lo
 	-rm -f largenet2/io/BinWriter.$(OBJEXT)
 	-rm -f largenet2/io/BinWriter.lo
+	-rm -f largenet2/io/DotWriter.$(OBJEXT)
+	-rm -f largenet2/io/DotWriter.lo
 	-rm -f largenet2/io/EdgeListReader.$(OBJEXT)
 	-rm -f largenet2/io/EdgeListReader.lo
 	-rm -f largenet2/io/EdgeListWriter.$(OBJEXT)
@@ -711,6 +717,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/base/$(DEPDIR)/converters.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/io/$(DEPDIR)/BinReader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/io/$(DEPDIR)/BinWriter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@largenet2/io/$(DEPDIR)/DotWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/io/$(DEPDIR)/EdgeListReader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/io/$(DEPDIR)/EdgeListWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/measures/$(DEPDIR)/InOutDegreeMatrix.Plo@am__quote@
