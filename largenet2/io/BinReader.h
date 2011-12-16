@@ -30,13 +30,6 @@ public:
 	 * @return pointer to new graph object
 	 */
 	Graph* createFromStream(std::istream& strm);
-	/**
-	 * Create a graph from stream data, using an existing Graph object
-	 * @param strm Stream to read data from
-	 * @param[out] graphToFill Graph object to hold the new graph, will be cleared before filling
-	 * @return pointer to @p graphToFill
-	 */
-	Graph* createFromStream(std::istream& strm, Graph& graphToFill);
 };
 
 } /* namespace io */

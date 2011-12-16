@@ -57,11 +57,5 @@ Graph* largenet::io::BinReader::createFromStream(std::istream& strm)
 	return graph;
 }
 
-Graph* largenet::io::BinReader::createFromStream(std::istream& strm,
-		Graph& graphToFill)
-{
-	throw("Not yet implemented.");
-}
-
 } /* namespace io */
 } /* namespace largenet */

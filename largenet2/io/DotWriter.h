@@ -22,7 +22,7 @@ namespace io
 class DotWriter: public largenet::io::GraphWriter
 {
 public:
-	DotWriter() {}
+	DotWriter() : GraphWriter() {}
 	virtual ~DotWriter() {}
 	/**
 	 * @copydoc GraphWriter::write()

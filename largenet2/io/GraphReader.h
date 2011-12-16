@@ -34,13 +34,6 @@ public:
 	 * @return pointer to new graph object
 	 */
 	virtual Graph* createFromStream(std::istream& strm) = 0;
-	/**
-	 * Create a graph from stream data, using an existing Graph object
-	 * @param strm Stream to read data from
-	 * @param[out] graphToFill Graph object to hold the new graph, will be cleared before filling
-	 * @return pointer to @p graphToFill
-	 */
-	virtual Graph* createFromStream(std::istream& strm, Graph& graphToFill) = 0;
 };
 
 }

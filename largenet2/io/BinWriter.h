@@ -20,7 +20,7 @@ namespace io
 class BinWriter: public largenet::io::GraphWriter
 {
 public:
-	BinWriter() {}
+	BinWriter() : GraphWriter() {}
 	virtual ~BinWriter() {}
 	/**
 	 * @copydoc GraphWriter::write()
