@@ -17,12 +17,12 @@ namespace io
 
 void EdgeListWriter::write(const Graph& g, std::ostream& strm)
 {
-	if (g.numberOfNodes() == 0)
+	if (g.numberOfEdges() == 0)
 		return;
 
 	BOOST_FOREACH(const Edge& e, g.edges())
 			{
-				strm << e.source()->id() << '\t' << e.target()->id()
+				strm << e.source()->id() << '\t' << e.target()->id() << '\t'
 						<< g.nodeState(e.source()->id()) << '\t'
 						<< g.nodeState(e.target()->id()) << '\n';
 			}

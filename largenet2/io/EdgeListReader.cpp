@@ -46,13 +46,17 @@ Graph* EdgeListReader::createFromStream(std::istream& strm)
 		{
 			node_state_t n1_state = 0, n2_state = 0;
 			if (!(ss >> n1_state))
-				throw std::runtime_error(
-						"Failed to read node state at input position "
-								<< strm.tellg() << "\n");
+			{
+				stringstream err_strm("Failed to read node state at input position ");
+				err_strm << strm.tellg() << "\n";
+				throw std::runtime_error(err_strm.str());
+			}
 			if (!(ss >> n2_state))
-				throw std::runtime_error(
-						"Failed to read node state at input position "
-								<< strm.tellg() << "\n");
+			{
+				stringstream err_strm("Failed to read node state at input position ");
+				err_strm << strm.tellg() << "\n";
+				throw std::runtime_error(err_strm.str());
+			}
 			if (n1_state >= numNodeStates)
 				numNodeStates = n1_state + 1;
 			if (n2_state >= numNodeStates)
