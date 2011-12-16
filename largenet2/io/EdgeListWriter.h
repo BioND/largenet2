@@ -22,7 +22,7 @@ namespace io
 class EdgeListWriter: public GraphWriter
 {
 public:
-	EdgeListWriter() {}
+	EdgeListWriter() : writeNodeStates_(false) {}
 	virtual ~EdgeListWriter() {}
 	/**
 	 * @copybrief GraphWriter::write()
@@ -30,6 +30,23 @@ public:
 	 * @param strm stream to write graph in edge list format to
 	 */
 	void write(const Graph& g, std::ostream& strm);
+	/**
+	 * Check whether this writer writes node states
+	 */
+    bool writesNodeStates() const
+    {
+        return writeNodeStates_;
+    }
+    /**
+     * Also write node states
+     * @param val
+     */
+    void writeNodeStates(bool val)
+    {
+        writeNodeStates_ = val;
+    }
+private:
+	bool writeNodeStates_;
 };
 
 }

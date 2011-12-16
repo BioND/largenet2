@@ -27,8 +27,11 @@
 #include <largenet2.h>
 #include <largenet2/StateConsistencyListener.h>
 #include <largenet2/generators/generators.h>
+#include <largenet2/io/EdgeListWriter.h>
 #include <iostream>
+#include <fstream>
 #include <memory>
+
 
 using namespace std;
 using namespace largenet;
@@ -115,6 +118,15 @@ int main(int argc, char **argv)
 		}
 		// One simulation step
 		t += model.step(rng);
+	}
+
+	// Write the final network to a file for later analysis
+	ofstream outfile("voter.net");
+	if (outfile)
+	{
+		io::EdgeListWriter writer;
+		writer.write(net, outfile);
+		outfile.close();
 	}
 
 	return 0;
