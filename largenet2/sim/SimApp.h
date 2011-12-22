@@ -13,7 +13,8 @@
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-namespace sim {
+namespace sim
+{
 
 class SimApp: public boost::noncopyable
 {
@@ -24,8 +25,8 @@ public:
 
 	virtual ~SimApp()
 	{ // actually, this is not necessary
-		for (ofstream_ptr_v::iterator i = outStreams_.begin(); i
-				!= outStreams_.end(); ++i)
+		for (ofstream_ptr_v::iterator i = outStreams_.begin();
+				i != outStreams_.end(); ++i)
 			i->close();
 	}
 
@@ -50,9 +51,10 @@ public:
 	}
 
 protected:
-	std::ofstream& openOutputStream(std::string filename)
+	std::ofstream& openOutputStream(std::string filename,
+			std::ios::openmode mode = std::ios::out | std::ios::trunc)
 	{
-		std::auto_ptr<std::ofstream> o(new std::ofstream(filename.c_str()));
+		std::auto_ptr<std::ofstream> o(new std::ofstream(filename.c_str(), mode));
 		if (o->bad())
 		{
 			o->close();
