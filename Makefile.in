@@ -322,7 +322,12 @@ top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = largenet2-@PACKAGE_VERSION@.pc
-EXTRA_DIST = largenet2-@PACKAGE_VERSION@.pc README.md Doxyfile
+EXTRA_DIST = \
+		largenet2-@PACKAGE_VERSION@.pc \
+		README.md \
+		Doxyfile \
+		res/bin-format.png 
+
 lib_LTLIBRARIES = liblargenet2-@PACKAGE_VERSION@.la
 liblargenet2_@PACKAGE_VERSION@_la_LDFLAGS = -version-info 0:0:0
 liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \

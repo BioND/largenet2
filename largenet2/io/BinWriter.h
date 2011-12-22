@@ -16,6 +16,8 @@ namespace io
 
 /**
  * Write binary graph output
+ *
+ * See BinReader for the used binary format.
  */
 class BinWriter: public largenet::io::GraphWriter
 {

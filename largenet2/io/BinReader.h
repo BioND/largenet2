@@ -15,9 +15,15 @@ namespace io
 {
 
 /**
+ * Read binary graph data
  * 
- *
- * @author gerd
+ * Reads binary data according to the following format:
+ * @image html bin-format.png
+ * where @p N and @p L denote the numbers of nodes and edges, respectively,
+ * and <tt>n<sub>N</sub></tt> and <tt>n<sub>E</sub></tt> denote the numbers
+ * of node and edge states. These are then followed by @p N pairs of node IDs
+ * and corresponding node states. Finally, @p L triplets of source and target
+ * node IDs and corresponding edge states are interpreted as the network edges.
  */
 class BinReader: public largenet::io::GraphReader
 {
