@@ -65,6 +65,10 @@ private:
 		for (largenet::Node::edge_iterator it = in.first; it != in.second; ++it)
 			g.setEdgeState((*it)->id(), (*lsc_)(g.nodeState((*it)->source()->id()),
 					g.nodeState((*it)->target()->id())));
+		largenet::Node::edge_iterator_range un = n.undirectedEdges();
+		for (largenet::Node::edge_iterator it = un.first; it != un.second; ++it)
+			g.setEdgeState((*it)->id(), (*lsc_)(g.nodeState((*it)->source()->id()),
+					g.nodeState((*it)->target()->id())));
 	}
 	std::auto_ptr<EdgeStateCalculator> lsc_;
 };
