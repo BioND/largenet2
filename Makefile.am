@@ -6,6 +6,7 @@ pkgconfig_DATA = largenet2-@PACKAGE_VERSION@.pc
 EXTRA_DIST = largenet2-@PACKAGE_VERSION@.pc README.md Doxyfile
 
 lib_LTLIBRARIES = liblargenet2-@PACKAGE_VERSION@.la
+liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS = $(BOOST_CPPFLAGS)
 liblargenet2_@PACKAGE_VERSION@_la_LDFLAGS = -version-info 0:0:0
 
 liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
