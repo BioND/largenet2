@@ -110,7 +110,8 @@ endif
 if BUILD_EXAMPLES
 
 noinst_PROGRAMS = votermodel
-votermodel_LDADD = liblargenet2-@PACKAGE_VERSION@.la 
+votermodel_LDADD = liblargenet2-@PACKAGE_VERSION@.la
+votermodel_CPPFLAGS = $(BOOST_CPPFLAGS) 
 votermodel_SOURCES = \
 		examples/votermodel/vm.cpp \
 		examples/votermodel/VoterModel.h \

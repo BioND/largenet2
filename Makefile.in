@@ -133,9 +133,8 @@ am__votermodel_SOURCES_DIST = examples/votermodel/vm.cpp \
 	examples/votermodel/RandomVariates.h \
 	examples/votermodel/util.h examples/votermodel/WELLEngine.h \
 	examples/votermodel/WELLEngine.cpp
-@BUILD_EXAMPLES_TRUE@am_votermodel_OBJECTS =  \
-@BUILD_EXAMPLES_TRUE@	examples/votermodel/vm.$(OBJEXT) \
-@BUILD_EXAMPLES_TRUE@	examples/votermodel/WELLEngine.$(OBJEXT)
+@BUILD_EXAMPLES_TRUE@am_votermodel_OBJECTS = examples/votermodel/votermodel-vm.$(OBJEXT) \
+@BUILD_EXAMPLES_TRUE@	examples/votermodel/votermodel-WELLEngine.$(OBJEXT)
 votermodel_OBJECTS = $(am_votermodel_OBJECTS)
 @BUILD_EXAMPLES_TRUE@votermodel_DEPENDENCIES =  \
 @BUILD_EXAMPLES_TRUE@	liblargenet2-@PACKAGE_VERSION@.la
@@ -413,7 +412,8 @@ io_test_SOURCES = tests/io/io_test.cpp
 io_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 @HAVE_DOXYGEN_TRUE@DOCDIR = doc
 @HAVE_DOXYGEN_TRUE@MOSTLYCLEANFILES = -r $(DOCDIR)
-@BUILD_EXAMPLES_TRUE@votermodel_LDADD = liblargenet2-@PACKAGE_VERSION@.la 
+@BUILD_EXAMPLES_TRUE@votermodel_LDADD = liblargenet2-@PACKAGE_VERSION@.la
+@BUILD_EXAMPLES_TRUE@votermodel_CPPFLAGS = $(BOOST_CPPFLAGS) 
 @BUILD_EXAMPLES_TRUE@votermodel_SOURCES = \
 @BUILD_EXAMPLES_TRUE@		examples/votermodel/vm.cpp \
 @BUILD_EXAMPLES_TRUE@		examples/votermodel/VoterModel.h \
@@ -672,9 +672,10 @@ examples/votermodel/$(am__dirstamp):
 examples/votermodel/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) examples/votermodel/$(DEPDIR)
 	@: > examples/votermodel/$(DEPDIR)/$(am__dirstamp)
-examples/votermodel/vm.$(OBJEXT): examples/votermodel/$(am__dirstamp) \
+examples/votermodel/votermodel-vm.$(OBJEXT):  \
+	examples/votermodel/$(am__dirstamp) \
 	examples/votermodel/$(DEPDIR)/$(am__dirstamp)
-examples/votermodel/WELLEngine.$(OBJEXT):  \
+examples/votermodel/votermodel-WELLEngine.$(OBJEXT):  \
 	examples/votermodel/$(am__dirstamp) \
 	examples/votermodel/$(DEPDIR)/$(am__dirstamp)
 votermodel$(EXEEXT): $(votermodel_OBJECTS) $(votermodel_DEPENDENCIES) 
@@ -683,8 +684,8 @@ votermodel$(EXEEXT): $(votermodel_OBJECTS) $(votermodel_DEPENDENCIES)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f examples/votermodel/WELLEngine.$(OBJEXT)
-	-rm -f examples/votermodel/vm.$(OBJEXT)
+	-rm -f examples/votermodel/votermodel-WELLEngine.$(OBJEXT)
+	-rm -f examples/votermodel/votermodel-vm.$(OBJEXT)
 	-rm -f largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-Edge.$(OBJEXT)
 	-rm -f largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-Edge.lo
 	-rm -f largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-Graph.$(OBJEXT)
@@ -734,8 +735,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@examples/votermodel/$(DEPDIR)/WELLEngine.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@examples/votermodel/$(DEPDIR)/vm.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@examples/votermodel/$(DEPDIR)/votermodel-WELLEngine.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@examples/votermodel/$(DEPDIR)/votermodel-vm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/base/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-Edge.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/base/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-Graph.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/base/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-MultiNode.Plo@am__quote@
@@ -955,6 +956,38 @@ largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-MultiNode.lo: largenet2/base/Mu
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='largenet2/base/MultiNode.cpp' object='largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-MultiNode.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-MultiNode.lo `test -f 'largenet2/base/MultiNode.cpp' || echo '$(srcdir)/'`largenet2/base/MultiNode.cpp
+
+examples/votermodel/votermodel-vm.o: examples/votermodel/vm.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/votermodel/votermodel-vm.o -MD -MP -MF examples/votermodel/$(DEPDIR)/votermodel-vm.Tpo -c -o examples/votermodel/votermodel-vm.o `test -f 'examples/votermodel/vm.cpp' || echo '$(srcdir)/'`examples/votermodel/vm.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/votermodel/$(DEPDIR)/votermodel-vm.Tpo examples/votermodel/$(DEPDIR)/votermodel-vm.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='examples/votermodel/vm.cpp' object='examples/votermodel/votermodel-vm.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/votermodel/votermodel-vm.o `test -f 'examples/votermodel/vm.cpp' || echo '$(srcdir)/'`examples/votermodel/vm.cpp
+
+examples/votermodel/votermodel-vm.obj: examples/votermodel/vm.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/votermodel/votermodel-vm.obj -MD -MP -MF examples/votermodel/$(DEPDIR)/votermodel-vm.Tpo -c -o examples/votermodel/votermodel-vm.obj `if test -f 'examples/votermodel/vm.cpp'; then $(CYGPATH_W) 'examples/votermodel/vm.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/votermodel/vm.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/votermodel/$(DEPDIR)/votermodel-vm.Tpo examples/votermodel/$(DEPDIR)/votermodel-vm.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='examples/votermodel/vm.cpp' object='examples/votermodel/votermodel-vm.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/votermodel/votermodel-vm.obj `if test -f 'examples/votermodel/vm.cpp'; then $(CYGPATH_W) 'examples/votermodel/vm.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/votermodel/vm.cpp'; fi`
+
+examples/votermodel/votermodel-WELLEngine.o: examples/votermodel/WELLEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/votermodel/votermodel-WELLEngine.o -MD -MP -MF examples/votermodel/$(DEPDIR)/votermodel-WELLEngine.Tpo -c -o examples/votermodel/votermodel-WELLEngine.o `test -f 'examples/votermodel/WELLEngine.cpp' || echo '$(srcdir)/'`examples/votermodel/WELLEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/votermodel/$(DEPDIR)/votermodel-WELLEngine.Tpo examples/votermodel/$(DEPDIR)/votermodel-WELLEngine.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='examples/votermodel/WELLEngine.cpp' object='examples/votermodel/votermodel-WELLEngine.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/votermodel/votermodel-WELLEngine.o `test -f 'examples/votermodel/WELLEngine.cpp' || echo '$(srcdir)/'`examples/votermodel/WELLEngine.cpp
+
+examples/votermodel/votermodel-WELLEngine.obj: examples/votermodel/WELLEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/votermodel/votermodel-WELLEngine.obj -MD -MP -MF examples/votermodel/$(DEPDIR)/votermodel-WELLEngine.Tpo -c -o examples/votermodel/votermodel-WELLEngine.obj `if test -f 'examples/votermodel/WELLEngine.cpp'; then $(CYGPATH_W) 'examples/votermodel/WELLEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/votermodel/WELLEngine.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/votermodel/$(DEPDIR)/votermodel-WELLEngine.Tpo examples/votermodel/$(DEPDIR)/votermodel-WELLEngine.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='examples/votermodel/WELLEngine.cpp' object='examples/votermodel/votermodel-WELLEngine.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/votermodel/votermodel-WELLEngine.obj `if test -f 'examples/votermodel/WELLEngine.cpp'; then $(CYGPATH_W) 'examples/votermodel/WELLEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/votermodel/WELLEngine.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
