@@ -9,7 +9,7 @@ with a given state value is provided. A limited number of graph-theoretical meas
 is implemented, such as the (state-resolved) in- and out-degree distributions and the
 degree correlations (same-node and nearest-neighbor).  
 
-The `largenet2` library has been developed by [Gerd Zschaler](gzschaler@googlemail.com).
+The `largenet2` library has been developed by [Gerd Zschaler](www.pks.mpg.de/~zschaler).
 It is a major rewrite of the original `largenet` library, which only supported undirected
 networks.
 
