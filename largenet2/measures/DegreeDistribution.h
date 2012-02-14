@@ -28,8 +28,12 @@ struct inS
 struct outS
 {
 };
+/// selector for undirected degree distributions
+struct undirectedS
+{
+};
 /// selector for total-degree distributions
-struct bothS
+struct allS
 {
 };
 
@@ -38,7 +42,7 @@ struct bothS
  * @tparam directionS Selector for in-, out-, or total-degree distribution.
  *                    Possible values are inS, outS, and bothS.
  */
-template<typename directionS = bothS>
+template<typename directionS = allS>
 class DegreeDistribution: public boost::noncopyable
 {
 public:
@@ -91,6 +95,8 @@ private:
 
 typedef DegreeDistribution<inS> InDegreeDistribution;
 typedef DegreeDistribution<outS> OutDegreeDistribution;
+typedef DegreeDistribution<undirectedS> UndirectedDegreeDistribution;
+typedef DegreeDistribution<allS> TotalDegreeDistribution;
 
 template<>
 template<class _NodeIterator>
@@ -108,7 +114,14 @@ degree_t DegreeDistribution<outS>::degree(_NodeIterator& it) const
 
 template<>
 template<class _NodeIterator>
-degree_t DegreeDistribution<bothS>::degree(_NodeIterator& it) const
+degree_t DegreeDistribution<undirectedS>::degree(_NodeIterator& it) const
+{
+	return it->undirectedDegree();
+}
+
+template<>
+template<class _NodeIterator>
+degree_t DegreeDistribution<allS>::degree(_NodeIterator& it) const
 {
 	return it->degree();
 }
@@ -145,7 +158,22 @@ degree_t DegreeDistribution<outS>::countNeighbors(_NodeIterator& it,
 
 template<>
 template<class _NodeIterator>
-degree_t DegreeDistribution<bothS>::countNeighbors(_NodeIterator& it,
+degree_t DegreeDistribution<undirectedS>::countNeighbors(_NodeIterator& it,
+		const Graph& g, const node_state_t s) const
+{
+	degree_t num = 0;
+	Node::ConstUndirectedNeighborIteratorRange iters = it->undirectedNeighbors();
+	for (Node::ConstUndirectedNeighborIterator i = iters.first; i != iters.second; ++i)
+	{
+		if (g.nodeState(i.id()) == s)
+			++num;
+	}
+	return num;
+}
+
+template<>
+template<class _NodeIterator>
+degree_t DegreeDistribution<allS>::countNeighbors(_NodeIterator& it,
 		const Graph& g, const node_state_t s) const
 {
 	degree_t num = 0;

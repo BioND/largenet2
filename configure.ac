@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([largenet2], [0.2])
+AC_INIT([largenet2], [0.3])
 AM_INIT_AUTOMAKE([1.11 -Wall -Werror foreign silent-rules subdir-objects])
 LT_PREREQ([2.2])
 LT_INIT([disable-static])
@@ -45,7 +45,7 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
 # Output files
 AC_CONFIG_FILES([Makefile
-                largenet2-0.2.pc:largenet2.pc.in
+                largenet2-0.3.pc:largenet2.pc.in
                 Doxyfile])
 
 AC_CONFIG_HEADERS([config.h])

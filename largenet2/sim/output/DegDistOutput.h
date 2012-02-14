@@ -24,7 +24,7 @@ namespace output
 {
 
 /**
- * Calculates and outputs the degree distribution for each node state in the network.
+ * Calculates and outputs the *directed* degree distribution for each node state in the network.
  */
 template<class _Graph>
 class DegDistOutput: public IntervalOutput
@@ -140,6 +140,65 @@ private:
 
 	const _Graph& net_;
 };
+
+template<class _Graph>
+class UndirectedDegDistOutput: public IntervalOutput
+{
+public:
+	UndirectedDegDistOutput(std::ostream& out, const _Graph& net, double interval) :
+		IntervalOutput(out, interval), net_(net), nodeMotifs_(
+				net_.numberOfNodeStates())
+	{
+	}
+	virtual ~UndirectedDegDistOutput()
+	{
+	}
+
+private:
+	void doOutput(double t)
+	{
+		typedef boost::ptr_map<lmo::NodeMotif, lmeas::UndirectedDegreeDistribution>
+				un_dist_map;
+
+		un_dist_map un_dists;
+		largenet::degree_t maxDegree = 0;
+		for (lmo::NodeMotifSet::const_iterator motif = nodeMotifs_.begin(); motif
+				!= nodeMotifs_.end(); ++motif)
+		{
+			lmeas::UndirectedDegreeDistribution* d1 = new lmeas::UndirectedDegreeDistribution(
+					net_, *motif);
+			un_dists.insert(*motif, std::auto_ptr<lmeas::UndirectedDegreeDistribution>(
+					d1));
+			if (maxDegree < d1->maxDegree())
+				maxDegree = d1->maxDegree();
+		}
+
+		const char tab = '\t';
+		for (largenet::degree_t k = 0; k <= maxDegree; ++k)
+		{
+			stream() << t << tab << k;
+			for (un_dist_map::const_iterator i = un_dists.begin(); i
+					!= un_dists.end(); ++i)
+				stream() << tab << (*i->second)[k];
+			stream() << "\n";
+		}
+		stream() << "\n\n";
+	}
+
+	void doWriteHeader()
+	{
+		const char tab = '\t';
+		stream() << commentChar() << " t" << tab << "k";
+		for (lmo::NodeMotifSet::const_iterator motif = nodeMotifs_.begin(); motif
+				!= nodeMotifs_.end(); ++motif)
+			stream() << tab << *motif;
+		stream() << "\n";
+	}
+
+	const _Graph& net_;
+	lmo::NodeMotifSet nodeMotifs_;
+};
+
 }
 }
 
