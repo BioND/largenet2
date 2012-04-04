@@ -14,6 +14,40 @@ namespace largenet
 namespace measures
 {
 
+size_t edges(const Graph& net, const motifs::LinkMotif& l)
+{
+	// we cannot obtain the corresponding edge state without access
+	// to a LinkStateCalculator, so we have to resort to looping over
+	// all nodes
+	size_t count = 0;
+	if (l.isDirected())
+	{
+		BOOST_FOREACH(const Node& n, net.nodes(l.source()))
+		{
+			BOOST_FOREACH(const Node& n1, n.outNeighbors())
+			{
+				if (net.nodeState(n1.id()) == l.target())
+					++count;
+			}
+		}
+		return count;
+	}
+	else
+	{
+		BOOST_FOREACH(const Node& n, net.nodes(l.source()))
+		{
+			BOOST_FOREACH(const Node& n1, n.undirectedNeighbors())
+			{
+				if (net.nodeState(n1.id()) == l.target())
+					++count;
+			}
+		}
+		if (l.isSymmetric())
+			count /= 2;
+		return count;
+	}
+}
+
 size_t triples(const Graph& net)
 {
 	size_t t = 0;
@@ -21,7 +55,7 @@ size_t triples(const Graph& net)
 	{
 		const degree_t d = n.degree();
 		if (d > 1)
-			t += d * (d - 1) - 2*n.mutualDegree();	// do not count 2-loops as triples
+			t += d * (d - 1) - 2 * n.mutualDegree(); // do not count 2-loops as triples
 	}
 	return t / 2;
 }
@@ -33,7 +67,7 @@ size_t outTriples(const Graph& net)
 	{
 		const degree_t d = n.outDegree();
 		if (d > 1)
-			t += d * (d - 1);	// FIXME will count multi-out-edges as triples for MultiNodes
+			t += d * (d - 1); // FIXME will count multi-out-edges as triples for MultiNodes
 	}
 	return t / 2;
 }
@@ -45,7 +79,7 @@ size_t inTriples(const Graph& net)
 	{
 		const degree_t d = n.inDegree();
 		if (d > 1)
-			t += d * (d - 1);	// FIXME will count multi-in-edges as triples for MultiNodes
+			t += d * (d - 1); // FIXME will count multi-in-edges as triples for MultiNodes
 	}
 	return t / 2;
 }
@@ -77,8 +111,7 @@ size_t triples_undirected(const Graph& net, const motifs::TripleMotif& t)
 			{
 				if (nb1.id() == nb2.id())
 					continue;
-				if (net.nodeState(nb2.id())
-						== t.right())
+				if (net.nodeState(nb2.id()) == t.right())
 					++ret;
 			}
 		}
@@ -238,8 +271,8 @@ size_t quadStars(const Graph& net)
 	{
 		const degree_t d = n.degree(), m = n.mutualDegree();
 		if (d > 2)
-			t += 2 * d - 3 * d * d + d * d * d + 8 * m
-					- 6 * d * m + 6 * m * m - 2 * m * m * m;
+			t += 2 * d - 3 * d * d + d * d * d + 8 * m - 6 * d * m + 6 * m * m
+					- 2 * m * m * m;
 	}
 	return t / 6;
 }
@@ -284,8 +317,7 @@ size_t quad_stars_undirected(const Graph& net, const motifs::QuadStarMotif& q)
 			{
 				if (nb1.id() == nb2.id())
 					continue;
-				if (net.nodeState(nb2.id())
-						!= q.b())
+				if (net.nodeState(nb2.id()) != q.b())
 					continue;
 				BOOST_FOREACH(const Node& nb3, n.undirectedNeighbors())
 				{
@@ -299,7 +331,7 @@ size_t quad_stars_undirected(const Graph& net, const motifs::QuadStarMotif& q)
 	}
 
 	if (q.isSymmetric())
-		return ret / 6;		// FIXME are these factors correct?
+		return ret / 6; // FIXME are these factors correct?
 	else if (q.isMirrorSymmetric())
 		return ret / 2;
 	else
@@ -329,7 +361,8 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 			if (q.isSymmetric())
 			{
 				ret += a_neighbors * (a_neighbors - 1) * (a_neighbors - 2);
-			} else if (q.isMirrorSymmetric())
+			}
+			else if (q.isMirrorSymmetric())
 			{
 				if (q.a() == q.b())
 					ret += a_neighbors * (a_neighbors - 1) * c_neighbors;
@@ -337,7 +370,8 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 					ret += a_neighbors * (a_neighbors - 1) * b_neighbors;
 				else
 					ret += b_neighbors * (b_neighbors - 1) * a_neighbors;
-			} else
+			}
+			else
 				ret += a_neighbors * b_neighbors * c_neighbors;
 		}
 		break;
@@ -358,7 +392,8 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 			if (q.isSymmetric())
 			{
 				ret += a_neighbors * (a_neighbors - 1) * (a_neighbors - 2);
-			} else if (q.isMirrorSymmetric())
+			}
+			else if (q.isMirrorSymmetric())
 			{
 				if (q.a() == q.b())
 					ret += a_neighbors * (a_neighbors - 1) * c_neighbors;
@@ -366,7 +401,8 @@ size_t quadStars(const Graph& net, const motifs::QuadStarMotif& q)
 					ret += a_neighbors * (a_neighbors - 1) * b_neighbors;
 				else
 					ret += b_neighbors * (b_neighbors - 1) * a_neighbors;
-			} else
+			}
+			else
 				ret += a_neighbors * b_neighbors * c_neighbors;
 		}
 		break;

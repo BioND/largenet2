@@ -8,12 +8,55 @@
 #define COUNTS_H_
 
 #include <largenet2/base/Graph.h>
+#include <largenet2/motifs/NodeMotif.h>
+#include <largenet2/motifs/LinkMotif.h>
 #include <largenet2/motifs/TripleMotif.h>
 #include <largenet2/motifs/QuadStarMotif.h>
 #include <cstddef>
 
 namespace largenet {
 namespace measures {
+
+/**
+ * Total number of nodes in graph.
+ *
+ * @param net Graph object
+ * @return number of nodes in @p net
+ */
+inline size_t nodes(const Graph& net)
+{
+	return net.numberOfNodes();
+}
+/**
+ * Total number of nodes of type @p n in graph.
+ *
+ * @param net Graph object
+ * @param n NodeMotif to count
+ * @return number of @p n nodes in @p net
+ */
+inline size_t nodes(const Graph& net, const motifs::NodeMotif& n)
+{
+	return net.numberOfNodes(n);
+}
+
+/**
+ * Total number of edges in graph
+ *
+ * @param net Graph object
+ * @return number of edges in @p net
+ */
+inline size_t edges(const Graph& net)
+{
+	return net.numberOfEdges();
+}
+/**
+ * Total number of edges of type @p l in graph.
+ *
+ * @param net Graph object
+ * @param l LinkMotif to count
+ * @return number of @p l edges in @p net
+ */
+size_t edges(const Graph& net, const motifs::LinkMotif& l);
 
 /**
  * Total number of triples in graph.
