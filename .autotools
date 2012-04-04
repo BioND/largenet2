@@ -30,7 +30,12 @@
 <option id="program-suffix" value=""/>
 <option id="program-transform-name" value=""/>
 <option id="enable-maintainer-mode" value="false"/>
-<option id="user" value=""/>
+<flag id="CFLAGS">
+<flagvalue id="cflags-debug" value="false"/>
+<flagvalue id="cflags-gprof" value="false"/>
+<flagvalue id="cflags-gcov" value="false"/>
+</flag>
+<option id="user" value="--enable-examples"/>
 <option id="autogen" value=""/>
 <option id="autogenOpts" value=""/>
 </configuration>
