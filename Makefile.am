@@ -86,18 +86,24 @@ nobase_include_HEADERS = \
 check_PROGRAMS = \
 		graph_iterators_test \
 		boost_test \
-		io_test
+		io_test \
+		CPtrRepository_test
 
 graph_iterators_test_SOURCES = tests/base/graph_iterators_test.cpp
 graph_iterators_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
 io_test_SOURCES = tests/io/io_test.cpp
 io_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
+CPtrRepository_test_SOURCES = tests/base/repo/CPtrRepository_test.cpp
+CPtrRepository_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
+CPtrRepository_test_CPPFLAGS = -DBOOST_TEST_DYN_LINK
+CPtrRepository_test_LDFLAGS = -lboost_unit_test_framework
 
 TESTS = \
 		graph_iterators_test \
 		boost_test \
-		io_test
+		io_test \
+		CPtrRepository_test
 
 if HAVE_DOXYGEN
 

@@ -5,7 +5,7 @@
  */
 
 #include <boost/graph/graph_concepts.hpp>
-#include <boost/concept/assert.hpp>
+#include <boost/concept_check.hpp>
 #include <largenet2/boost/largenet2_boost.h>
 
 using namespace largenet;

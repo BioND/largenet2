@@ -38,9 +38,9 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = graph_iterators_test$(EXEEXT) boost_test$(EXEEXT) \
-	io_test$(EXEEXT)
+	io_test$(EXEEXT) CPtrRepository_test$(EXEEXT)
 TESTS = graph_iterators_test$(EXEEXT) boost_test$(EXEEXT) \
-	io_test$(EXEEXT)
+	io_test$(EXEEXT) CPtrRepository_test$(EXEEXT)
 @BUILD_EXAMPLES_TRUE@noinst_PROGRAMS = votermodel$(EXEEXT)
 subdir = .
 DIST_COMMON = $(am__configure_deps) $(nobase_include_HEADERS) \
@@ -120,6 +120,13 @@ liblargenet2_@PACKAGE_VERSION@_la_LINK = $(LIBTOOL) $(AM_V_lt) \
 	$(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(liblargenet2_@PACKAGE_VERSION@_la_LDFLAGS) $(LDFLAGS) -o $@
 PROGRAMS = $(noinst_PROGRAMS)
+am_CPtrRepository_test_OBJECTS = tests/base/repo/CPtrRepository_test-CPtrRepository_test.$(OBJEXT)
+CPtrRepository_test_OBJECTS = $(am_CPtrRepository_test_OBJECTS)
+CPtrRepository_test_DEPENDENCIES = liblargenet2-@PACKAGE_VERSION@.la
+CPtrRepository_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
+	$(AM_CXXFLAGS) $(CXXFLAGS) $(CPtrRepository_test_LDFLAGS) \
+	$(LDFLAGS) -o $@
 am_boost_test_OBJECTS = tests/boost/largenet2_boost_test.$(OBJEXT)
 boost_test_OBJECTS = $(am_boost_test_OBJECTS)
 boost_test_LDADD = $(LDADD)
@@ -183,11 +190,13 @@ AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(liblargenet2_@PACKAGE_VERSION@_la_SOURCES) \
-	$(boost_test_SOURCES) $(graph_iterators_test_SOURCES) \
-	$(io_test_SOURCES) $(votermodel_SOURCES)
+	$(CPtrRepository_test_SOURCES) $(boost_test_SOURCES) \
+	$(graph_iterators_test_SOURCES) $(io_test_SOURCES) \
+	$(votermodel_SOURCES)
 DIST_SOURCES = $(liblargenet2_@PACKAGE_VERSION@_la_SOURCES) \
-	$(boost_test_SOURCES) $(graph_iterators_test_SOURCES) \
-	$(io_test_SOURCES) $(am__votermodel_SOURCES_DIST)
+	$(CPtrRepository_test_SOURCES) $(boost_test_SOURCES) \
+	$(graph_iterators_test_SOURCES) $(io_test_SOURCES) \
+	$(am__votermodel_SOURCES_DIST)
 DATA = $(pkgconfig_DATA)
 HEADERS = $(nobase_include_HEADERS)
 ETAGS = etags
@@ -414,6 +423,11 @@ graph_iterators_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
 io_test_SOURCES = tests/io/io_test.cpp
 io_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
+#CPtrRepository_test_HEADERS = tests/base/repo/test_types.h
+CPtrRepository_test_SOURCES = tests/base/repo/CPtrRepository_test.cpp
+CPtrRepository_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
+CPtrRepository_test_CPPFLAGS = -DBOOST_TEST_DYN_LINK
+CPtrRepository_test_LDFLAGS = -lboost_unit_test_framework
 @HAVE_DOXYGEN_TRUE@DOCDIR = doc
 @HAVE_DOXYGEN_TRUE@MOSTLYCLEANFILES = -r $(DOCDIR)
 @BUILD_EXAMPLES_TRUE@votermodel_LDADD = liblargenet2-@PACKAGE_VERSION@.la
@@ -636,6 +650,18 @@ clean-noinstPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
+tests/base/repo/$(am__dirstamp):
+	@$(MKDIR_P) tests/base/repo
+	@: > tests/base/repo/$(am__dirstamp)
+tests/base/repo/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tests/base/repo/$(DEPDIR)
+	@: > tests/base/repo/$(DEPDIR)/$(am__dirstamp)
+tests/base/repo/CPtrRepository_test-CPtrRepository_test.$(OBJEXT):  \
+	tests/base/repo/$(am__dirstamp) \
+	tests/base/repo/$(DEPDIR)/$(am__dirstamp)
+CPtrRepository_test$(EXEEXT): $(CPtrRepository_test_OBJECTS) $(CPtrRepository_test_DEPENDENCIES) 
+	@rm -f CPtrRepository_test$(EXEEXT)
+	$(AM_V_CXXLD)$(CPtrRepository_test_LINK) $(CPtrRepository_test_OBJECTS) $(CPtrRepository_test_LDADD) $(LIBS)
 tests/boost/$(am__dirstamp):
 	@$(MKDIR_P) tests/boost
 	@: > tests/boost/$(am__dirstamp)
@@ -733,6 +759,7 @@ mostlyclean-compile:
 	-rm -f largenet2/sim/output/liblargenet2_@PACKAGE_VERSION@_la-Outputter.$(OBJEXT)
 	-rm -f largenet2/sim/output/liblargenet2_@PACKAGE_VERSION@_la-Outputter.lo
 	-rm -f tests/base/graph_iterators_test.$(OBJEXT)
+	-rm -f tests/base/repo/CPtrRepository_test-CPtrRepository_test.$(OBJEXT)
 	-rm -f tests/boost/largenet2_boost_test.$(OBJEXT)
 	-rm -f tests/io/io_test.$(OBJEXT)
 
@@ -763,6 +790,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/sim/output/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-IntervalOutput.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/sim/output/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-Outputter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/base/$(DEPDIR)/graph_iterators_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tests/base/repo/$(DEPDIR)/CPtrRepository_test-CPtrRepository_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/boost/$(DEPDIR)/largenet2_boost_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/io/$(DEPDIR)/io_test.Po@am__quote@
 
@@ -960,6 +988,22 @@ largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-MultiNode.lo: largenet2/base/Mu
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='largenet2/base/MultiNode.cpp' object='largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-MultiNode.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-MultiNode.lo `test -f 'largenet2/base/MultiNode.cpp' || echo '$(srcdir)/'`largenet2/base/MultiNode.cpp
+
+tests/base/repo/CPtrRepository_test-CPtrRepository_test.o: tests/base/repo/CPtrRepository_test.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CPtrRepository_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT tests/base/repo/CPtrRepository_test-CPtrRepository_test.o -MD -MP -MF tests/base/repo/$(DEPDIR)/CPtrRepository_test-CPtrRepository_test.Tpo -c -o tests/base/repo/CPtrRepository_test-CPtrRepository_test.o `test -f 'tests/base/repo/CPtrRepository_test.cpp' || echo '$(srcdir)/'`tests/base/repo/CPtrRepository_test.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) tests/base/repo/$(DEPDIR)/CPtrRepository_test-CPtrRepository_test.Tpo tests/base/repo/$(DEPDIR)/CPtrRepository_test-CPtrRepository_test.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/base/repo/CPtrRepository_test.cpp' object='tests/base/repo/CPtrRepository_test-CPtrRepository_test.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CPtrRepository_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o tests/base/repo/CPtrRepository_test-CPtrRepository_test.o `test -f 'tests/base/repo/CPtrRepository_test.cpp' || echo '$(srcdir)/'`tests/base/repo/CPtrRepository_test.cpp
+
+tests/base/repo/CPtrRepository_test-CPtrRepository_test.obj: tests/base/repo/CPtrRepository_test.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CPtrRepository_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT tests/base/repo/CPtrRepository_test-CPtrRepository_test.obj -MD -MP -MF tests/base/repo/$(DEPDIR)/CPtrRepository_test-CPtrRepository_test.Tpo -c -o tests/base/repo/CPtrRepository_test-CPtrRepository_test.obj `if test -f 'tests/base/repo/CPtrRepository_test.cpp'; then $(CYGPATH_W) 'tests/base/repo/CPtrRepository_test.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/base/repo/CPtrRepository_test.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) tests/base/repo/$(DEPDIR)/CPtrRepository_test-CPtrRepository_test.Tpo tests/base/repo/$(DEPDIR)/CPtrRepository_test-CPtrRepository_test.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/base/repo/CPtrRepository_test.cpp' object='tests/base/repo/CPtrRepository_test-CPtrRepository_test.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CPtrRepository_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o tests/base/repo/CPtrRepository_test-CPtrRepository_test.obj `if test -f 'tests/base/repo/CPtrRepository_test.cpp'; then $(CYGPATH_W) 'tests/base/repo/CPtrRepository_test.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/base/repo/CPtrRepository_test.cpp'; fi`
 
 examples/votermodel/votermodel-vm.o: examples/votermodel/vm.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/votermodel/votermodel-vm.o -MD -MP -MF examples/votermodel/$(DEPDIR)/votermodel-vm.Tpo -c -o examples/votermodel/votermodel-vm.o `test -f 'examples/votermodel/vm.cpp' || echo '$(srcdir)/'`examples/votermodel/vm.cpp
@@ -1390,6 +1434,8 @@ distclean-generic:
 	-rm -f largenet2/sim/output/$(am__dirstamp)
 	-rm -f tests/base/$(DEPDIR)/$(am__dirstamp)
 	-rm -f tests/base/$(am__dirstamp)
+	-rm -f tests/base/repo/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tests/base/repo/$(am__dirstamp)
 	-rm -f tests/boost/$(DEPDIR)/$(am__dirstamp)
 	-rm -f tests/boost/$(am__dirstamp)
 	-rm -f tests/io/$(DEPDIR)/$(am__dirstamp)
@@ -1405,7 +1451,7 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libLTLIBRARIES \
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf examples/votermodel/$(DEPDIR) largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/boost/$(DEPDIR) tests/io/$(DEPDIR)
+	-rm -rf examples/votermodel/$(DEPDIR) largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/base/repo/$(DEPDIR) tests/boost/$(DEPDIR) tests/io/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -1453,7 +1499,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf examples/votermodel/$(DEPDIR) largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/boost/$(DEPDIR) tests/io/$(DEPDIR)
+	-rm -rf examples/votermodel/$(DEPDIR) largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/base/repo/$(DEPDIR) tests/boost/$(DEPDIR) tests/io/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
