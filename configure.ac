@@ -16,6 +16,7 @@ AC_PROG_TRY_DOXYGEN
 BOOST_REQUIRE([1.36.0])
 BOOST_FOREACH
 BOOST_FUNCTION
+BOOST_TEST
 #BOOST_GRAPH
  
 # Checks for typedefs, structures, and compiler characteristics.

@@ -100,8 +100,8 @@ base_tests_SOURCES = \
 	tests/base/graph_iterators_test.cpp
 	
 base_tests_LDADD = liblargenet2-@PACKAGE_VERSION@.la
-base_tests_CPPFLAGS = -DBOOST_TEST_DYN_LINK
-base_tests_LDFLAGS = -lboost_unit_test_framework
+base_tests_CPPFLAGS = -DBOOST_TEST_DYN_LINK $(BOOST_CPPFLAGS)
+base_tests_LDFLAGS = $(BOOST_LDFLAGS) -lboost_unit_test_framework
 
 TESTS = \
 		base_tests \

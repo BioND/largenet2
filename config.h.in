@@ -9,6 +9,9 @@
 /* Define to 1 if you have <boost/function.hpp> */
 #undef HAVE_BOOST_FUNCTION_HPP
 
+/* Define to 1 if you have <boost/test/unit_test.hpp> */
+#undef HAVE_BOOST_TEST_UNIT_TEST_HPP
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
