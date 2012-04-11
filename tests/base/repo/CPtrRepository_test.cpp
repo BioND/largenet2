@@ -1,4 +1,3 @@
-#define BOOST_TEST_MODULE CPtrRepository test
 #include <boost/test/unit_test.hpp>
 #include <boost/concept_check.hpp>
 
@@ -31,6 +30,8 @@ void ptr_fillRepo(ptr_rep_type& c, const unsigned int size, const repo::category
 	for (unsigned int i = 0; i < size; ++i)
 		c.insert(new val_type(i + 1), cat);
 }
+
+BOOST_AUTO_TEST_SUITE(ptr_repo_tests)
 
 BOOST_AUTO_TEST_CASE( ptr_repo_basics )
 {
@@ -294,3 +295,4 @@ BOOST_AUTO_TEST_CASE( ptr_repo_iterators )
 	//it = c_it; // should fail to compile
 }
 
+BOOST_AUTO_TEST_SUITE_END()
