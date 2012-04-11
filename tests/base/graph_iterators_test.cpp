@@ -26,7 +26,14 @@ int main(int argc, char **argv)
 	BOOST_ASSERT(c_n == n);
 	BOOST_ASSERT(n == c_n);
 	if (!boost::is_convertible<Graph::NodeIterator, Graph::ConstNodeIterator>::value)
+	{
 		std::cerr << "Must be able to convert non-const to const iterator!\n";
+		return -1;
+	}
 	if (boost::is_convertible<Graph::ConstNodeIterator, Graph::NodeIterator>::value)
+	{
 		std::cerr << "Must not be able to convert const to non-const iterator!\n";
+		return -1;
+	}
+	return 0;
 }

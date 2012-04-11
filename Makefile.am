@@ -94,6 +94,11 @@ boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
 io_test_SOURCES = tests/io/io_test.cpp
 io_test_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 
+TESTS = \
+		graph_iterators_test \
+		boost_test \
+		io_test
+
 if HAVE_DOXYGEN
 
 DOCDIR = doc

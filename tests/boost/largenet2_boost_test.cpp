@@ -17,4 +17,5 @@ int main(int argc, char **argv)
 	BOOST_CONCEPT_ASSERT((boost::EdgeListGraphConcept<Graph>));
 	BOOST_CONCEPT_ASSERT((boost::BidirectionalGraphConcept<Graph>));
 	BOOST_CONCEPT_ASSERT((boost::MutableGraphConcept<Graph>));
+	return 0;
 }

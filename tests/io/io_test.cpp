@@ -62,4 +62,5 @@ int main(int argc, char **argv)
 				<< g2->numberOfEdges() << " edges.\n";
 	}
 	delete g2;
+	return 0;
 }
