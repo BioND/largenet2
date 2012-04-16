@@ -60,6 +60,7 @@ std::string TripleMotif::toStr() const
 		break;
 	case LRC:
 		ss << "(" << left_ << ">" << center_ << "<" << right_ << ")";
+		break;
 	}
 	return ss.str();
 }
