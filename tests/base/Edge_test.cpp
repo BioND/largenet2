@@ -1,9 +1,40 @@
 #include <boost/test/unit_test.hpp>
 
-#include <largenet2/base/MultiNode.h>
 #include <largenet2/base/Edge.h>
+#include <largenet2/base/Node.h>
 
 using namespace largenet;
+
+class MockNode: public Node
+{
+public:
+	MockNode(node_id_t id) : Node(id) {}
+	degree_t outDegree() const { return 0; }
+	degree_t inDegree() const { return 0; }
+	degree_t mutualDegree() const { return 0; }
+	degree_t undirectedDegree() const { return 0; }
+	bool hasInEdge(const Edge* e) const { return false; }
+	bool hasOutEdge(const Edge* e) const { return false; }
+	bool hasUndirectedEdge(const Edge* e) const { return false; }
+	bool hasEdgeTo(const Node* n) const { return false; }
+	bool hasEdgeFrom(const Node* n) const { return false; }
+	bool hasUndirectedEdgeTo(const Node* n) const { return false; }
+	Edge* edgeTo(const Node* n) const { return 0; }
+	Edge* edgeFrom(const Node* n) const { return 0; }
+	Edge* undirectedEdgeTo(const Node* n) const { return 0; }
+	edge_iterator_range outEdges() const { return edge_iterator_range(edge_iterator(), edge_iterator()); }
+	edge_iterator_range inEdges() const { return edge_iterator_range(edge_iterator(), edge_iterator()); }
+	edge_iterator_range undirectedEdges() const { return edge_iterator_range(edge_iterator(0), edge_iterator(0)); }
+	ConstOutNeighborIteratorRange outNeighbors() const { return ConstOutNeighborIteratorRange(ConstOutNeighborIterator(), ConstOutNeighborIterator()); }
+	OutNeighborIteratorRange outNeighbors() { return OutNeighborIteratorRange(OutNeighborIterator(), OutNeighborIterator()); }
+	ConstInNeighborIteratorRange inNeighbors() const { return ConstInNeighborIteratorRange(ConstInNeighborIterator(), ConstInNeighborIterator()); }
+	InNeighborIteratorRange inNeighbors() { return InNeighborIteratorRange(InNeighborIterator(), InNeighborIterator()); }
+	ConstUndirectedNeighborIteratorRange undirectedNeighbors() const { return ConstUndirectedNeighborIteratorRange(ConstUndirectedNeighborIterator(), ConstUndirectedNeighborIterator()); }
+	UndirectedNeighborIteratorRange undirectedNeighbors() { return UndirectedNeighborIteratorRange(UndirectedNeighborIterator(), UndirectedNeighborIterator()); }
+protected:
+	void registerEdge(const Edge* e) {}
+	void unregisterEdge(const Edge* e) {}
+};
 
 BOOST_TEST_DONT_PRINT_LOG_VALUE( Edge );
 
@@ -11,7 +42,7 @@ BOOST_AUTO_TEST_SUITE( Edge_tests )
 
 BOOST_AUTO_TEST_CASE( interface )
 {
-	MultiNode s(1), t(2);
+	MockNode s(1), t(2);
 	Edge* e = Edge::create(5, s, t, true);	// factory construction
 	BOOST_CHECK_EQUAL(e->id(), 5);
 	BOOST_CHECK_EQUAL(e->source(), &s);
