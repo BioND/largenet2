@@ -96,6 +96,7 @@ am_liblargenet2_@PACKAGE_VERSION@_la_OBJECTS = largenet2/measures/liblargenet2_@
 	largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-BinWriter.lo \
 	largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-BinReader.lo \
 	largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-DotWriter.lo \
+	largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.lo \
 	largenet2/sim/output/liblargenet2_@PACKAGE_VERSION@_la-IntervalOutput.lo \
 	largenet2/sim/output/liblargenet2_@PACKAGE_VERSION@_la-Outputter.lo \
 	largenet2/motifs/liblargenet2_@PACKAGE_VERSION@_la-QuadLineMotif.lo \
@@ -352,6 +353,7 @@ liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 		largenet2/io/BinWriter.cpp \
 		largenet2/io/BinReader.cpp \
 		largenet2/io/DotWriter.cpp \
+		largenet2/io/GraphMLWriter.cpp \
 		largenet2/sim/output/IntervalOutput.cpp \
 		largenet2/sim/output/Outputter.cpp \
 		largenet2/motifs/QuadLineMotif.cpp \
@@ -381,6 +383,7 @@ nobase_include_HEADERS = \
 		largenet2/io/BinWriter.h \
 		largenet2/io/BinReader.h \
 		largenet2/io/DotWriter.h \
+		largenet2/io/GraphMLWriter.h \
 		largenet2/sim/gillespie/MaxMethod.h \
 		largenet2/sim/gillespie/DirectMethod.h \
 		largenet2/sim/SimApp.h \
@@ -415,7 +418,8 @@ nobase_include_HEADERS = \
 		largenet2/base/Edge.h \
 		largenet2/base/Node.h \
 		largenet2/base/node_iterators.h \
-		largenet2/boost/largenet2_boost.h
+		largenet2/boost/largenet2_boost.h \
+		largenet2/boost/property_graph.h
 
 boost_test_SOURCES = tests/boost/largenet2_boost_test.cpp
 io_test_SOURCES = tests/io/io_test.cpp
@@ -567,6 +571,9 @@ largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-BinReader.lo:  \
 	largenet2/io/$(am__dirstamp) \
 	largenet2/io/$(DEPDIR)/$(am__dirstamp)
 largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-DotWriter.lo:  \
+	largenet2/io/$(am__dirstamp) \
+	largenet2/io/$(DEPDIR)/$(am__dirstamp)
+largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.lo:  \
 	largenet2/io/$(am__dirstamp) \
 	largenet2/io/$(DEPDIR)/$(am__dirstamp)
 largenet2/sim/output/$(am__dirstamp):
@@ -741,6 +748,8 @@ mostlyclean-compile:
 	-rm -f largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-EdgeListReader.lo
 	-rm -f largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-EdgeListWriter.$(OBJEXT)
 	-rm -f largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-EdgeListWriter.lo
+	-rm -f largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.$(OBJEXT)
+	-rm -f largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.lo
 	-rm -f largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-InOutDegreeMatrix.$(OBJEXT)
 	-rm -f largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-InOutDegreeMatrix.lo
 	-rm -f largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-counts.$(OBJEXT)
@@ -785,6 +794,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/io/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-DotWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/io/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-EdgeListReader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/io/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-EdgeListWriter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@largenet2/io/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-InOutDegreeMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-counts.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-measures.Plo@am__quote@
@@ -893,6 +903,14 @@ largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-DotWriter.lo: largenet2/io/DotWri
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='largenet2/io/DotWriter.cpp' object='largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-DotWriter.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-DotWriter.lo `test -f 'largenet2/io/DotWriter.cpp' || echo '$(srcdir)/'`largenet2/io/DotWriter.cpp
+
+largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.lo: largenet2/io/GraphMLWriter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.lo -MD -MP -MF largenet2/io/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.Tpo -c -o largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.lo `test -f 'largenet2/io/GraphMLWriter.cpp' || echo '$(srcdir)/'`largenet2/io/GraphMLWriter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) largenet2/io/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.Tpo largenet2/io/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.Plo
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='largenet2/io/GraphMLWriter.cpp' object='largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-GraphMLWriter.lo `test -f 'largenet2/io/GraphMLWriter.cpp' || echo '$(srcdir)/'`largenet2/io/GraphMLWriter.cpp
 
 largenet2/sim/output/liblargenet2_@PACKAGE_VERSION@_la-IntervalOutput.lo: largenet2/sim/output/IntervalOutput.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT largenet2/sim/output/liblargenet2_@PACKAGE_VERSION@_la-IntervalOutput.lo -MD -MP -MF largenet2/sim/output/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-IntervalOutput.Tpo -c -o largenet2/sim/output/liblargenet2_@PACKAGE_VERSION@_la-IntervalOutput.lo `test -f 'largenet2/sim/output/IntervalOutput.cpp' || echo '$(srcdir)/'`largenet2/sim/output/IntervalOutput.cpp
