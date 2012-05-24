@@ -101,6 +101,32 @@ struct graph_traits<largenet::Graph>
 	typedef largenet::node_state_t vertex_property_type;
 	typedef largenet::edge_state_t edge_property_type;
 };
+
+template<>
+struct graph_traits<const largenet::Graph>
+{
+	typedef largenet::node_id_t vertex_descriptor;
+	typedef largenet::edge_id_t edge_descriptor;
+
+	// FIXME we need to use iterator adaptors/facades here, because the BGL requires
+	// the iterator's value_types to be edge or vertex descriptors
+	typedef largenet::detail::node_edge_iterator_t out_edge_iterator;
+	typedef largenet::detail::node_edge_iterator_t in_edge_iterator;
+	typedef largenet::detail::edge_iterator_t edge_iterator;
+	typedef largenet::detail::node_iterator_t vertex_iterator;
+
+	typedef largenet_graph_traversal_category traversal_category;
+	// FIXME need clever mechanics for this
+	typedef directed_tag directed_category;
+	typedef allow_parallel_edge_tag edge_parallel_category;
+
+	typedef largenet::node_size_t vertices_size_type;
+	typedef largenet::edge_size_t edges_size_type;
+	typedef largenet::degree_size_t degree_size_type;
+
+	typedef largenet::node_state_t vertex_property_type;
+	typedef largenet::edge_state_t edge_property_type;
+};
 }
 namespace largenet
 {

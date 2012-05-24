@@ -18,6 +18,7 @@ liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 		largenet2/io/BinWriter.cpp \
 		largenet2/io/BinReader.cpp \
 		largenet2/io/DotWriter.cpp \
+		largenet2/io/GraphMLWriter.cpp \
 		largenet2/sim/output/IntervalOutput.cpp \
 		largenet2/sim/output/Outputter.cpp \
 		largenet2/motifs/QuadLineMotif.cpp \
@@ -47,6 +48,7 @@ nobase_include_HEADERS = \
 		largenet2/io/BinWriter.h \
 		largenet2/io/BinReader.h \
 		largenet2/io/DotWriter.h \
+		largenet2/io/GraphMLWriter.h \
 		largenet2/sim/gillespie/MaxMethod.h \
 		largenet2/sim/gillespie/DirectMethod.h \
 		largenet2/sim/SimApp.h \
@@ -81,7 +83,8 @@ nobase_include_HEADERS = \
 		largenet2/base/Edge.h \
 		largenet2/base/Node.h \
 		largenet2/base/node_iterators.h \
-		largenet2/boost/largenet2_boost.h
+		largenet2/boost/largenet2_boost.h \
+		largenet2/boost/property_graph.h
 
 check_PROGRAMS = \
 		boost_test \
