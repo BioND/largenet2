@@ -8,4 +8,4 @@ Description: Largenet2 library for adaptive network simulations
 Requires: 
 Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -l@PACKAGE_NAME@
-Cflags: -I${includedir}/@PACKAGE_NAME@
+Cflags: -I${includedir}
