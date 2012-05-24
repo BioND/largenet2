@@ -613,6 +613,8 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+HAVE_GRAPHML_FALSE
+HAVE_GRAPHML_TRUE
 HAVE_DOXYGEN_FALSE
 HAVE_DOXYGEN_TRUE
 BUILD_EXAMPLES_FALSE
@@ -15972,6 +15974,23 @@ else
 fi
 
 
+ if test "x$BOOST_VERSION" \> "x1.48.0"; then
+  HAVE_GRAPHML_TRUE=
+  HAVE_GRAPHML_FALSE='#'
+else
+  HAVE_GRAPHML_TRUE='#'
+  HAVE_GRAPHML_FALSE=
+fi
+
+
+if $HAVE_GRAPHML ; then
+  echo "-----------------------------------------"
+  echo " Found Boost version <= 1.48.0 "
+  echo " Writing GraphML files will be disabled "
+  echo " due to broken Boost implementation  "
+  echo "-----------------------------------------"
+fi
+
 # Output files
 ac_config_files="$ac_config_files Makefile largenet2-0.3.pc:largenet2.pc.in Doxyfile"
 
@@ -16114,6 +16133,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_DOXYGEN_TRUE}" && test -z "${HAVE_DOXYGEN_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_DOXYGEN\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_GRAPHML_TRUE}" && test -z "${HAVE_GRAPHML_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_GRAPHML\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

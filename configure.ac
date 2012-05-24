@@ -44,6 +44,16 @@ AM_CONDITIONAL([BUILD_EXAMPLES], [test x$examples = xtrue])
 
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
+AM_CONDITIONAL([HAVE_GRAPHML], [test "x$BOOST_VERSION" \> "x1.48.0"])
+
+if $HAVE_GRAPHML ; then
+  echo "-----------------------------------------"
+  echo " Found Boost version <= 1.48.0 "
+  echo " Writing GraphML files will be disabled "
+  echo " due to broken Boost implementation  "
+  echo "-----------------------------------------"
+fi 
+
 # Output files
 AC_CONFIG_FILES([Makefile
                 largenet2-0.3.pc:largenet2.pc.in
