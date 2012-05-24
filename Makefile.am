@@ -1,9 +1,9 @@
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = largenet2-@PACKAGE_VERSION@.pc
+pkgconfig_DATA = largenet2.pc
 
-EXTRA_DIST = largenet2-@PACKAGE_VERSION@.pc README.md Doxyfile
+EXTRA_DIST = largenet2.pc README.md Doxyfile
 
 lib_LTLIBRARIES = liblargenet2-@PACKAGE_VERSION@.la
 liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS = $(BOOST_CPPFLAGS)

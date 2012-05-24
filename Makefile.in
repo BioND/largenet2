@@ -37,6 +37,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+target_triplet = @target@
 check_PROGRAMS = boost_test$(EXEEXT) io_test$(EXEEXT) \
 	base_tests$(EXEEXT)
 TESTS = base_tests$(EXEEXT) boost_test$(EXEEXT) io_test$(EXEEXT)
@@ -60,7 +61,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = largenet2-0.3.pc Doxyfile
+CONFIG_CLEAN_FILES = largenet2.pc Doxyfile
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -395,14 +396,18 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
+target = @target@
 target_alias = @target_alias@
+target_cpu = @target_cpu@
+target_os = @target_os@
+target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = largenet2-@PACKAGE_VERSION@.pc
-EXTRA_DIST = largenet2-@PACKAGE_VERSION@.pc README.md Doxyfile
+pkgconfig_DATA = largenet2.pc
+EXTRA_DIST = largenet2.pc README.md Doxyfile
 lib_LTLIBRARIES = liblargenet2-@PACKAGE_VERSION@.la
 liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS = $(BOOST_CPPFLAGS)
 liblargenet2_@PACKAGE_VERSION@_la_LDFLAGS = -version-info 0:0:0
@@ -570,7 +575,7 @@ $(srcdir)/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f config.h stamp-h1
-largenet2-0.3.pc: $(top_builddir)/config.status $(srcdir)/largenet2.pc.in
+largenet2.pc: $(top_builddir)/config.status $(srcdir)/largenet2.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 Doxyfile: $(top_builddir)/config.status $(srcdir)/Doxyfile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
