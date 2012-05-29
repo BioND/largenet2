@@ -23,6 +23,7 @@ liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 		largenet2/measures/measures.cpp \
 		largenet2/measures/InOutDegreeMatrix.cpp \
 		largenet2/measures/counts.cpp \
+		largenet2/measures/spectrum.cpp \
 		largenet2/io/EdgeListWriter.cpp \
 		largenet2/io/EdgeListReader.cpp \
 		largenet2/io/BinWriter.cpp \
@@ -50,6 +51,7 @@ nobase_include_HEADERS = \
 		largenet2/measures/measures.h \
 		largenet2/measures/counts.h \
 		largenet2/measures/InOutDegreeMatrix.h \
+		largenet2/measures/spectrum.h \
 		largenet2/util/choosetype.h \
 		largenet2/io/GraphReader.h \
 		largenet2/io/EdgeListReader.h \

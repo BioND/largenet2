@@ -97,7 +97,8 @@ liblargenet2_@PACKAGE_VERSION@_la_LIBADD =
 am__liblargenet2_@PACKAGE_VERSION@_la_SOURCES_DIST =  \
 	largenet2/measures/measures.cpp \
 	largenet2/measures/InOutDegreeMatrix.cpp \
-	largenet2/measures/counts.cpp largenet2/io/EdgeListWriter.cpp \
+	largenet2/measures/counts.cpp largenet2/measures/spectrum.cpp \
+	largenet2/io/EdgeListWriter.cpp \
 	largenet2/io/EdgeListReader.cpp largenet2/io/BinWriter.cpp \
 	largenet2/io/BinReader.cpp largenet2/io/DotWriter.cpp \
 	largenet2/sim/output/IntervalOutput.cpp \
@@ -115,6 +116,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 am_liblargenet2_@PACKAGE_VERSION@_la_OBJECTS = largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-measures.lo \
 	largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-InOutDegreeMatrix.lo \
 	largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-counts.lo \
+	largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-spectrum.lo \
 	largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-EdgeListWriter.lo \
 	largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-EdgeListReader.lo \
 	largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-BinWriter.lo \
@@ -223,11 +225,11 @@ am__nobase_include_HEADERS_DIST = largenet2.h \
 	largenet2/measures/DegreeDistribution.h \
 	largenet2/measures/measures.h largenet2/measures/counts.h \
 	largenet2/measures/InOutDegreeMatrix.h \
-	largenet2/util/choosetype.h largenet2/io/GraphReader.h \
-	largenet2/io/EdgeListReader.h largenet2/io/GraphWriter.h \
-	largenet2/io/EdgeListWriter.h largenet2/io/BinWriter.h \
-	largenet2/io/BinReader.h largenet2/io/DotWriter.h \
-	largenet2/sim/gillespie/MaxMethod.h \
+	largenet2/measures/spectrum.h largenet2/util/choosetype.h \
+	largenet2/io/GraphReader.h largenet2/io/EdgeListReader.h \
+	largenet2/io/GraphWriter.h largenet2/io/EdgeListWriter.h \
+	largenet2/io/BinWriter.h largenet2/io/BinReader.h \
+	largenet2/io/DotWriter.h largenet2/sim/gillespie/MaxMethod.h \
 	largenet2/sim/gillespie/DirectMethod.h largenet2/sim/SimApp.h \
 	largenet2/sim/output/IntervalOutput.h \
 	largenet2/sim/output/DegDistOutput.h \
@@ -423,6 +425,7 @@ liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 		largenet2/measures/measures.cpp \
 		largenet2/measures/InOutDegreeMatrix.cpp \
 		largenet2/measures/counts.cpp \
+		largenet2/measures/spectrum.cpp \
 		largenet2/io/EdgeListWriter.cpp \
 		largenet2/io/EdgeListReader.cpp \
 		largenet2/io/BinWriter.cpp \
@@ -450,6 +453,7 @@ nobase_include_HEADERS = \
 		largenet2/measures/measures.h \
 		largenet2/measures/counts.h \
 		largenet2/measures/InOutDegreeMatrix.h \
+		largenet2/measures/spectrum.h \
 		largenet2/util/choosetype.h \
 		largenet2/io/GraphReader.h \
 		largenet2/io/EdgeListReader.h \
@@ -623,6 +627,9 @@ largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-InOutDegreeMatrix.lo:  \
 	largenet2/measures/$(am__dirstamp) \
 	largenet2/measures/$(DEPDIR)/$(am__dirstamp)
 largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-counts.lo:  \
+	largenet2/measures/$(am__dirstamp) \
+	largenet2/measures/$(DEPDIR)/$(am__dirstamp)
+largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-spectrum.lo:  \
 	largenet2/measures/$(am__dirstamp) \
 	largenet2/measures/$(DEPDIR)/$(am__dirstamp)
 largenet2/io/$(am__dirstamp):
@@ -829,6 +836,8 @@ mostlyclean-compile:
 	-rm -f largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-counts.lo
 	-rm -f largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-measures.$(OBJEXT)
 	-rm -f largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-measures.lo
+	-rm -f largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-spectrum.$(OBJEXT)
+	-rm -f largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-spectrum.lo
 	-rm -f largenet2/motifs/detail/liblargenet2_@PACKAGE_VERSION@_la-motif_construction.$(OBJEXT)
 	-rm -f largenet2/motifs/detail/liblargenet2_@PACKAGE_VERSION@_la-motif_construction.lo
 	-rm -f largenet2/motifs/liblargenet2_@PACKAGE_VERSION@_la-LinkMotif.$(OBJEXT)
@@ -871,6 +880,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-InOutDegreeMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-counts.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-measures.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-spectrum.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/motifs/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-LinkMotif.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/motifs/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-NodeMotif.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/motifs/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-QuadLineMotif.Plo@am__quote@
@@ -930,6 +940,13 @@ largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-counts.lo: largenet2/measur
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='largenet2/measures/counts.cpp' object='largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-counts.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-counts.lo `test -f 'largenet2/measures/counts.cpp' || echo '$(srcdir)/'`largenet2/measures/counts.cpp
+
+largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-spectrum.lo: largenet2/measures/spectrum.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-spectrum.lo -MD -MP -MF largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-spectrum.Tpo -c -o largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-spectrum.lo `test -f 'largenet2/measures/spectrum.cpp' || echo '$(srcdir)/'`largenet2/measures/spectrum.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-spectrum.Tpo largenet2/measures/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-spectrum.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='largenet2/measures/spectrum.cpp' object='largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-spectrum.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o largenet2/measures/liblargenet2_@PACKAGE_VERSION@_la-spectrum.lo `test -f 'largenet2/measures/spectrum.cpp' || echo '$(srcdir)/'`largenet2/measures/spectrum.cpp
 
 largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-EdgeListWriter.lo: largenet2/io/EdgeListWriter.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-EdgeListWriter.lo -MD -MP -MF largenet2/io/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-EdgeListWriter.Tpo -c -o largenet2/io/liblargenet2_@PACKAGE_VERSION@_la-EdgeListWriter.lo `test -f 'largenet2/io/EdgeListWriter.cpp' || echo '$(srcdir)/'`largenet2/io/EdgeListWriter.cpp
