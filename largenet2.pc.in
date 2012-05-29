@@ -7,5 +7,5 @@ Name: largenet2
 Description: Largenet2 library for adaptive network simulations
 Requires: 
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -l@PACKAGE_NAME@
+Libs: -L${libdir} -l@PACKAGE_NAME@-@PACKAGE_VERSION@
 Cflags: -I${includedir}
