@@ -1,4 +1,4 @@
-AC_PREREQ([2.67])
+AC_PREREQ([2.61])
 AC_INIT([largenet2], [0.3])
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([1.11 -Wall -Werror foreign silent-rules subdir-objects])
