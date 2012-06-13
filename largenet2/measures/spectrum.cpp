@@ -1,7 +1,5 @@
 #include "spectrum.h"
 
-#include <boost/foreach.hpp>
-
 namespace largenet
 {
 namespace measures

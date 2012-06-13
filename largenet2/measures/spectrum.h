@@ -8,6 +8,7 @@
 
 #include <largenet2/base/Graph.h>
 #include <boost/numeric/ublas/matrix_sparse.hpp>
+#include <boost/foreach.hpp>
 
 namespace bnu = boost::numeric::ublas;
 
@@ -27,6 +28,34 @@ typedef bnu::mapped_matrix<double> sparse_dmatrix_t;
  * @return adjacency matrix of @p g
  */
 sparse_dmatrix_t adjacency_matrix(const Graph& g);
+
+/**
+ * Weighted adjacency matrix of graph @p g, given an edge weight provider @p w
+ * @param g graph object
+ * @param w edge weight provider; function or functor of signature double (egdge_id_t)
+ * @return weighted adjacency matrix
+ */
+template<class EdgeWeightProvider>
+sparse_dmatrix_t weighted_adjacency_matrix(const Graph& g, EdgeWeightProvider& w)
+{
+	std::map<node_id_t, node_id_t> node_index_map;
+	node_id_t i = 0;
+	BOOST_FOREACH(const Node& n, g.nodes())
+	{
+		node_index_map.insert(std::make_pair(n.id(), i));
+		++i;
+	}
+	sparse_dmatrix_t m(g.numberOfNodes(), g.numberOfNodes());
+	BOOST_FOREACH(const Edge& e, g.edges())
+	{
+		m(node_index_map[e.source()->id()], node_index_map[e.target()->id()]) = w(e.id());
+		if (!e.isDirected())
+		{
+			m(node_index_map[e.target()->id()], node_index_map[e.source()->id()]) = w(e.id());
+		}
+	}
+	return m;
+}
 
 /**
  * Diagonal matrix of node degrees
