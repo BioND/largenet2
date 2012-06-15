@@ -63,6 +63,31 @@ sparse_dmatrix_t weighted_adjacency_matrix(const Graph& g, EdgeWeightProvider& w
  * @return diagonal matrix containing the node degrees (ascending node ID order)
  */
 sparse_dmatrix_t degree_matrix(const Graph& g);
+
+/**
+ * Diagonal matrix of node strengths (sum of edge weights attached to a node).
+ * @param g graph object
+ * @param w edge weight provider; function or functor of signature double (egdge_id_t)
+ * @return diagonal matrix containing node strengths (ascending node ID order)
+ */
+template<class EdgeWeightProvider>
+sparse_dmatrix_t strength_matrix(const Graph& g, EdgeWeightProvider& w)
+{
+	sparse_dmatrix_t m(g.numberOfNodes(), g.numberOfNodes());
+	node_id_t i = 0;
+	BOOST_FOREACH(const Node& n, g.nodes())
+	{
+		double s = 0;
+		BOOST_FOREACH(const Edge* e, n.undirectedEdges())
+		{
+			s += w(e->id());
+		}
+		m(i, i) = s;
+		++i;
+	}
+	return m;
+}
+
 /**
  * Unnormalized Laplacian of the graph @p g.
  *
@@ -72,6 +97,23 @@ sparse_dmatrix_t degree_matrix(const Graph& g);
  * @return Laplacian matrix of @p g
  */
 sparse_dmatrix_t laplacian(const Graph& g);
+
+/**
+ * Unnormalized weighted Laplacian of the graph @p g.
+ *
+ * Compute the matrix \f$ L = S - W\f$, where \f$ S \f$ is the strength matrix of the
+ * graph and \f$ W \f$ is its weighted adjacency matrix.
+ * @param g graph object
+ * @param w edge weight provider; function or functor of signature double (egdge_id_t)
+ * @return weighted Laplacian matrix of @p g
+ */
+template<class EdgeWeightProvider>
+sparse_dmatrix_t weighted_laplacian(const Graph& g, EdgeWeightProvider& w)
+{
+	sparse_dmatrix_t d = strength_matrix(g, w), a = weighted_adjacency_matrix(g, w);
+	return d - a;
+}
+
 /**
  * Normalized Laplacian of the graph @p g.
  *
