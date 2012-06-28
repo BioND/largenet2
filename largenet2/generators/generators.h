@@ -58,6 +58,7 @@ _Iter random_from(_Iter begin, _Iter end, RandomGen& rnd)
 {
 	if (begin == end)
 		return end;
+	// FIXME std::distance return type may be larger than int!
 	int i = rnd.IntFromTo(0, std::distance(begin, end) - 1);
 	std::advance(begin, i);
 	assert(begin != end);
@@ -151,6 +152,7 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 	{
 		while (true)
 		{
+			// FIXME max_edges may be larger than maximum int!!!
 			int edge_index = rnd.IntFromTo(0, max_edges - 1);
 			current_edge.first = 1 + static_cast<node_id_t> (std::floor(
 					std::sqrt(0.25 + 2.0 * edge_index) - 0.5));
