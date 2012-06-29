@@ -42,7 +42,9 @@ namespace util
 template<class U, class V, class RandomGen>
 U& random_from(V& container, RandomGen& rnd)
 {
-	int i = rnd.IntFromTo(0, container.size() - 1);
+	typedef typename V::size_type sz_t;
+	sz_t from = 0, to = container.size() - 1;
+	sz_t i = rnd.IntFromTo(from, to);
 	return container[i];
 }
 
@@ -58,8 +60,9 @@ _Iter random_from(_Iter begin, _Iter end, RandomGen& rnd)
 {
 	if (begin == end)
 		return end;
-	// FIXME std::distance return type may be larger than int!
-	int i = rnd.IntFromTo(0, std::distance(begin, end) - 1);
+	typedef typename std::iterator_traits<_Iter>::difference_type d_t;
+	d_t from = 0, to = std::distance(begin, end) - 1;
+	d_t i = rnd.IntFromTo(from, to);
 	std::advance(begin, i);
 	assert(begin != end);
 	return begin;
@@ -90,8 +93,9 @@ template<class RandomGen>
 void randomGnmSlow(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 		RandomGen& rnd, bool directed = false)
 {
-	node_size_t max_edges = directed ? numNodes * (numNodes - 1) : numNodes
-			* (numNodes - 1) / 2;
+	node_size_t max_edges =
+			directed ?
+					numNodes * (numNodes - 1) : numNodes * (numNodes - 1) / 2;
 	if (numEdges > max_edges)
 		throw std::out_of_range(
 				"Cannot create graph with more than O(N^2) edges");
@@ -140,7 +144,7 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 	if (numNodes < 1)
 		return;
 	// FIXME this algorithm does not do what it is expected to do when creating directed edges??
-	node_size_t max_edges = numNodes * (numNodes - 1) / 2; // undirected
+	edge_size_t max_edges = numNodes * (numNodes - 1) / 2; // undirected
 	assert(numEdges <= max_edges);
 
 	/*
@@ -152,11 +156,11 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 	{
 		while (true)
 		{
-			// FIXME max_edges may be larger than maximum int!!!
-			int edge_index = rnd.IntFromTo(0, max_edges - 1);
-			current_edge.first = 1 + static_cast<node_id_t> (std::floor(
-					std::sqrt(0.25 + 2.0 * edge_index) - 0.5));
-			current_edge.second = static_cast<node_id_t> (edge_index
+			edge_id_t edge_index = rnd.IntFromTo(0, max_edges - 1);
+			current_edge.first = 1
+					+ static_cast<node_id_t>(std::floor(
+							std::sqrt(0.25 + 2.0 * edge_index) - 0.5));
+			current_edge.second = static_cast<node_id_t>(edge_index
 					- current_edge.first * (current_edge.first - 1) / 2);
 			if (current_edge.first == current_edge.second) // disallow self-loops
 				continue;
@@ -171,7 +175,7 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 }
 
 /**
- * Create a random Erdọős-Rényi network with link probability @p p.
+ * Create a random Erdős-Rényi network with link probability @p p.
  *
  * Links are created with probability @p p in such a way that the expected (average)
  * number of links is @f$ \frac{p}{2} N(N-1) @f$.
@@ -232,13 +236,13 @@ void randomBA(Graph& g, node_size_t numNodes, edge_size_t m, RandomGen& rnd)
 	typedef std::vector<node_id_t> node_id_v;
 	node_id_v nodes(2 * numNodes * m, 0);
 
-	for (node_id_t v = 0; v < numNodes; ++v)
+	for (size_t v = 0; v < numNodes; ++v)
 	{
-		for (node_id_t i = 0; i < m; ++i)
+		for (size_t i = 0; i < m; ++i)
 		{
 			size_t ind = 2 * (v * m + i);
 			nodes[ind] = v;
-			int r = rnd.IntFromTo(0, ind);
+			size_t r = rnd.IntFromTo(0, ind);
 			nodes[ind + 1] = nodes[r];
 		}
 	}
@@ -263,7 +267,8 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 		RandomGen& rnd)
 {
 	if (g.numberOfNodes() != 0)
-		throw std::invalid_argument("Need empty graph in randomOutDegreePowerlaw");
+		throw std::invalid_argument(
+				"Need empty graph in randomOutDegreePowerlaw");
 
 	double normalization = 0;
 	for (int i = numNodes - 1; i >= 1; --i)
@@ -278,10 +283,10 @@ void randomOutDegreePowerlaw(Graph& g, node_size_t numNodes, double exponent,
 	{
 		degdist[i] = 0;
 		remain += numNodes * normalization * pow(i, -exponent);
-		degdist[i] = static_cast<node_size_t> (floor(remain));
+		degdist[i] = static_cast<node_size_t>(floor(remain));
 		remain -= degdist[i];
 	}
-	degdist[0] = static_cast<node_size_t> (round(remain));
+	degdist[0] = static_cast<node_size_t>(round(remain));
 
 #ifndef NDEBUG
 	node_size_t degsum = 0;
@@ -350,7 +355,8 @@ void wattsStrogatzGraph(Graph& g, node_size_t numNodes,
 	{
 		node_id_v targets(numNodes, 0);
 		// targets = nodes[i:] + nodes[0:i]
-		std::rotate_copy(nodes.begin(), nodes.begin()+i, nodes.end(), targets.begin());
+		std::rotate_copy(nodes.begin(), nodes.begin() + i, nodes.end(),
+				targets.begin());
 		for (size_t k = 0; k < numNodes; ++k)
 			g.addEdge(nodes[k], targets[k], false);
 	}
@@ -360,7 +366,8 @@ void wattsStrogatzGraph(Graph& g, node_size_t numNodes,
 	// TODO now, rewire each edge with probability p
 	typedef std::vector<edge_id_t> edge_id_v;
 	edge_id_v edges;
-	edges.reserve(2*static_cast<size_t>(std::ceil(rewProb * g.numberOfEdges())));
+	edges.reserve(
+			2 * static_cast<size_t>(std::ceil(rewProb * g.numberOfEdges())));
 	BOOST_FOREACH(Edge& e, g.edges())
 	{
 		if (rnd.Chance(rewProb))
@@ -371,7 +378,8 @@ void wattsStrogatzGraph(Graph& g, node_size_t numNodes,
 		Edge* e = g.edge(eid);
 		Graph::NodeIterator nit = util::random_from(g.nodes(), rnd);
 		// no self-loops or double edges
-		while ((nit.id() == e->source()->id()) || g.adjacent(e->source()->id(), nit.id()))
+		while ((nit.id() == e->source()->id())
+				|| g.adjacent(e->source()->id(), nit.id()))
 			nit = util::random_from(g.nodes(), rnd);
 		g.addEdge(e->source()->id(), nit.id(), false);
 		g.removeEdge(eid);
