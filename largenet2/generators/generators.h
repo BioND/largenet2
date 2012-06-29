@@ -144,7 +144,7 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 	if (numNodes < 1)
 		return;
 	// FIXME this algorithm does not do what it is expected to do when creating directed edges??
-	edge_size_t max_edges = numNodes * (numNodes - 1) / 2; // undirected
+	edge_id_t max_edges = numNodes * (numNodes - 1) / 2; // undirected
 	assert(numEdges <= max_edges);
 
 	/*
@@ -156,7 +156,8 @@ void randomGnm(Graph& g, node_size_t numNodes, edge_size_t numEdges,
 	{
 		while (true)
 		{
-			edge_id_t edge_index = rnd.IntFromTo(0, max_edges - 1);
+			edge_id_t from = 0, to = max_edges - 1;
+			edge_id_t edge_index = rnd.IntFromTo(from, to);
 			current_edge.first = 1
 					+ static_cast<node_id_t>(std::floor(
 							std::sqrt(0.25 + 2.0 * edge_index) - 0.5));
@@ -240,9 +241,10 @@ void randomBA(Graph& g, node_size_t numNodes, edge_size_t m, RandomGen& rnd)
 	{
 		for (size_t i = 0; i < m; ++i)
 		{
+			size_t from = 0;
 			size_t ind = 2 * (v * m + i);
 			nodes[ind] = v;
-			size_t r = rnd.IntFromTo(0, ind);
+			size_t r = rnd.IntFromTo(from, ind);
 			nodes[ind + 1] = nodes[r];
 		}
 	}

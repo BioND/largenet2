@@ -472,8 +472,8 @@ const Node* Graph::randomNode(RandomNumGen& rnd) const
 		throw(std::invalid_argument("Cannot pick random node from empty set."));
 	return node(
 			nodes_.id(
-					static_cast<repo::address_t>(rnd.IntFromTo(0,
-							nodes_.size() - 1))));
+					static_cast<repo::address_t>(rnd.IntFromTo(
+							static_cast<repo::id_size_t>(0), nodes_.size() - 1))));
 }
 
 template<class RandomNumGen>
@@ -483,8 +483,8 @@ Node* Graph::randomNode(RandomNumGen& rnd)
 		throw(std::invalid_argument("Cannot pick random node from empty set."));
 	return node(
 			nodes_.id(
-					static_cast<repo::address_t>(rnd.IntFromTo(0,
-							nodes_.size() - 1))));
+					static_cast<repo::address_t>(rnd.IntFromTo(
+							static_cast<repo::id_size_t>(0), nodes_.size() - 1))));
 }
 
 template<class RandomNumGen>
@@ -493,9 +493,9 @@ const Node* Graph::randomNode(const node_state_t s, RandomNumGen& rnd) const
 	if (numberOfNodes(s) == 0)
 		throw(std::invalid_argument("Cannot pick random node from empty set."));
 	return node(
-			nodes_.id(
-					s,
-					static_cast<repo::address_t>(rnd.IntFromTo(0,
+			nodes_.id(s,
+					static_cast<repo::address_t>(rnd.IntFromTo(
+							static_cast<repo::id_size_t>(0),
 							nodes_.count(s) - 1))));
 }
 
@@ -505,9 +505,9 @@ Node* Graph::randomNode(const node_state_t s, RandomNumGen& rnd)
 	if (numberOfNodes(s) == 0)
 		throw(std::invalid_argument("Cannot pick random node from empty set."));
 	return node(
-			nodes_.id(
-					s,
-					static_cast<repo::address_t>(rnd.IntFromTo(0,
+			nodes_.id(s,
+					static_cast<repo::address_t>(rnd.IntFromTo(
+							static_cast<repo::id_size_t>(0),
 							nodes_.count(s) - 1))));
 }
 
@@ -518,8 +518,8 @@ const Edge* Graph::randomEdge(RandomNumGen& rnd) const
 		throw(std::invalid_argument("Cannot pick random edge from empty set."));
 	return edge(
 			edges_.id(
-					static_cast<repo::address_t>(rnd.IntFromTo(0,
-							edges_.size() - 1))));
+					static_cast<repo::address_t>(rnd.IntFromTo(
+							static_cast<repo::id_size_t>(0), edges_.size() - 1))));
 }
 
 template<class RandomNumGen>
@@ -529,8 +529,8 @@ Edge* Graph::randomEdge(RandomNumGen& rnd)
 		throw(std::invalid_argument("Cannot pick random edge from empty set."));
 	return edge(
 			edges_.id(
-					static_cast<repo::address_t>(rnd.IntFromTo(0,
-							edges_.size() - 1))));
+					static_cast<repo::address_t>(rnd.IntFromTo(
+							static_cast<repo::id_size_t>(0), edges_.size() - 1))));
 }
 
 template<class RandomNumGen>
@@ -539,9 +539,9 @@ const Edge* Graph::randomEdge(const edge_state_t s, RandomNumGen& rnd) const
 	if (numberOfEdges(s) == 0)
 		throw(std::invalid_argument("Cannot pick random edge from empty set."));
 	return edge(
-			edges_.id(
-					s,
-					static_cast<repo::address_t>(rnd.IntFromTo(0,
+			edges_.id(s,
+					static_cast<repo::address_t>(rnd.IntFromTo(
+							static_cast<repo::id_size_t>(0),
 							edges_.count(s) - 1))));
 }
 
@@ -551,9 +551,9 @@ Edge* Graph::randomEdge(const edge_state_t s, RandomNumGen& rnd)
 	if (numberOfEdges(s) == 0)
 		throw(std::invalid_argument("Cannot pick random edge from empty set."));
 	return edge(
-			edges_.id(
-					s,
-					static_cast<repo::address_t>(rnd.IntFromTo(0,
+			edges_.id(s,
+					static_cast<repo::address_t>(rnd.IntFromTo(
+							static_cast<repo::id_size_t>(0),
 							edges_.count(s) - 1))));
 }
 
