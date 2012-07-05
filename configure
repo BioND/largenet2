@@ -615,6 +615,8 @@ LTLIBOBJS
 LIBOBJS
 HAVE_GRAPHML_FALSE
 HAVE_GRAPHML_TRUE
+DEBUGMODE_FALSE
+DEBUGMODE_TRUE
 HAVE_DOXYGEN_FALSE
 HAVE_DOXYGEN_TRUE
 BUILD_EXAMPLES_FALSE
@@ -765,6 +767,7 @@ enable_libtool_lock
 with_boost
 enable_static_boost
 enable_examples
+enable_debug
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1413,6 +1416,7 @@ Optional Features:
   --enable-static-boost   Prefer the static boost libraries over the shared
                           ones [no]
   --enable-examples       build examples (default: no)
+  --enable-debug          Enable debug mode (default=no)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -16019,6 +16023,24 @@ else
 fi
 
 
+# configure option --enable-debug [=no]
+# Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then :
+  enableval=$enable_debug; debug="$withval"
+else
+  debug=no
+fi
+
+
+ if test "x$debug" = "xyes"; then
+  DEBUGMODE_TRUE=
+  DEBUGMODE_FALSE='#'
+else
+  DEBUGMODE_TRUE='#'
+  DEBUGMODE_FALSE=
+fi
+
+
  if test "x$BOOST_VERSION" \> "x1.48.0"; then
   HAVE_GRAPHML_TRUE=
   HAVE_GRAPHML_FALSE='#'
@@ -16178,6 +16200,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_DOXYGEN_TRUE}" && test -z "${HAVE_DOXYGEN_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_DOXYGEN\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${DEBUGMODE_TRUE}" && test -z "${DEBUGMODE_FALSE}"; then
+  as_fn_error $? "conditional \"DEBUGMODE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_GRAPHML_TRUE}" && test -z "${HAVE_GRAPHML_FALSE}"; then

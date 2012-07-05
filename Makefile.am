@@ -150,3 +150,8 @@ votermodel_SOURCES = \
 		examples/votermodel/WELLEngine.cpp 
 		
 endif
+
+if DEBUGMODE
+else
+CXXFLAGS += -DNDEBUG
+endif

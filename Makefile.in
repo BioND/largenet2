@@ -42,6 +42,7 @@ check_PROGRAMS = boost_test$(EXEEXT) io_test$(EXEEXT) \
 	base_tests$(EXEEXT)
 TESTS = base_tests$(EXEEXT) boost_test$(EXEEXT) io_test$(EXEEXT)
 @BUILD_EXAMPLES_TRUE@noinst_PROGRAMS = votermodel$(EXEEXT)
+@DEBUGMODE_FALSE@am__append_1 = -DNDEBUG
 subdir = .
 DIST_COMMON = $(am__configure_deps) $(am__nobase_include_HEADERS_DIST) \
 	$(srcdir)/Doxyfile.in $(srcdir)/Makefile.am \
@@ -297,7 +298,7 @@ CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@
+CXXFLAGS = @CXXFLAGS@ $(am__append_1)
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@

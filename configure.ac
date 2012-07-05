@@ -45,6 +45,14 @@ AM_CONDITIONAL([BUILD_EXAMPLES], [test x$examples = xtrue])
 
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
+# configure option --enable-debug [=no]
+AC_ARG_ENABLE([debug],
+			   [AS_HELP_STRING([--enable-debug], [Enable debug mode (default=no)])],
+			   [debug="$withval"],
+			   [debug=no])
+
+AM_CONDITIONAL([DEBUGMODE], [test "x$debug" = "xyes"])
+
 AM_CONDITIONAL([HAVE_GRAPHML], [test "x$BOOST_VERSION" \> "x1.48.0"])
 
 if $HAVE_GRAPHML ; then
