@@ -86,15 +86,16 @@ public:
 	 * Simulates a dice roll.
 	 * Example:
 	 * \code
-	 *   int classicDice;
+	 *   unsigned int classicDice;
 	 *   classicDice=rng.Dice();
 	 * \endcode
 	 * \param faces are the faces of the virtual dice. The default value is 6.
-	 * \return An integer number, which is a member of the set {1,2...,faces}.
+	 * \return An unsigned integer number, which is a member of the set {1,2...,faces}.
 	 */
-	int Dice(int faces = 6)
+	template<class T>
+	T Dice(T faces = 6)
 	{
-		return (1 + (int) (Uniform01() * faces));
+		return (1 + static_cast<T> (Uniform01() * faces));
 	}
 
 	/**
@@ -113,9 +114,10 @@ public:
 	 * \return An integer number in the discrete interval [from,from+1,...,to].
 	 * @see Dice()
 	 */
-	int IntFromTo(int from, int to)
+	template<class T>
+	T IntFromTo(T from, T to)
 	{
-		return from + (int) ((double) (to - from + 1) * Uniform01());
+		return from + static_cast<T>((to - from + 1) * Uniform01());
 	}
 
 	/**
@@ -145,7 +147,7 @@ public:
 	 * Example:
 	 * \code
 	 * double prob[3]={0.2, 0.2, 0.6};
-	 * int result;
+	 * unsigned int result;
 	 * result=rng.Choices(prob,3);
 	 * std::cout << "Case " << result << " was chosen by the RNG.";
 	 * \endcode
@@ -154,9 +156,10 @@ public:
 	 * \param numberOfChoices is the length of the prob array.
 	 * \return An integer value between 0 and n-1
 	 */
-	int Choices(double* prob, int numberOfChoices)
+	template<class T>
+	T Choices(double* prob, T numberOfChoices)
 	{
-		int ret = 0;
+		T ret = 0;
 		double x = Uniform01();
 		while (x > 0 && numberOfChoices > 0)
 		{

@@ -16,7 +16,7 @@ WELLEngine::WELLEngine()
 	// Long has to be at least 32 bits!
 	assert(sizeof(long) >= 4);
 	state_i = 0;
-	seed((unsigned long) time(0));
+	seed((unsigned long) std::time(0));
 }
 
 void WELLEngine::seed(unsigned long int s)

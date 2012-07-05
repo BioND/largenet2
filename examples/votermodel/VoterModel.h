@@ -118,7 +118,7 @@ public:
 		// Get a random out-going edge of the node. For convenience,
 		// we use the helper function random_from() defined in util.h,
 		// which returns a Node::edge_iterator object.
-		largenet::Node::edge_iterator ei = random_from(n1->outEdges(), rng);
+		largenet::Node::edge_iterator ei = myrng::util::random_from(n1->outEdges(), rng);
 		if (ei == n1->outEdges().second)
 			return tau; // do nothing if the node has no neighbors
 
