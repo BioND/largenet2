@@ -2,6 +2,22 @@
  * @example sis.cpp
  * @section sis_example SIS model example
  *
+ * This is a simulation of a simple epidemiological susceptible-infected-susceptible (SIS)
+ * model on an adaptive network as in <a href="http://dx.doi.org/10.1103/PhysRevLett.96.208701">Gross et al. (2006)</a>.
+ * A network of @p N nodes, representing agents, and @p L undirected links, representing social connections, is
+ * created. Each agent is either susceptible to a communicable disease, @p S, or infected, @p I.
+ * With probability @p p per link between susceptible and infected nodes and per unit time,
+ * a susceptible node contracts the disease from an infectious neighbour. With probability @p r
+ * an infected node recovers and becomes susceptible again. Additionally, susceptible nodes
+ * seek to avoid their infectious neighbours by rewiring links between susceptible and infectious
+ * nodes with probability @p w per link and unit time. Thus a link connecting a susceptible and
+ * and infectious node is removed and a new one between the susceptible and another, randomly
+ * selected susceptible node is established.
+ *
+ * Depending on the model parameters @p p, @p r, @p w, the disease-free state is stable or
+ * unstable. Additionally, the rewiring activity (non-zero @p w) allows for a bistable regime
+ * where both states coexist, and the final outcome depends on the initial conditions.
+ *
  * @author Gerd Zschaler <gzschaler@googlemail.com>
  */
 

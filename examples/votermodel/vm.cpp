@@ -2,7 +2,7 @@
  * @example vm.cpp
  * @section vm_example Voter model example
  *
- * This is a simulation of the directed adaptive voter model as in <a href="http://arxiv.org/abs/1110.1336">Zschaler et al. (2011)</a>.
+ * This is a simulation of the directed adaptive voter model as in <a href="http://dx.doi.org/10.1103/PhysRevE.85.046107">Zschaler et al. (2012)</a>.
  * A network of @p N nodes, representing agents, and @p L directed links, representing social connections, is
  * created. Each agent holds one of two possible opinions, @p UP or @p DOWN. The system evolves as
  * follows: In each update step, a random node and a random one of its outgoing neighbors are selected. If
