@@ -41,7 +41,8 @@ target_triplet = @target@
 check_PROGRAMS = boost_test$(EXEEXT) io_test$(EXEEXT) \
 	base_tests$(EXEEXT)
 TESTS = base_tests$(EXEEXT) boost_test$(EXEEXT) io_test$(EXEEXT)
-@BUILD_EXAMPLES_TRUE@noinst_PROGRAMS = votermodel$(EXEEXT)
+@BUILD_EXAMPLES_TRUE@noinst_PROGRAMS = votermodel$(EXEEXT) \
+@BUILD_EXAMPLES_TRUE@	sis$(EXEEXT)
 @DEBUGMODE_FALSE@am__append_1 = -DNDEBUG
 subdir = .
 DIST_COMMON = $(am__configure_deps) $(am__nobase_include_HEADERS_DIST) \
@@ -162,13 +163,25 @@ boost_test_LDADD = $(LDADD)
 am_io_test_OBJECTS = tests/io/io_test.$(OBJEXT)
 io_test_OBJECTS = $(am_io_test_OBJECTS)
 io_test_DEPENDENCIES = liblargenet2-@PACKAGE_VERSION@.la
+am__sis_SOURCES_DIST = examples/sis/sis.cpp examples/sis/SISModel.h \
+	examples/lib/RandomVariates.h examples/lib/WELLEngine.h \
+	examples/lib/WELLEngine.cpp examples/lib/util.h
+@BUILD_EXAMPLES_TRUE@am__objects_2 =  \
+@BUILD_EXAMPLES_TRUE@	examples/lib/sis-WELLEngine.$(OBJEXT)
+@BUILD_EXAMPLES_TRUE@am_sis_OBJECTS = examples/sis/sis-sis.$(OBJEXT) \
+@BUILD_EXAMPLES_TRUE@	$(am__objects_2)
+sis_OBJECTS = $(am_sis_OBJECTS)
+@BUILD_EXAMPLES_TRUE@sis_DEPENDENCIES =  \
+@BUILD_EXAMPLES_TRUE@	liblargenet2-@PACKAGE_VERSION@.la
 am__votermodel_SOURCES_DIST = examples/votermodel/vm.cpp \
 	examples/votermodel/VoterModel.h examples/lib/RandomVariates.h \
 	examples/lib/WELLEngine.h examples/lib/WELLEngine.cpp \
 	examples/lib/util.h
-@BUILD_EXAMPLES_TRUE@am__objects_2 = examples/lib/votermodel-WELLEngine.$(OBJEXT)
-@BUILD_EXAMPLES_TRUE@am_votermodel_OBJECTS = examples/votermodel/votermodel-vm.$(OBJEXT) \
-@BUILD_EXAMPLES_TRUE@	$(am__objects_2)
+@BUILD_EXAMPLES_TRUE@am__objects_3 =  \
+@BUILD_EXAMPLES_TRUE@	examples/lib/WELLEngine.$(OBJEXT)
+@BUILD_EXAMPLES_TRUE@am_votermodel_OBJECTS =  \
+@BUILD_EXAMPLES_TRUE@	examples/votermodel/vm.$(OBJEXT) \
+@BUILD_EXAMPLES_TRUE@	$(am__objects_3)
 votermodel_OBJECTS = $(am_votermodel_OBJECTS)
 @BUILD_EXAMPLES_TRUE@votermodel_DEPENDENCIES =  \
 @BUILD_EXAMPLES_TRUE@	liblargenet2-@PACKAGE_VERSION@.la
@@ -216,10 +229,10 @@ am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(liblargenet2_@PACKAGE_VERSION@_la_SOURCES) \
 	$(base_tests_SOURCES) $(boost_test_SOURCES) $(io_test_SOURCES) \
-	$(votermodel_SOURCES)
+	$(sis_SOURCES) $(votermodel_SOURCES)
 DIST_SOURCES = $(am__liblargenet2_@PACKAGE_VERSION@_la_SOURCES_DIST) \
 	$(base_tests_SOURCES) $(boost_test_SOURCES) $(io_test_SOURCES) \
-	$(am__votermodel_SOURCES_DIST)
+	$(am__sis_SOURCES_DIST) $(am__votermodel_SOURCES_DIST)
 DATA = $(pkgconfig_DATA)
 am__nobase_include_HEADERS_DIST = largenet2.h \
 	largenet2/generators/generators.h \
@@ -523,10 +536,16 @@ base_tests_LDFLAGS = $(BOOST_LDFLAGS) -lboost_unit_test_framework
 @BUILD_EXAMPLES_TRUE@		examples/lib/util.h
 
 @BUILD_EXAMPLES_TRUE@votermodel_LDADD = liblargenet2-@PACKAGE_VERSION@.la
-@BUILD_EXAMPLES_TRUE@votermodel_CPPFLAGS = $(BOOST_CPPFLAGS) 
 @BUILD_EXAMPLES_TRUE@votermodel_SOURCES = \
 @BUILD_EXAMPLES_TRUE@		examples/votermodel/vm.cpp \
 @BUILD_EXAMPLES_TRUE@		examples/votermodel/VoterModel.h \
+@BUILD_EXAMPLES_TRUE@		$(examples_lib_src)
+
+@BUILD_EXAMPLES_TRUE@sis_LDADD = liblargenet2-@PACKAGE_VERSION@.la
+@BUILD_EXAMPLES_TRUE@sis_CPPFLAGS = $(BOOST_CPPFLAGS)
+@BUILD_EXAMPLES_TRUE@sis_SOURCES = \
+@BUILD_EXAMPLES_TRUE@		examples/sis/sis.cpp \
+@BUILD_EXAMPLES_TRUE@		examples/sis/SISModel.h \
 @BUILD_EXAMPLES_TRUE@		$(examples_lib_src)
 
 all: config.h
@@ -792,23 +811,34 @@ tests/io/io_test.$(OBJEXT): tests/io/$(am__dirstamp) \
 io_test$(EXEEXT): $(io_test_OBJECTS) $(io_test_DEPENDENCIES) $(EXTRA_io_test_DEPENDENCIES) 
 	@rm -f io_test$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(io_test_OBJECTS) $(io_test_LDADD) $(LIBS)
-examples/votermodel/$(am__dirstamp):
-	@$(MKDIR_P) examples/votermodel
-	@: > examples/votermodel/$(am__dirstamp)
-examples/votermodel/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) examples/votermodel/$(DEPDIR)
-	@: > examples/votermodel/$(DEPDIR)/$(am__dirstamp)
-examples/votermodel/votermodel-vm.$(OBJEXT):  \
-	examples/votermodel/$(am__dirstamp) \
-	examples/votermodel/$(DEPDIR)/$(am__dirstamp)
+examples/sis/$(am__dirstamp):
+	@$(MKDIR_P) examples/sis
+	@: > examples/sis/$(am__dirstamp)
+examples/sis/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) examples/sis/$(DEPDIR)
+	@: > examples/sis/$(DEPDIR)/$(am__dirstamp)
+examples/sis/sis-sis.$(OBJEXT): examples/sis/$(am__dirstamp) \
+	examples/sis/$(DEPDIR)/$(am__dirstamp)
 examples/lib/$(am__dirstamp):
 	@$(MKDIR_P) examples/lib
 	@: > examples/lib/$(am__dirstamp)
 examples/lib/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) examples/lib/$(DEPDIR)
 	@: > examples/lib/$(DEPDIR)/$(am__dirstamp)
-examples/lib/votermodel-WELLEngine.$(OBJEXT):  \
-	examples/lib/$(am__dirstamp) \
+examples/lib/sis-WELLEngine.$(OBJEXT): examples/lib/$(am__dirstamp) \
+	examples/lib/$(DEPDIR)/$(am__dirstamp)
+sis$(EXEEXT): $(sis_OBJECTS) $(sis_DEPENDENCIES) $(EXTRA_sis_DEPENDENCIES) 
+	@rm -f sis$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(sis_OBJECTS) $(sis_LDADD) $(LIBS)
+examples/votermodel/$(am__dirstamp):
+	@$(MKDIR_P) examples/votermodel
+	@: > examples/votermodel/$(am__dirstamp)
+examples/votermodel/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) examples/votermodel/$(DEPDIR)
+	@: > examples/votermodel/$(DEPDIR)/$(am__dirstamp)
+examples/votermodel/vm.$(OBJEXT): examples/votermodel/$(am__dirstamp) \
+	examples/votermodel/$(DEPDIR)/$(am__dirstamp)
+examples/lib/WELLEngine.$(OBJEXT): examples/lib/$(am__dirstamp) \
 	examples/lib/$(DEPDIR)/$(am__dirstamp)
 votermodel$(EXEEXT): $(votermodel_OBJECTS) $(votermodel_DEPENDENCIES) $(EXTRA_votermodel_DEPENDENCIES) 
 	@rm -f votermodel$(EXEEXT)
@@ -816,8 +846,10 @@ votermodel$(EXEEXT): $(votermodel_OBJECTS) $(votermodel_DEPENDENCIES) $(EXTRA_vo
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f examples/lib/votermodel-WELLEngine.$(OBJEXT)
-	-rm -f examples/votermodel/votermodel-vm.$(OBJEXT)
+	-rm -f examples/lib/WELLEngine.$(OBJEXT)
+	-rm -f examples/lib/sis-WELLEngine.$(OBJEXT)
+	-rm -f examples/sis/sis-sis.$(OBJEXT)
+	-rm -f examples/votermodel/vm.$(OBJEXT)
 	-rm -f largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-Edge.$(OBJEXT)
 	-rm -f largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-Edge.lo
 	-rm -f largenet2/base/liblargenet2_@PACKAGE_VERSION@_la-Graph.$(OBJEXT)
@@ -874,8 +906,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@examples/lib/$(DEPDIR)/votermodel-WELLEngine.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@examples/votermodel/$(DEPDIR)/votermodel-vm.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@examples/lib/$(DEPDIR)/WELLEngine.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@examples/lib/$(DEPDIR)/sis-WELLEngine.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@examples/sis/$(DEPDIR)/sis-sis.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@examples/votermodel/$(DEPDIR)/vm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/base/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-Edge.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/base/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-Graph.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@largenet2/base/$(DEPDIR)/liblargenet2_@PACKAGE_VERSION@_la-MultiNode.Plo@am__quote@
@@ -1147,33 +1181,33 @@ tests/base/base_tests-graph_iterators_test.obj: tests/base/graph_iterators_test.
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(base_tests_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o tests/base/base_tests-graph_iterators_test.obj `if test -f 'tests/base/graph_iterators_test.cpp'; then $(CYGPATH_W) 'tests/base/graph_iterators_test.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/base/graph_iterators_test.cpp'; fi`
 
-examples/votermodel/votermodel-vm.o: examples/votermodel/vm.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/votermodel/votermodel-vm.o -MD -MP -MF examples/votermodel/$(DEPDIR)/votermodel-vm.Tpo -c -o examples/votermodel/votermodel-vm.o `test -f 'examples/votermodel/vm.cpp' || echo '$(srcdir)/'`examples/votermodel/vm.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/votermodel/$(DEPDIR)/votermodel-vm.Tpo examples/votermodel/$(DEPDIR)/votermodel-vm.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='examples/votermodel/vm.cpp' object='examples/votermodel/votermodel-vm.o' libtool=no @AMDEPBACKSLASH@
+examples/sis/sis-sis.o: examples/sis/sis.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sis_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/sis/sis-sis.o -MD -MP -MF examples/sis/$(DEPDIR)/sis-sis.Tpo -c -o examples/sis/sis-sis.o `test -f 'examples/sis/sis.cpp' || echo '$(srcdir)/'`examples/sis/sis.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/sis/$(DEPDIR)/sis-sis.Tpo examples/sis/$(DEPDIR)/sis-sis.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='examples/sis/sis.cpp' object='examples/sis/sis-sis.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/votermodel/votermodel-vm.o `test -f 'examples/votermodel/vm.cpp' || echo '$(srcdir)/'`examples/votermodel/vm.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sis_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/sis/sis-sis.o `test -f 'examples/sis/sis.cpp' || echo '$(srcdir)/'`examples/sis/sis.cpp
 
-examples/votermodel/votermodel-vm.obj: examples/votermodel/vm.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/votermodel/votermodel-vm.obj -MD -MP -MF examples/votermodel/$(DEPDIR)/votermodel-vm.Tpo -c -o examples/votermodel/votermodel-vm.obj `if test -f 'examples/votermodel/vm.cpp'; then $(CYGPATH_W) 'examples/votermodel/vm.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/votermodel/vm.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/votermodel/$(DEPDIR)/votermodel-vm.Tpo examples/votermodel/$(DEPDIR)/votermodel-vm.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='examples/votermodel/vm.cpp' object='examples/votermodel/votermodel-vm.obj' libtool=no @AMDEPBACKSLASH@
+examples/sis/sis-sis.obj: examples/sis/sis.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sis_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/sis/sis-sis.obj -MD -MP -MF examples/sis/$(DEPDIR)/sis-sis.Tpo -c -o examples/sis/sis-sis.obj `if test -f 'examples/sis/sis.cpp'; then $(CYGPATH_W) 'examples/sis/sis.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/sis/sis.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/sis/$(DEPDIR)/sis-sis.Tpo examples/sis/$(DEPDIR)/sis-sis.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='examples/sis/sis.cpp' object='examples/sis/sis-sis.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/votermodel/votermodel-vm.obj `if test -f 'examples/votermodel/vm.cpp'; then $(CYGPATH_W) 'examples/votermodel/vm.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/votermodel/vm.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sis_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/sis/sis-sis.obj `if test -f 'examples/sis/sis.cpp'; then $(CYGPATH_W) 'examples/sis/sis.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/sis/sis.cpp'; fi`
 
-examples/lib/votermodel-WELLEngine.o: examples/lib/WELLEngine.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/lib/votermodel-WELLEngine.o -MD -MP -MF examples/lib/$(DEPDIR)/votermodel-WELLEngine.Tpo -c -o examples/lib/votermodel-WELLEngine.o `test -f 'examples/lib/WELLEngine.cpp' || echo '$(srcdir)/'`examples/lib/WELLEngine.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/lib/$(DEPDIR)/votermodel-WELLEngine.Tpo examples/lib/$(DEPDIR)/votermodel-WELLEngine.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='examples/lib/WELLEngine.cpp' object='examples/lib/votermodel-WELLEngine.o' libtool=no @AMDEPBACKSLASH@
+examples/lib/sis-WELLEngine.o: examples/lib/WELLEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sis_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/lib/sis-WELLEngine.o -MD -MP -MF examples/lib/$(DEPDIR)/sis-WELLEngine.Tpo -c -o examples/lib/sis-WELLEngine.o `test -f 'examples/lib/WELLEngine.cpp' || echo '$(srcdir)/'`examples/lib/WELLEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/lib/$(DEPDIR)/sis-WELLEngine.Tpo examples/lib/$(DEPDIR)/sis-WELLEngine.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='examples/lib/WELLEngine.cpp' object='examples/lib/sis-WELLEngine.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/lib/votermodel-WELLEngine.o `test -f 'examples/lib/WELLEngine.cpp' || echo '$(srcdir)/'`examples/lib/WELLEngine.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sis_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/lib/sis-WELLEngine.o `test -f 'examples/lib/WELLEngine.cpp' || echo '$(srcdir)/'`examples/lib/WELLEngine.cpp
 
-examples/lib/votermodel-WELLEngine.obj: examples/lib/WELLEngine.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/lib/votermodel-WELLEngine.obj -MD -MP -MF examples/lib/$(DEPDIR)/votermodel-WELLEngine.Tpo -c -o examples/lib/votermodel-WELLEngine.obj `if test -f 'examples/lib/WELLEngine.cpp'; then $(CYGPATH_W) 'examples/lib/WELLEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/lib/WELLEngine.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/lib/$(DEPDIR)/votermodel-WELLEngine.Tpo examples/lib/$(DEPDIR)/votermodel-WELLEngine.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='examples/lib/WELLEngine.cpp' object='examples/lib/votermodel-WELLEngine.obj' libtool=no @AMDEPBACKSLASH@
+examples/lib/sis-WELLEngine.obj: examples/lib/WELLEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sis_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT examples/lib/sis-WELLEngine.obj -MD -MP -MF examples/lib/$(DEPDIR)/sis-WELLEngine.Tpo -c -o examples/lib/sis-WELLEngine.obj `if test -f 'examples/lib/WELLEngine.cpp'; then $(CYGPATH_W) 'examples/lib/WELLEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/lib/WELLEngine.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) examples/lib/$(DEPDIR)/sis-WELLEngine.Tpo examples/lib/$(DEPDIR)/sis-WELLEngine.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='examples/lib/WELLEngine.cpp' object='examples/lib/sis-WELLEngine.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(votermodel_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/lib/votermodel-WELLEngine.obj `if test -f 'examples/lib/WELLEngine.cpp'; then $(CYGPATH_W) 'examples/lib/WELLEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/lib/WELLEngine.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sis_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o examples/lib/sis-WELLEngine.obj `if test -f 'examples/lib/WELLEngine.cpp'; then $(CYGPATH_W) 'examples/lib/WELLEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/examples/lib/WELLEngine.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1575,6 +1609,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f examples/lib/$(DEPDIR)/$(am__dirstamp)
 	-rm -f examples/lib/$(am__dirstamp)
+	-rm -f examples/sis/$(DEPDIR)/$(am__dirstamp)
+	-rm -f examples/sis/$(am__dirstamp)
 	-rm -f examples/votermodel/$(DEPDIR)/$(am__dirstamp)
 	-rm -f examples/votermodel/$(am__dirstamp)
 	-rm -f largenet2/base/$(DEPDIR)/$(am__dirstamp)
@@ -1608,7 +1644,7 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libLTLIBRARIES \
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf examples/lib/$(DEPDIR) examples/votermodel/$(DEPDIR) largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/base/repo/$(DEPDIR) tests/boost/$(DEPDIR) tests/io/$(DEPDIR)
+	-rm -rf examples/lib/$(DEPDIR) examples/sis/$(DEPDIR) examples/votermodel/$(DEPDIR) largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/base/repo/$(DEPDIR) tests/boost/$(DEPDIR) tests/io/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -1656,7 +1692,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf examples/lib/$(DEPDIR) examples/votermodel/$(DEPDIR) largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/base/repo/$(DEPDIR) tests/boost/$(DEPDIR) tests/io/$(DEPDIR)
+	-rm -rf examples/lib/$(DEPDIR) examples/sis/$(DEPDIR) examples/votermodel/$(DEPDIR) largenet2/base/$(DEPDIR) largenet2/io/$(DEPDIR) largenet2/measures/$(DEPDIR) largenet2/motifs/$(DEPDIR) largenet2/motifs/detail/$(DEPDIR) largenet2/sim/output/$(DEPDIR) tests/base/$(DEPDIR) tests/base/repo/$(DEPDIR) tests/boost/$(DEPDIR) tests/io/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
