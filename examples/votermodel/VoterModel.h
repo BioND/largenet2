@@ -7,7 +7,7 @@
 #ifndef VOTERMODEL_H_
 #define VOTERMODEL_H_
 
-#include "util.h"
+#include "../lib/util.h"
 #include <largenet2.h>
 
 /**

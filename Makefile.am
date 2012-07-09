@@ -138,16 +138,19 @@ endif
 
 if BUILD_EXAMPLES
 
+examples_lib_src = \
+		examples/lib/RandomVariates.h \
+		examples/lib/WELLEngine.h \
+		examples/lib/WELLEngine.cpp \
+		examples/lib/util.h
+
 noinst_PROGRAMS = votermodel
 votermodel_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 votermodel_CPPFLAGS = $(BOOST_CPPFLAGS) 
 votermodel_SOURCES = \
 		examples/votermodel/vm.cpp \
 		examples/votermodel/VoterModel.h \
-		examples/votermodel/RandomVariates.h \
-		examples/votermodel/util.h \
-		examples/votermodel/WELLEngine.h \
-		examples/votermodel/WELLEngine.cpp 
+		$(examples_lib_src)
 		
 endif
 

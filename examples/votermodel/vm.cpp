@@ -22,8 +22,8 @@
  */
 
 #include "VoterModel.h"
-#include "RandomVariates.h"
-#include "WELLEngine.h"
+#include "../lib/RandomVariates.h"
+#include "../lib/WELLEngine.h"
 #include <largenet2.h>
 #include <largenet2/StateConsistencyListener.h>
 #include <largenet2/generators/generators.h>
