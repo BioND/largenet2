@@ -1,10 +1,3 @@
-/*
- * SISModel.h
- *
- *  Created on: 09.07.2012
- *      Author: gerd
- */
-
 #ifndef SISMODEL_H_
 #define SISMODEL_H_
 
@@ -13,6 +6,11 @@
 #include <boost/bind.hpp>
 #include "../lib/util.h"
 
+/**
+ * The SISModel class in the @ref sis_example.
+ *
+ * @example sis.cpp
+ */
 template<class RandomGen>
 class SISModel
 {

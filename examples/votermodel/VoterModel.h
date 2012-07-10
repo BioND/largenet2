@@ -11,7 +11,9 @@
 #include <largenet2.h>
 
 /**
- * The voter model class in the @ref vm.cpp "voter model example".
+ * The voter model class in the @ref vm_example.
+ *
+ * @example vm.cpp
  */
 class VoterModel
 {
