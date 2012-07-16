@@ -7,6 +7,7 @@
 #ifndef STATECONSISTENCYLISTENER_H_
 #define STATECONSISTENCYLISTENER_H_
 
+#include <largenet2.h>
 #include <largenet2/base/GraphListener.h>
 #include <memory>
 
