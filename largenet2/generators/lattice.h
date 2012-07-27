@@ -68,7 +68,7 @@ private:
 void vonNeumannLattice2DPeriodic(Graph& g, node_size_t rows, node_size_t cols)
 {
 	g.clear();
-	detail::PeriodicGrid grid(rows, cols);
+	detail::PeriodicGrid<node_id_t> grid(rows, cols);
 
 	for (size_t i = 0; i < rows; ++i)
 		for (size_t j = 0; j < cols; ++j)
@@ -87,7 +87,7 @@ void vonNeumannLattice2DPeriodic(Graph& g, node_size_t rows, node_size_t cols)
 void mooreLattice2DPeriodic(Graph& g, node_size_t rows, node_size_t cols)
 {
 	g.clear();
-	detail::PeriodicGrid grid(rows, cols);
+	detail::PeriodicGrid<node_id_t> grid(rows, cols);
 	for (size_t i = 0; i < rows; ++i)
 		for (size_t j = 0; j < cols; ++j)
 			grid(i, j) = g.addNode();
