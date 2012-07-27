@@ -47,6 +47,7 @@ liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 nobase_include_HEADERS = \
 		largenet2.h \
 		largenet2/generators/generators.h \
+		largenet2/generators/lattice.h \
 		largenet2/measures/DegreeDistribution.h \
 		largenet2/measures/measures.h \
 		largenet2/measures/counts.h \
