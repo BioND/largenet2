@@ -92,12 +92,12 @@ public:
 
 	reference operator()(long i, long j)
 	{
-		return data_[wrapRow(i)][wrapCol(j)];
+		return data_[IndexWrapPolicy::wrapRow(i)][IndexWrapPolicy::wrapCol(j)];
 	}
 
 	const_reference operator()(long i, long j) const
 	{
-		return data_[wrapRow(i)][wrapCol(j)];
+		return data_[IndexWrapPolicy::wrapRow(i)][IndexWrapPolicy::wrapCol(j)];
 	}
 
 private:
