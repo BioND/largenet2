@@ -155,8 +155,8 @@ void vonNeumannLattice2DPeriodic(Graph& g, node_size_t rows, node_size_t cols)
 void mooreLattice2D(Graph& g, node_size_t rows, node_size_t cols)
 {
 	g.clear();
-	typedef detail::Grid<node_id_t, detail::PeriodicWrap> PeriodicGrid;
-	PeriodicGrid grid(rows, cols);
+	typedef detail::Grid<node_id_t, detail::NoWrapChecked> Grid;
+	Grid grid(rows, cols);
 
 	for (size_t i = 0; i < rows; ++i)
 		for (size_t j = 0; j < cols; ++j)
