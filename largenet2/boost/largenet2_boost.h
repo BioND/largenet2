@@ -21,35 +21,6 @@ typedef boost::function<node_id_t(Node&)> node_func_t;
 typedef boost::function<edge_id_t(Edge&)> edge_func_t;
 typedef boost::function<edge_id_t(Edge*)> ptr_edge_func_t;
 
-/*
-class node_iterator_t: public boost::iterator_adaptor<node_iterator_t,
-		Graph::NodeIterator, node_id_t, std::forward_iterator_tag, node_id_t>
-{
-public:
-	node_iterator_t() :
-			node_iterator_t::iterator_adaptor_(Graph::NodeIterator())
-	{
-	}
-	explicit node_iterator_t(const Graph::NodeIterator& it) :
-			node_iterator_t::iterator_adaptor_(it)
-	{
-	}
-	template<class U>
-	node_iterator_t(
-			const U& other,
-			typename boost::enable_if_convertible<U, Graph::NodeIterator>::type* =
-					0) :
-			node_iterator_t::iterator_adaptor_(other.base())
-	{
-	}
-private:
-	friend class boost::iterator_core_access;
-	node_id_t dereference() const
-	{
-		return base_reference()->id();
-	}
-};
-*/
 typedef boost::transform_iterator<node_func_t, Graph::NodeIterator> node_iterator_t;
 typedef boost::transform_iterator<edge_func_t, Graph::EdgeIterator> edge_iterator_t;
 typedef boost::transform_iterator<ptr_edge_func_t, Node::edge_iterator> node_edge_iterator_t;
