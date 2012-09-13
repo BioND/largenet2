@@ -1,9 +1,3 @@
-/**
- * @file node_iterators.h
- * @date 02.11.2009
- * @author gerd
- */
-
 #ifndef NODE_ITERATORS_H_
 #define NODE_ITERATORS_H_
 

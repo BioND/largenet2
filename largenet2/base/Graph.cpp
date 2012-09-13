@@ -1,9 +1,3 @@
-/**
- * @file Graph.cpp
- * @date 12.08.2009
- * @author gerd
- */
-
 #include "Graph.h"
 #include <largenet2/base/Node.h>
 #include <largenet2/base/Edge.h>
@@ -21,10 +15,6 @@ Graph::Graph(const node_state_t nodeStates, const edge_state_t edgeStates) :
 
 Graph::~Graph()
 {
-	//	for (EdgeContainer::iterator i = edges_.begin(); i != edges_.end(); ++i)
-	//		delete *i;
-	//	for (NodeContainer::iterator i = nodes_.begin(); i != nodes_.end(); ++i)
-	//		delete *i;
 }
 
 void Graph::clear()

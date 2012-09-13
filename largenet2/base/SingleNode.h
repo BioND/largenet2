@@ -1,9 +1,3 @@
-/**
- * @file SingleNode.h
- * @date 01.09.2009
- * @author gerd
- */
-
 #ifndef SINGLENODE_H_
 #define SINGLENODE_H_
 
@@ -30,9 +24,6 @@ public:
 		Node(id)
 	{
 	}
-	/**
-	 * Destructor
-	 */
 	virtual ~SingleNode()
 	{
 	}

@@ -1,8 +1,3 @@
-/**
- * @file Node.h
- *
- * Declaration of the lnet::Node class.
- */
 #ifndef NODE_H_
 #define NODE_H_
 

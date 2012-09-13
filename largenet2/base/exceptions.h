@@ -1,9 +1,3 @@
-/**
- * @file exceptions.h
- * @date 31.08.2009
- * @author gerd
- */
-
 #ifndef EXCEPTIONS_H_
 #define EXCEPTIONS_H_
 
