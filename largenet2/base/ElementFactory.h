@@ -14,23 +14,16 @@ namespace largenet
 
 class Node;
 class Edge;
-//class Triple;
 
 /**
- * Basic graph element factory used to create nodes and edges as required
+ * Basic graph element factory used to create nodes and edges as required.
  */
 class ElementFactory
 {
 public:
-	/**
-	 * Constructor
-	 */
 	ElementFactory()
 	{
 	}
-	/**
-	 * Destructor
-	 */
 	virtual ~ElementFactory()
 	{
 	}
@@ -49,13 +42,12 @@ public:
 	 * @param source source node
 	 * @param target target node
 	 * @param directed create a directed edge?
-	 * @return
+	 * @return pointer to created edge
 	 */
 	Edge* createEdge(edge_id_t id, Node& source, Node& target, bool directed)
 	{
 		return doCreateEdge(id, source, target, directed);
 	}
-	//Triple* createTriple(edge_id_t left, edge_id_t right);	FIXME directed triples?
 private:
 	virtual Node* doCreateNode(node_id_t id) = 0;
 	virtual Edge* doCreateEdge(edge_id_t id, Node& source, Node& target, bool directed) = 0;

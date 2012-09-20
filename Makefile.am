@@ -145,7 +145,7 @@ examples_lib_src = \
 		examples/lib/WELLEngine.cpp \
 		examples/lib/util.h
 
-noinst_PROGRAMS = votermodel sis
+noinst_PROGRAMS = votermodel sis simple-sis
 votermodel_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 votermodel_SOURCES = \
 		examples/votermodel/vm.cpp \
@@ -157,6 +157,11 @@ sis_CPPFLAGS = $(BOOST_CPPFLAGS)
 sis_SOURCES = \
 		examples/sis/sis.cpp \
 		examples/sis/SISModel.h \
+		$(examples_lib_src)
+		
+simple_sis_LDADD = liblargenet2-@PACKAGE_VERSION@.la
+simple_sis_SOURCES = \
+		examples/simple-sis/simple-sis.cpp \
 		$(examples_lib_src)
 		
 endif
