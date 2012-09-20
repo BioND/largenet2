@@ -1,9 +1,3 @@
-/**
- * @file GraphListener.h
- * @date 08.10.2009
- * @author gerd
- */
-
 #ifndef GRAPHLISTENER_H_
 #define GRAPHLISTENER_H_
 
@@ -16,6 +10,9 @@ class Graph;
 class Node;
 class Edge;
 
+/**
+ * Listener interface for listening to graph events.
+ */
 class GraphListener
 {
 public:

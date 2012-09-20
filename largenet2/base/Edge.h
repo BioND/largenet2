@@ -25,7 +25,7 @@ protected:
 	/**
 	 * Constructor
 	 */
-	Edge() : id_(0), source_(0), target_(0) {}
+	Edge() : id_(0), source_(0), target_(0), directed_(false) {}
 	/**
 	 * Constructor
 	 * @param id Edge ID

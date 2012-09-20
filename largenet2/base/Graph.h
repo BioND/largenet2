@@ -1,9 +1,3 @@
-/**
- * @file Graph.h
- * @date 12.08.2009
- * @author gerd
- */
-
 #ifndef GRAPH_H_
 #define GRAPH_H_
 
@@ -11,7 +5,6 @@
 #include <largenet2/base/Node.h>
 #include <largenet2/base/Edge.h>
 #include <largenet2/base/repo/CPtrRepository.h>
-//#include <largenet2/base/graph_iterators.h>
 #include <boost/noncopyable.hpp>
 #include <list>
 #include <utility>
@@ -21,8 +14,6 @@
 namespace largenet
 {
 
-//class Node;
-//class Edge;
 class ElementFactory;
 class GraphListener;
 

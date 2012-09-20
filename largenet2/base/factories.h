@@ -1,9 +1,3 @@
-/**
- * @file factories.h
- * @date 02.11.2009
- * @author gerd
- */
-
 #ifndef FACTORIES_H_
 #define FACTORIES_H_
 

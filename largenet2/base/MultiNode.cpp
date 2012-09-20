@@ -1,9 +1,3 @@
-/**
- * @file MultiNode.cpp
- * @date 01.09.2009
- * @author gerd
- */
-
 #include "MultiNode.h"
 #include <largenet2/base/Edge.h>
 #include "exceptions.h"

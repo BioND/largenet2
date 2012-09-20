@@ -1,9 +1,3 @@
-/**
- * @file MultiNode.h
- * @date 01.09.2009
- * @author gerd
- */
-
 #ifndef MULTINODE_H_
 #define MULTINODE_H_
 
