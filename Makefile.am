@@ -168,5 +168,5 @@ endif
 
 if DEBUGMODE
 else
-CXXFLAGS += -DNDEBUG
+AM_CXXFLAGS = -DNDEBUG
 endif

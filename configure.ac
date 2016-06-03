@@ -1,6 +1,7 @@
 AC_PREREQ([2.61])
 AC_INIT([largenet2], [0.3])
 AC_CANONICAL_SYSTEM
+AM_PROG_AR
 AM_INIT_AUTOMAKE([1.11 -Wall -Werror foreign silent-rules subdir-objects])
 LT_PREREQ([2.2])
 LT_INIT([disable-static])
@@ -54,14 +55,6 @@ AC_ARG_ENABLE([debug],
 AM_CONDITIONAL([DEBUGMODE], [test "x$debug" = "xyes"])
 
 AM_CONDITIONAL([HAVE_GRAPHML], [test "x$BOOST_VERSION" \> "x1.48.0"])
-
-if $HAVE_GRAPHML ; then
-  echo "-----------------------------------------"
-  echo " Found Boost version <= 1.48.0 "
-  echo " Writing GraphML files will be disabled "
-  echo " due to broken Boost implementation  "
-  echo "-----------------------------------------"
-fi 
 
 # Output files
 AC_CONFIG_FILES([Makefile
