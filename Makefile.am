@@ -9,14 +9,23 @@ lib_LTLIBRARIES = liblargenet2-@PACKAGE_VERSION@.la
 liblargenet2_@PACKAGE_VERSION@_la_CPPFLAGS = $(BOOST_CPPFLAGS)
 liblargenet2_@PACKAGE_VERSION@_la_LDFLAGS = -version-info 0:0:0
 
-if HAVE_GRAPHML
-GRAPHML_SRC = \
-		largenet2/io/GraphMLWriter.cpp
-GRAPHML_HPP = \
-		largenet2/io/GraphMLWriter.h
-else
-GRAPHML_SRC = 
-GRAPHML_HPP = 
+GRAPHML_SRC =
+GRAPHML_HPP =
+BOOST_GRAPH_HPP =
+
+if USE_BOOST_GRAPH
+	if HAVE_GRAPHML
+		GRAPHML_SRC = \
+				largenet2/io/GraphMLWriter.cpp
+		GRAPHML_HPP = \
+			largenet2/io/GraphMLWriter.h
+	endif
+	BOOST_GRAPH_HPP = \
+			largenet2/boost/largenet2_boost.h \
+			largenet2/boost/property_graph.h \
+			largenet2/io/DotWriter.h \
+	BOOST_GRAPH_CPP = \
+			largenet2/io/DotWriter.cpp
 endif
 
 liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
@@ -28,7 +37,7 @@ liblargenet2_@PACKAGE_VERSION@_la_SOURCES = \
 		largenet2/io/EdgeListReader.cpp \
 		largenet2/io/BinWriter.cpp \
 		largenet2/io/BinReader.cpp \
-		largenet2/io/DotWriter.cpp \
+		$(BOOST_GRAPH_CPP) \
 		largenet2/sim/output/IntervalOutput.cpp \
 		largenet2/sim/output/Outputter.cpp \
 		largenet2/motifs/QuadLineMotif.cpp \
@@ -60,7 +69,6 @@ nobase_include_HEADERS = \
 		largenet2/io/EdgeListWriter.h \
 		largenet2/io/BinWriter.h \
 		largenet2/io/BinReader.h \
-		largenet2/io/DotWriter.h \
 		largenet2/sim/gillespie/MaxMethod.h \
 		largenet2/sim/gillespie/DirectMethod.h \
 		largenet2/sim/SimApp.h \
@@ -95,8 +103,7 @@ nobase_include_HEADERS = \
 		largenet2/base/Edge.h \
 		largenet2/base/Node.h \
 		largenet2/base/node_iterators.h \
-		largenet2/boost/largenet2_boost.h \
-		largenet2/boost/property_graph.h \
+		$(BOOST_GRAPH_HPP) \
 		$(GRAPHML_HPP)
 
 check_PROGRAMS = \
@@ -114,7 +121,7 @@ base_tests_SOURCES = \
 	tests/base/repo/CPtrRepository_test.cpp \
 	tests/base/Edge_test.cpp \
 	tests/base/graph_iterators_test.cpp
-	
+
 base_tests_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 base_tests_CPPFLAGS = -DBOOST_TEST_DYN_LINK $(BOOST_CPPFLAGS)
 base_tests_LDFLAGS = $(BOOST_LDFLAGS) -lboost_unit_test_framework
@@ -128,8 +135,8 @@ if HAVE_DOXYGEN
 
 DOCDIR = doc
 MOSTLYCLEANFILES = -r $(DOCDIR)
-	
-doxygen-doc: $(DOCDIR)/doxygen.stamp 
+
+doxygen-doc: $(DOCDIR)/doxygen.stamp
 
 $(DOCDIR)/doxygen.stamp: Doxyfile
 	$(DOXYGEN) $(DOXYFLAGS) $<
@@ -151,19 +158,19 @@ votermodel_SOURCES = \
 		examples/votermodel/vm.cpp \
 		examples/votermodel/VoterModel.h \
 		$(examples_lib_src)
-		
+
 sis_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 sis_CPPFLAGS = $(BOOST_CPPFLAGS)
 sis_SOURCES = \
 		examples/sis/sis.cpp \
 		examples/sis/SISModel.h \
 		$(examples_lib_src)
-		
+
 simple_sis_LDADD = liblargenet2-@PACKAGE_VERSION@.la
 simple_sis_SOURCES = \
 		examples/simple-sis/simple-sis.cpp \
 		$(examples_lib_src)
-		
+
 endif
 
 if DEBUGMODE

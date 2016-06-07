@@ -20,7 +20,7 @@ BOOST_FOREACH
 BOOST_FUNCTION
 BOOST_TEST
 #BOOST_GRAPH
- 
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 AC_HEADER_STDBOOL
@@ -46,11 +46,20 @@ AM_CONDITIONAL([BUILD_EXAMPLES], [test x$examples = xtrue])
 
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
+# configure --enable-boost [=no]
+AC_ARG_ENABLE([boost_graph],
+  [AS_HELP_STRING([--enable-boost_graph], [Enable Boost Graph bindings (default=no)])],
+  [boost_graph="$withval"],
+  [boost_graph=no])
+
+AM_CONDITIONAL([USE_BOOST_GRAPH], [test "x$boost_graph" = "xyes"])
+
 # configure option --enable-debug [=no]
 AC_ARG_ENABLE([debug],
 			   [AS_HELP_STRING([--enable-debug], [Enable debug mode (default=no)])],
 			   [debug="$withval"],
 			   [debug=no])
+
 
 AM_CONDITIONAL([DEBUGMODE], [test "x$debug" = "xyes"])
 

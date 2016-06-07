@@ -637,6 +637,8 @@ HAVE_GRAPHML_FALSE
 HAVE_GRAPHML_TRUE
 DEBUGMODE_FALSE
 DEBUGMODE_TRUE
+USE_BOOST_GRAPH_FALSE
+USE_BOOST_GRAPH_TRUE
 HAVE_DOXYGEN_FALSE
 HAVE_DOXYGEN_TRUE
 BUILD_EXAMPLES_FALSE
@@ -789,6 +791,7 @@ enable_libtool_lock
 with_boost
 enable_static_boost
 enable_examples
+enable_boost_graph
 enable_debug
 '
       ac_precious_vars='build_alias
@@ -1439,6 +1442,7 @@ Optional Features:
   --enable-static-boost   Prefer the static boost libraries over the shared
                           ones [no]
   --enable-examples       build examples (default: no)
+  --enable-boost_graph    Enable Boost Graph bindings (default=no)
   --enable-debug          Enable debug mode (default=no)
 
 Optional Packages:
@@ -17108,6 +17112,24 @@ else
 fi
 
 
+# configure --enable-boost [=no]
+# Check whether --enable-boost_graph was given.
+if test "${enable_boost_graph+set}" = set; then :
+  enableval=$enable_boost_graph; boost_graph="$withval"
+else
+  boost_graph=no
+fi
+
+
+ if test "x$boost_graph" = "xyes"; then
+  USE_BOOST_GRAPH_TRUE=
+  USE_BOOST_GRAPH_FALSE='#'
+else
+  USE_BOOST_GRAPH_TRUE='#'
+  USE_BOOST_GRAPH_FALSE=
+fi
+
+
 # configure option --enable-debug [=no]
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
@@ -17115,6 +17137,7 @@ if test "${enable_debug+set}" = set; then :
 else
   debug=no
 fi
+
 
 
  if test "x$debug" = "xyes"; then
@@ -17285,6 +17308,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_DOXYGEN_TRUE}" && test -z "${HAVE_DOXYGEN_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_DOXYGEN\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${USE_BOOST_GRAPH_TRUE}" && test -z "${USE_BOOST_GRAPH_FALSE}"; then
+  as_fn_error $? "conditional \"USE_BOOST_GRAPH\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${DEBUGMODE_TRUE}" && test -z "${DEBUGMODE_FALSE}"; then
